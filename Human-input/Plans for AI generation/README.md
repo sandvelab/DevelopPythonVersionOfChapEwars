@@ -19,3 +19,5 @@ run it end to end without asking anything?**
 ## Currently here
 
 - `plan-template.md` — the template. Not a plan; `/do` does not run it.
+- `26-10-14_pythonEwarsForChap.md` — the project plan: translate CHAP-EWARS from R to
+  Python (dlnmpy for dlnm), run through chap, with judgment-call and challenge records.
