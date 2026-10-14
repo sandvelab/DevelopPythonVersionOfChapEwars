@@ -10,5 +10,5 @@ REPO_ROOT="$(cd ".." && pwd)"
 # declares env/ and overrides PYTHON below.
 PYTHON="$REPO_ROOT/environment/env/bin/python"
 
-
-# Own scripts -- add calls here as scripts/ fills up.
+# Sub-analyses: every child runs, in order.
+bash "01_referenceThroughChap/run.sh"

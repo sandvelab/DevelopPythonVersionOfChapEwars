@@ -7,7 +7,7 @@ seed-to-seed variability — and which translation choices drive any difference?
 
 ## Children
 
-kind: -
+kind: sub-analyses
 main-path: -
 
 ## Environment
