@@ -1,0 +1,83 @@
+site_name: pyLGM
+site_description: General-purpose latent Gaussian models for Python
+repo_url: https://github.com/Ardea00/pylgm
+repo_name: Ardea00/pylgm
+
+# Each documented branch is published under its own path, so the canonical URL
+# differs per build. The workflow sets SITE_URL; the default is what a local
+# `mkdocs serve` wants.
+site_url: !ENV [SITE_URL, "https://ardea00.github.io/pylgm/"]
+
+theme:
+  name: material
+  custom_dir: overrides
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+
+# Design/spec history lives in-repo under docs/design/ but is not part of the
+# published site.
+exclude_docs: |
+  design/
+
+nav:
+  - Home: index.md
+  - How it works: how-it-works.md
+  - Guide:
+      - Likelihoods: likelihoods.md
+      - Effects: effects.md
+      - Spatial effects: spatial-effects.md
+      - Empirical Bayes and priors: empirical-bayes.md
+      - INLA integration: inla.md
+      - Prediction: prediction.md
+      - Model comparison and backtesting: model-comparison.md
+      - Spark: spark.md
+  - Examples:
+      - All examples: examples.md
+      - "Case study: Anselin (1988)": examples-columbus.md
+      - "Case study: dynamic networks": examples-dynamic-network.md
+      - Disease mapping (spatial): examples-disease-mapping.md
+      - Count regression: examples-count-regression.md
+  - Comparison: comparison.md
+  - Theory: theory.md
+  - Internals & release policy: internals.md
+  - Roadmap: roadmap.md
+  - Development: development.md
+
+# Branch switcher. Material's `mike` provider only needs a versions.json at the
+# site root -- the workflow writes one -- so the mike package is not a
+# dependency here.
+extra:
+  version:
+    provider: mike
+    default: main
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - toc:
+      permalink: true
+
+# MathJax, loaded from the CDN. `generic: true` above makes arithmatex emit
+# \(...\) / \[...\] delimiters, which this config wires to MathJax v3.
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js

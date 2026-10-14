@@ -1,0 +1,40 @@
+%% DO NOT EDIT!
+%% This file is generated automatically from models.R
+\begin{description}
+	\item[doc] \verb!The generalized Poisson likelihood!
+	\item[hyper]\ 
+	 \begin{description}
+	 	\item[theta1]\ 
+	 	 \begin{description}
+	 	 	\item[hyperid] \verb!56001!
+	 	 	\item[name] \verb!overdispersion!
+	 	 	\item[short.name] \verb!phi!
+	 	 	\item[output.name] \verb!Overdispersion for gpoisson!
+	 	 	\item[output.name.intern] \verb!Log overdispersion for gpoisson!
+	 	 	\item[initial] \verb!0!
+	 	 	\item[fixed] \verb!FALSE!
+	 	 	\item[prior] \verb!loggamma!
+	 	 	\item[param] \verb!1 1!
+	 	 	\item[to.theta] \verb!function(x) log(x)!
+	 	 	\item[from.theta] \verb!function(x) exp(x)!
+	 	 \end{description}
+	 	\item[theta2]\ 
+	 	 \begin{description}
+	 	 	\item[hyperid] \verb!56002!
+	 	 	\item[name] \verb!p!
+	 	 	\item[short.name] \verb!p!
+	 	 	\item[output.name] \verb!Parameter p for gpoisson!
+	 	 	\item[output.name.intern] \verb!Parameter p_intern for gpoisson!
+	 	 	\item[initial] \verb!1!
+	 	 	\item[fixed] \verb!TRUE!
+	 	 	\item[prior] \verb!normal!
+	 	 	\item[param] \verb!1 100!
+	 	 	\item[to.theta] \verb!function(x) x!
+	 	 	\item[from.theta] \verb!function(x) x!
+	 	 \end{description}
+	 \end{description}
+	\item[survival] \verb!FALSE!
+	\item[discrete] \verb!TRUE!
+	\item[link] \verb!default log logoffset!
+	\item[pdf] \verb!gpoisson!
+\end{description}

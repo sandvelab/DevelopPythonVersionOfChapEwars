@@ -23,3 +23,7 @@ reader who was not present can follow, and keep them honest about what did not w
   verified by a clean-shell run of its own commands. The R original's monthly example failed
   inside INLA through chap (CH-07); diagnosed from the failed job's workspace and resolved by
   reducing inputs to the data contract (JC-05).
+- T5 (2026-10-14): Ran batch 3: archived R-INLA 25.10.19 and dlnm 2.4.10 sources and the
+  reference image's installed defaults; listed every R call with R's parser and mapped each
+  to Python (none unmapped); assessed existing Python INLAs (none usable as candidate c);
+  pinned the main environment.

@@ -1,0 +1,54 @@
+################ inla.models()$likelihood$nbinomial
+list(doc = "The negBinomial likelihood", hyper = list(theta = list(
+    hyperid = structure(63001, inla.read.only = FALSE), name = structure("size", inla.read.only = FALSE), 
+    short.name = structure("size", inla.read.only = FALSE), output.name = structure("size for the nbinomial observations (1/overdispersion)", inla.read.only = FALSE), 
+    output.name.intern = structure("log size for the nbinomial observations (1/overdispersion)", inla.read.only = FALSE), 
+    initial = structure(2.30258509299405, inla.read.only = FALSE), 
+    fixed = structure(FALSE, inla.read.only = FALSE), prior = structure("pc.mgamma", inla.read.only = FALSE), 
+    param = structure(7, inla.read.only = FALSE), to.theta = structure(function (x) 
+    log(x), inla.read.only = TRUE), from.theta = structure(function (x) 
+    exp(x), inla.read.only = TRUE))), survival = FALSE, discrete = TRUE, 
+    link = c("default", "log", "logoffset", "quantile"), pdf = "nbinomial")
+
+################ inla.models()$latent$iid
+list(doc = "Gaussian random effects in dim=1", hyper = list(theta = list(
+    hyperid = structure(1001, inla.read.only = FALSE), name = structure("log precision", inla.read.only = FALSE), 
+    short.name = structure("prec", inla.read.only = FALSE), prior = structure("loggamma", inla.read.only = FALSE), 
+    param = structure(c(1, 5e-05), inla.read.only = FALSE), initial = structure(4, inla.read.only = FALSE), 
+    fixed = structure(FALSE, inla.read.only = FALSE), to.theta = structure(function (x) 
+    log(x), inla.read.only = TRUE), from.theta = structure(function (x) 
+    exp(x), inla.read.only = TRUE))), constr = FALSE, nrow.ncol = FALSE, 
+    augmented = FALSE, aug.factor = 1L, aug.constr = NULL, n.div.by = NULL, 
+    n.required = FALSE, set.default.values = FALSE, pdf = "indep")
+
+################ inla.models()$latent$rw1
+list(doc = "Random walk of order 1", hyper = list(theta = list(
+    hyperid = structure(4001, inla.read.only = FALSE), name = structure("log precision", inla.read.only = FALSE), 
+    short.name = structure("prec", inla.read.only = FALSE), prior = structure("loggamma", inla.read.only = FALSE), 
+    param = structure(c(1, 5e-05), inla.read.only = FALSE), initial = structure(4, inla.read.only = FALSE), 
+    fixed = structure(FALSE, inla.read.only = FALSE), to.theta = structure(function (x) 
+    log(x), inla.read.only = TRUE), from.theta = structure(function (x) 
+    exp(x), inla.read.only = TRUE))), constr = TRUE, nrow.ncol = FALSE, 
+    augmented = FALSE, aug.factor = 1L, aug.constr = NULL, n.div.by = NULL, 
+    n.required = FALSE, set.default.values = FALSE, min.diff = 1e-06, 
+    pdf = "rw1")
+
+################ inla.models()$prior (names)
+ [1] "normal"                 "gaussian"               "laplace"               
+ [4] "linksnintercept"        "wishart1d"              "wishart2d"             
+ [7] "wishart3d"              "wishart4d"              "wishart5d"             
+[10] "loggamma"               "gamma"                  "pc.prw2.range"         
+[13] "minuslogsqrtruncnormal" "logtnormal"             "logtgaussian"          
+[16] "flat"                   "logflat"                "logiflat"              
+[19] "mvnorm"                 "pc.alphaw"              "pc.ar"                 
+[22] "dirichlet"              "none"                   "invalid"               
+[25] "betacorrelation"        "logitbeta"              "pc.prec"               
+[28] "pc.dof"                 "pc.cor0"                "pc.cor1"               
+[31] "pc.fgnh"                "pc.spde.GA"             "pc.matern"             
+[34] "pc.range"               "pc.sn"                  "pc.gamma"              
+[37] "pc.mgamma"              "pc.gammacount"          "pc.gevtail"            
+[40] "pc.egptail"             "pc"                     "ref.ar"                
+[43] "pom"                    "jeffreystdf"            "wishartkd"             
+[46] "expression:"            "table:"                 "rprior:"               
+################ inla.models()$prior$loggamma
+list(doc = "Log-Gamma prior", nparameters = 2L, pdf = "prior-loggamma")

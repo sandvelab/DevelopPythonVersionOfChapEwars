@@ -88,3 +88,14 @@ The input reduction is an autonomous call that the human may want to revisit. It
 in the report. `run.sh` step 4 (`summarise_reference.py`) was appended while the final run
 was in progress. Bash picked the new line up and ran it at the end. The provenance record
 says so, and the script was committed after the run, not before.
+
+## T5 (2026-10-14) — batch 3
+
+See `AI-generated/batch-reports/26-10-14_b03_translationInventory.md`.
+- **Records written before commit, then corrected.** I first wrote INLA's licence into
+  `Archive/r-sources/provenance.md` as GPL; the installed DESCRIPTION and the repository's
+  LICENSE say MIT. I corrected the file before it was committed.
+- **Web fetch failed.** PyPI's web pages failed to load through the fetch tool, so the
+  assessment uses PyPI's JSON API and pylgm's archived sdist instead.
+- **The mapping is a judgment.** The parser output is mechanical, but the Python column and
+  notes of `call_mapping.tsv` are mine.

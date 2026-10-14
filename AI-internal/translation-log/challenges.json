@@ -115,5 +115,59 @@
     "solution": "To read in full and decide in batch 3 (translation inventory); recorded here because the reference run is where they were first observed",
     "status": "open",
     "details": "In the weekly workspace (results/run1/weekly_workspace/workspace/), predictions.csv has 60 rows: the 30 future rows (2017-W50..W52) plus 30 for the three historic periods with missing disease_cases (2008-W52, 2014-W52, 2016-W08). chap keeps only the future periods (external_chapkit_model.py, the start_timestamp mask in predict), so the scores are unaffected, but the Python service must return the same row set or chap's filtering must be relied on knowingly. historic.csv contains 30 rows of ISO week 53; lib.R's offset_years_and_weeks computes ((week + diff - 1) %% 52) + 1, which puts week 53 on the same cyclic index as another week."
+  },
+  {
+    "date": "2026-10-14",
+    "batch": 3,
+    "id": "CH-14",
+    "challenge": "INLA's default prior on the negative-binomial size is pc.mgamma(λ=7) on log size, not a log-gamma prior, and this INLA version ships no documentation page for it",
+    "solution": "Ported from its C source: priorfunc_pc_mgamma evaluates the PC-gamma prior at a = exp(-theta) (inlaprog/src/inla-priors.c:1666-1696); read from inla.models() of the installed package",
+    "status": "solved",
+    "details": "results/inla_defaults.tsv: nbinomial theta (size): prior 'pc.mgamma', parameter 7, initial log(10). Archive/r-sources/r-inla/src/r-inla.org/doc/prior/ has pc.gamma.tex but no pc.mgamma.tex. A port written from memory or from older INLA documentation would use another prior. The C function is short and is ported in batch 7, checked against INLA's own prior evaluation."
+  },
+  {
+    "date": "2026-10-14",
+    "batch": 3,
+    "id": "CH-15",
+    "challenge": "INLA's posterior predictive samples pass through engine layers that have no Python counterpart and are only specified by source code",
+    "solution": "To decide per candidate in batches 7-10 (JC-13); recorded here so the decision is visible",
+    "status": "open",
+    "details": "inla.posterior.sample defaults (posterior.sample.R:375-379): use.improved.mean=TRUE (means from the VB correction, control.vb enable 'auto'), skew.corr=TRUE (skew-normal correction of the Gaussian samples). Hyperparameters are drawn from the integration configurations with probability proportional to exp(log posterior), without the integration weights (posterior.sample.R:488-496). Latent samples come from N(mean, Q^-1) at each configuration under the constraints (inla.qsample). inla.mode defaults to 'compact'; num.threads to '8:1'."
+  },
+  {
+    "date": "2026-10-14",
+    "batch": 3,
+    "id": "CH-16",
+    "challenge": "INLA silently sets missing fixed-effect covariate values to 0",
+    "solution": "Reproduced in the Python data layer (batch 6): the NA rows of the cross-basis (the first nlag rows of each location) enter the fit as zeros",
+    "status": "solved",
+    "details": "inla.R:794-802 (inla.na.action) replaces NA in numeric covariates by 0 before building the fixed-effect design matrix. predict.R never removes those rows, so they are in the fit with a zero basis contribution. A Python port that dropped them, or that let NaN propagate, would fit different data."
+  },
+  {
+    "date": "2026-10-14",
+    "batch": 3,
+    "id": "CH-17",
+    "challenge": "Resolution of CH-05 (sf and spdep loaded but apparently unused)",
+    "solution": "Confirmed unused: no call in predict.R, lib.R or train.R resolves to sf, spdep or jsonlite; yaml (yaml.load_file) and dplyr (mutate) are used",
+    "status": "solved",
+    "details": "results/r_calls.tsv, column supplied_by. The Python port needs no spatial-geometry library. CH-05 stays as raised; this entry records its resolution."
+  },
+  {
+    "date": "2026-10-14",
+    "batch": 3,
+    "id": "CH-18",
+    "challenge": "Resolution of CH-13 (weekly quirks: NA-case rows predicted, ISO week 53 folded)",
+    "solution": "Both reproduced by the port (JC-11); the extra predicted rows are kept so the service returns what R returns, and chap's filtering does the rest as it does for R",
+    "status": "solved",
+    "details": "CH-13 stays as raised; this entry records the decision."
+  },
+  {
+    "date": "2026-10-14",
+    "batch": 3,
+    "id": "CH-19",
+    "challenge": "Whether INLA's `Predictor` in the posterior samples includes the log(E) offset",
+    "solution": "Source says yes (posterior.sample.R:437-440, the compact-mode path adds the offsets); to confirm numerically in batch 4 from the instrumented fit",
+    "status": "provisional",
+    "details": "predict.R draws rnbinom(mu = exp(Predictor)), which is the NB mean only if the offset is included. If it were not, the R reference's samples would be on a per-unit-population scale, and the port must match whichever is true. The batch-4 harness compares exp(Predictor) with E*exp(eta) on the fitted rows."
   }
 ]

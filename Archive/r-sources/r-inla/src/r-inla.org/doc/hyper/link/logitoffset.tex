@@ -1,0 +1,21 @@
+%% DO NOT EDIT!
+%% This file is generated automatically from models.R
+\begin{description}
+	\item[doc] \verb!Logit-link with an offset!
+	\item[hyper]\ 
+	 \begin{description}
+	 	\item[theta]\ 
+	 	 \begin{description}
+	 	 	\item[hyperid] \verb!49011!
+	 	 	\item[name] \verb!prob!
+	 	 	\item[short.name] \verb!p!
+	 	 	\item[prior] \verb!normal!
+	 	 	\item[param] \verb!-1 100!
+	 	 	\item[initial] \verb!-1!
+	 	 	\item[fixed] \verb!FALSE!
+	 	 	\item[to.theta] \verb!function(x) log(x / (1 - x))!
+	 	 	\item[from.theta] \verb!function(x) exp(x) / (1 + exp(x))!
+	 	 \end{description}
+	 \end{description}
+	\item[pdf] \verb!logitoffset!
+\end{description}

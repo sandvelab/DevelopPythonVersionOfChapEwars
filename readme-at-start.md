@@ -25,7 +25,7 @@ non-negotiables: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForCha
 | Backtest or split scheme | `chap eval` rolling-origin backtest: 7 splits, 3-period horizon, stride 1, `climatology` future weather; `analysis/01_referenceThroughChap/scripts/backtest_settings.env` |
 | Required baselines | chap-core's built-in `global_median`, `seasonal_median`, `persistence` |
 | Reference model | the R original, chapkit_ewars_model @ `964eea8b`, run as `ghcr.io/chap-models/chapkit_ewars_model@sha256:959fb4f0…c6ff88` (linux/amd64); given the development files reduced to the six-column data contract (JC-05) |
-| Modelling resources to start from | dlnmpy @ `8c5edd79` at `Archive/dlnmpy/`; the R `dlnm` and R-INLA sources from inside the reference image (archived in batch 3) |
+| Modelling resources to start from | dlnmpy @ `8c5edd79` at `Archive/dlnmpy/`; R-INLA 25.10.19 (tag commit `acb55f37`) and dlnm 2.4.10 sources, plus the reference image's installed code and defaults, at `Archive/r-sources/` |
 | Data | EWARS repo and chap-core example data, at `Archive/dev-data/` and `Archive/holdout/` with `sha256sums.txt`; licence: that of the shipping repositories (CH-03) |
 | Target | `disease_cases` per location per period (week or month), as 1000 predictive samples per row |
 | Development data | `Archive/dev-data/`: EWARS monthly example (23 locations, 2001-01..2017-06); Nicaragua weekly, periods before 2018-01-01 |
@@ -34,9 +34,9 @@ non-negotiables: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForCha
 ## The article
 
 - **Target venue**: not yet decided.
-- **Status**: batches 1–2 done: anchors pinned, holdout sealed, the R reference scored
-  through chap on both development datasets, tutorial written and verified in a clean shell.
-  Next: batch 3, the translation inventory.
+- **Status**: batches 1–3 done: anchors pinned, holdout sealed, the R reference scored
+  through chap on both development datasets, tutorial verified, every R call mapped to Python
+  and the main environment pinned. Next: batch 4, the R reference harness (noise floor).
 - **Manuscript**: `Human-AI-collaboration/manuscript/` (empty).
 - **The plan being executed**: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForChap.md`.
   It carries the batch ledger (§6); `/do` runs the next open batch and stops.
@@ -46,7 +46,7 @@ non-negotiables: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForCha
 | Setting | Value |
 |---|---|
 | Project random seed | `20261014`. Every component seed derives from it (`AI-internal/skill-references/provenance-record.md`). |
-| Main environment | Python 3.13 with dlnmpy, chapkit, chap-core and the inference libraries, pinned once batch 3's inventory is known. Installed from `environment/lock.txt` by `environment/install-env.sh`. Invoked as `environment/env/bin/python`. Docker image: yes — the R reference is one, and the Python model ships one so chap drives both identically. |
+| Main environment | Python 3.13.0 with numpy, scipy, pandas, pyyaml and dlnmpy @ `8c5edd79`, pinned in batch 3; the inference libraries are added when batches 8–10 build the candidates. Installed from `environment/lock.txt` by `environment/install-env.sh`. Invoked as `environment/env/bin/python`. Docker image: yes — the R reference is one, and the Python model ships one so chap drives both identically. |
 | Repository machinery interpreter | `.venv`, per `setup-guide.md` §3. |
 | Tracking level | standard (`AGENTS.md` §6). |
 | Compute budget for stability work | not yet set — set in phase D once the per-run cost is known |

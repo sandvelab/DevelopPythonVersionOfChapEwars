@@ -1,0 +1,11 @@
+package	version
+INLA	25.10.19
+dlnm	2.4.10
+splines	4.5.0
+dplyr	1.2.1
+yaml	2.3.12
+jsonlite	2.0.0
+sf	1.1.3
+spdep	1.4.2
+Matrix	1.7.3
+stats	4.5.0

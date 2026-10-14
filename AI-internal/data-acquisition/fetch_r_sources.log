@@ -1,0 +1,9 @@
+[1] TRUE
+[1] TRUE
+done
+installed INLA 25.10.19, dlnm 2.4.10
+r-inla https://github.com/hrue/r-inla.git tag Version_25.10.19 commit acb55f3748be94ca49e9c81a85df8975241f742a 9256KB
+dlnm https://cran.r-project.org/src/contrib/dlnm_2.4.10.tar.gz 3b75be8ce30b41c90a7b01f373d7a4ca9c5ddddb1739c5e6763c66ac2dfb0bf2
+2.6M	/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/r-sources/dlnm
+9.1M	/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/r-sources/r-inla
+284K	/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/r-sources/reference-image

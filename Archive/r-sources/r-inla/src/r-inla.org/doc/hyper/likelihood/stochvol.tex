@@ -1,0 +1,26 @@
+%% DO NOT EDIT!
+%% This file is generated automatically from models.R
+\begin{description}
+	\item[doc] \verb!The Gaussian stochvol likelihood!
+	\item[hyper]\ 
+	 \begin{description}
+	 	\item[theta]\ 
+	 	 \begin{description}
+	 	 	\item[hyperid] \verb!82001!
+	 	 	\item[name] \verb!log precision!
+	 	 	\item[short.name] \verb!prec!
+	 	 	\item[output.name] \verb!Offset precision for stochvol!
+	 	 	\item[output.name.intern] \verb!Log offset precision for stochvol!
+	 	 	\item[initial] \verb!500!
+	 	 	\item[fixed] \verb!TRUE!
+	 	 	\item[prior] \verb!loggamma!
+	 	 	\item[param] \verb!1 0.005!
+	 	 	\item[to.theta] \verb!function(x) log(x)!
+	 	 	\item[from.theta] \verb!function(x) exp(x)!
+	 	 \end{description}
+	 \end{description}
+	\item[survival] \verb!FALSE!
+	\item[discrete] \verb!FALSE!
+	\item[link] \verb!default log!
+	\item[pdf] \verb!stochvolgaussian!
+\end{description}

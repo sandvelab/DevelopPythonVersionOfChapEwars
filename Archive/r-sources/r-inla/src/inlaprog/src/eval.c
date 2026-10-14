@@ -1,0 +1,265 @@
+#include <assert.h>
+#include <math.h>
+#include <omp.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h>
+
+#if defined(INLA_WITH_MUPARSER)
+#include <muParser/muParserDLL.h>
+#endif
+
+#include "GMRFLib/GMRFLib.h"
+#include "inla.h"
+#include "R-interface.h"
+#include "eval.h"
+
+static const unsigned char debug = 0;
+
+double inla_eval(char *expression, double *x, double *theta, int ntheta)
+{
+	if (debug) {
+		printf("call inla_eval with %s\n", expression);
+	}
+
+	if (strncasecmp(expression, "EXPRESSION:", strlen("EXPRESSION:")) == 0) {
+#if defined(INLA_WITH_MUPARSER)
+		return (inla_eval_expression(expression + strlen("EXPRESSION:"), x, theta, ntheta));
+#else
+		fprintf(stderr, "\n\n *** ERROR *** EXPRESSION-priors are not supported in this build\n\n");
+		abort();
+#endif
+	} else if (strncasecmp(expression, "TABLE:", strlen("TABLE:")) == 0) {
+		return (inla_eval_table(expression + strlen("TABLE:"), x, theta, ntheta));
+	} else if (strncasecmp(expression, "RPRIOR:", strlen("RPRIOR:")) == 0) {
+		int n_out = 0, one = 1;
+		double *x_out = NULL, ret = 0.0;
+
+		inla_R_funcall1(&n_out, &x_out, expression + strlen("RPRIOR:"), &one, x);
+		assert(n_out == 1);
+		ret = *x_out;
+		Free(x_out);
+
+		return (ret);
+	}
+
+	assert(0 == 1);
+	return 0.0;
+}
+double inla_eval_table(char *expression, double *xval, double *UNUSED(theta), int UNUSED(ntheta))
+{
+	double value;
+	GMRFLib_spline_tp *s = NULL;
+	GMRFLib_matrix_tp *M = NULL;
+
+	while (*expression == ' ' || *expression == '\t') {
+		expression++;
+	}
+	if (debug) {
+		fprintf(stderr, "OPEN FILE[%s]\n", expression);
+	}
+	M = GMRFLib_read_fmesher_file((const char *) expression, 0, -1);
+	assert(M->nrow >= 4);
+	assert(M->ncol == 2);
+
+	s = GMRFLib_spline_create(M->A, M->A + M->nrow, M->nrow);
+	value = GMRFLib_spline_eval(*xval, s);
+
+	if (0) {
+		// a check of the interpolation
+#pragma omp critical (Name_e578aec88a26ae580f841592d1651b595dac46e4)
+		{
+			double xx;
+			for (xx = -20; xx < 20; xx += .1)
+				printf("TABLE %g %g\n", xx, GMRFLib_spline_eval(xx, s));
+			exit(1);
+		}
+	}
+
+	if (ISNAN(value)) {
+		char *msg = NULL;
+		GMRFLib_sprintf(&msg, "table-prior returns NAN. Argument is %g but prior is defined on [%g,%g] only.", *xval, s->xmin, s->xmax);
+		inla_error_general(msg);
+		exit(1);
+	}
+
+	GMRFLib_matrix_free(M);
+	GMRFLib_spline_free(s);
+
+	return value;
+}
+
+
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
+//////////////////////////////////////////////////
+#if defined(INLA_WITH_MUPARSER)
+
+/* 
+   This is the interface to the muparser-library (http://muparser.sourceforge.net).  This code is buildt upon example2.c in the muparser/samples directory.
+ */
+typedef struct {
+	muFloat_t **value;
+	char **name;
+	int n;
+	int n_alloc;
+	double default_value;
+} eval_keep_vars_tp;
+
+double inla_eval_Gamma(double arg);
+double inla_eval_LogGamma(double arg);
+double inla_eval_Return(double v);
+double inla_eval_Not(double v);
+void inla_eval_OnError(muParserHandle_t hParser);
+muFloat_t *inla_eval_AddVariable(const muChar_t * a_szName, void *pUserData);
+double inla_eval_lgamma(double arg);
+double inla_eval_digamma(double arg);
+double inla_eval_trigamma(double arg);
+
+double inla_eval_Gamma(double arg)
+{
+	return exp(gsl_sf_lngamma(arg));
+}
+double inla_eval_LogGamma(double arg)
+{
+	return gsl_sf_lngamma(arg);
+}
+double inla_eval_lgamma(double arg)
+{
+	return gsl_sf_lngamma(arg);
+}
+double inla_eval_digamma(double arg)
+{
+	return gsl_sf_psi(arg);
+}
+double inla_eval_trigamma(double arg)
+{
+	return gsl_sf_psi_1(arg);
+}
+double inla_eval_Return(double v)
+{
+	return v;
+}
+
+double inla_eval_Not(double v)
+{
+	return v == 0.0;
+}
+
+void inla_eval_OnError(muParserHandle_t hParser)
+{
+	fprintf(stderr, "\n\n\nEval: Error while parsing expression:\n");
+	fprintf(stderr, "----------\n");
+	fprintf(stderr, "Message   :  \"%s\"\n", mupGetErrorMsg(hParser));
+	fprintf(stderr, "Token     :    \"%s\"\n", mupGetErrorToken(hParser));
+	fprintf(stderr, "Position  : %1d\n", mupGetErrorPos(hParser));
+	fprintf(stderr, "Error Code:     %1d\n", mupGetErrorCode(hParser));
+	exit(1);
+}
+
+muFloat_t *inla_eval_AddVariable(const muChar_t *a_szName, void *pUserData)
+{
+	eval_keep_vars_tp **aa = (eval_keep_vars_tp **) pUserData;
+	if (*aa == NULL) {
+		*aa = Calloc(1, eval_keep_vars_tp);
+	}
+	eval_keep_vars_tp *a = *aa;
+
+	if (a->n >= a->n_alloc) {
+		a->n_alloc += 16;
+		if (a->n_alloc == 0) {
+			assert(a->name == NULL);
+			assert(a->value == NULL);
+		}
+		a->name = Realloc(a->name, a->n_alloc, char *);
+		a->value = Realloc(a->value, a->n_alloc, muFloat_t *);
+	}
+	a->value[a->n] = Calloc(1, muFloat_t);
+	a->value[a->n][0] = a->default_value;
+	a->name[a->n] = Strdup(a_szName);
+
+	if (debug) {
+		printf("Eval: Add variable [%s] = %g\n", a->name[a->n], a->value[a->n][0]);
+	}
+	a->n++;
+
+	return &(a->value[a->n - 1][0]);
+}
+
+double inla_eval_expression(char *expression, double *x, double *theta, int ntheta)
+{
+	double value;
+
+	/*
+	 * I need this until the muparser-library is thread-safe....
+	 */
+#pragma omp critical (Name_0fa7f09460b3fe66b3508c1154b27762dbfac4e8)
+	{
+		int i;
+		muParserHandle_t hParser;
+
+		if (debug) {
+			printf("Eval: expression: %s\n", expression);
+			printf("Eval: value: %g\n", *x);
+		}
+
+		hParser = mupCreate(muBASETYPE_FLOAT);
+		mupSetErrorHandler(hParser, inla_eval_OnError);
+
+		mupSetArgSep(hParser, ';');
+		mupSetDecSep(hParser, '.');
+		mupSetThousandsSep(hParser, 0);
+		mupDefineConst(hParser, "pi", M_PI);
+		mupDefineInfixOprt(hParser, "!", inla_eval_Not, 0);
+		mupDefineFun1(hParser, "return", inla_eval_Return, 1);
+		mupDefineFun1(hParser, "gamma", inla_eval_Gamma, 1);
+		mupDefineFun1(hParser, "lgamma", inla_eval_LogGamma, 1);
+		mupDefineFun1(hParser, "digamma", inla_eval_digamma, 1);
+		mupDefineFun1(hParser, "trigamma", inla_eval_trigamma, 1);
+		mupDefineFun1(hParser, "log", log, 1);
+		mupDefineFun1(hParser, "log10", log10, 1);
+		mupDefineFun1(hParser, "ln", log, 1);
+		mupDefineFun2(hParser, "pow", pow, 1);
+
+		// add constants like THETA0, THETA1, THETA2, ...
+		for (i = 0; i < ntheta; i++) {
+			char *var = NULL;
+			GMRFLib_sprintf(&var, "THETA%1d", i);
+			mupDefineConst(hParser, var, theta[i]);
+			Free(var);
+		}
+		eval_keep_vars_tp *keep_vars = NULL;
+
+		keep_vars = Calloc(1, eval_keep_vars_tp);
+		keep_vars->default_value = *x;
+		mupSetVarFactory(hParser, inla_eval_AddVariable, (void *) &keep_vars);
+		mupSetExpr(hParser, (muChar_t *) expression);
+		value = (double) mupEval(hParser);
+
+		mupRelease(hParser);
+
+		for (i = 0; i < keep_vars->n; i++) {
+			if (debug) {
+				printf("Free %s = %g\n", keep_vars->name[i], (double) keep_vars->value[i][0]);
+			}
+			Free(keep_vars->value[i]);
+			Free(keep_vars->name[i]);
+		}
+		Free(keep_vars->value);
+		Free(keep_vars->name);
+		Free(keep_vars);
+	}
+
+	if (ISINF(value) || ISNAN(value)) {
+		char *msg = NULL;
+
+		GMRFLib_sprintf(&msg, "Expression[%s] evaluate to INF or NAN [%g] for x=%g\n", expression, value, *x);
+		inla_error_general(msg);
+	}
+
+	return value;
+}
+
+#endif							       // define(INLA_WITH_MUPARSER)

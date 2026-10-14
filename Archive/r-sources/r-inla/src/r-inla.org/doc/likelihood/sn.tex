@@ -1,0 +1,94 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[scale={0.8,0.9},centering,includeheadfoot]{geometry}
+\usepackage{amstext}
+\usepackage{amsmath}
+\usepackage{verbatim}
+
+\begin{document}
+\section*{Skew-Normal likelihood}
+
+\subsection*{Parametrisation}
+
+The standardised Skew-Normal distribution is
+\begin{displaymath}
+    f(z) = \frac{2}{\omega_{\alpha}}
+    \phi\left(\frac{z -\xi_{\alpha}}{\omega_{\alpha}}\right)
+    \Phi\left(\alpha \frac{z -\xi_{\alpha}}{\omega_{\alpha}}\right)
+\end{displaymath}
+where $\omega_\alpha$ and $\xi_\alpha$ are so that the mean is zero
+and variance is one, and they depends both on the skewness parameter
+$\alpha$.
+
+The skew-normal likelihood is defined as the density wrt $y$, where
+\begin{displaymath}
+    z = (y - \eta)\sqrt{w \tau} \;\sim\; f(z)
+\end{displaymath}
+and
+\begin{description}
+\item[$\eta$:] is the the linear predictor
+\item[$\tau$:] is the precision
+\item[$w$:] is a fixed scale or weight, $w>0$,
+\end{description}
+
+\subsection*{Link-function}
+
+The mean equals the linear predictor
+\begin{displaymath}
+    \mu = \eta
+\end{displaymath}
+
+\subsection*{Hyperparameters}
+
+The precision is represented as
+\begin{displaymath}
+    \theta_{1} = \log \tau
+\end{displaymath}
+and the prior is defined on $\theta_{1}$. 
+
+The (standardised) skewness $\gamma$, is represented as
+\begin{displaymath}
+    \gamma=0.988 (2\frac{\exp(\theta_2)}{1+\exp(\theta_2)}-1)
+\end{displaymath}
+and the prior is defined on $\theta_{2}$. The standardised skewness
+depends on $\alpha$ as
+\begin{displaymath}
+\gamma ={\frac  {4-\pi }{2}}{\frac{\left(\delta {\sqrt  {2/\pi
+              }}\right)^{3}}{\left(1-2\delta^{2}/\pi
+        \right)^{{3/2}}}}, \qquad
+    \delta ={\frac{\alpha}{{\sqrt{1+\alpha^{2}}}}}
+\end{displaymath}
+
+
+\subsection*{Specification}
+
+\begin{itemize}
+\item \texttt{family="sn"}
+\item Required arguments: $y$ and $w$ (keyword \texttt{scale}, and 
+    $w=1$ by default).
+\end{itemize}
+
+\subsubsection*{Hyperparameter specification and default values}
+\input{../hyper/likelihood/sn.tex}
+
+
+\subsection*{Example}
+
+\verbatiminput{example-sn.R}
+
+\subsection*{Notes}
+
+\begin{itemize}
+\item This implementation replaces older ones ("sn" and "sn2") from
+    $16^{\text{\emph{th}}}$ September 2020.
+\item A $N(a,0)$ prior is interpreted as a constant prior with density
+    equal to one.
+\end{itemize}
+
+\end{document}
+
+% LocalWords:  np Hyperparameters Ntrials gaussian Parametrisation skewness sn
+
+%%% Local Variables: 
+%%% TeX-master: t
+%%% End: 
+% LocalWords:  quantile probit Hyperparameter th

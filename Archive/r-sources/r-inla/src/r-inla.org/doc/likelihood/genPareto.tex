@@ -1,0 +1,69 @@
+\documentclass[12pt]{article}
+\usepackage[scale={0.8,0.9},centering,includeheadfoot]{geometry}
+\usepackage{amstext}
+\usepackage{amsmath}
+\usepackage{verbatim}
+
+\begin{document}
+
+\section*{Generalized Pareto distribution}
+\subsection*{Parametrisation}
+The generalized Pareto (GP) distribution with positive shape parameter
+has cumulative distribution function
+$$
+F(y;\sigma,\xi)=1-\left(1+\xi\frac{y}{\sigma}\right)^{-1/\xi},
+\quad y>0,
+$$
+for a continuous response $y$ where
+\begin{description}
+\item $\xi$: is the tail parameter, $\xi>0$
+\item $\sigma$: is the scale parameter, $\sigma>0$
+\end{description}
+The limit for $\xi\downarrow 0$ is
+$F(y;\sigma,0)=1-\exp(-x/\sigma)$.
+
+\subsection*{Link function}
+
+The linear predictor $\eta$ controls the $\alpha$ quantile of
+the GP
+\begin{displaymath}
+    P(y \le q_{\alpha}) = \alpha
+\end{displaymath}
+and $q_{\alpha} = \exp(\eta)$. The scaling $\sigma$, is then a
+function of $(q_{\alpha}, \xi)$, as
+\begin{displaymath}
+    \sigma = \frac{\xi\exp(\eta)}{(1-\alpha)^{-\xi}-1}
+\end{displaymath}
+
+\subsection*{Hyperparameters}
+The $\mathrm{GP}$ model has one hyperparameter. The tail $\xi>0$ is
+represented as
+$$
+\xi = \xi_{\text{low}} + (\xi_{\text{high}} - \xi_{\text{low}})
+\frac{\exp(\theta)}{1 + \exp(\theta)}
+$$
+and the prior is defined on $\theta$, with constant low and high
+values. The prior is FIXED to \texttt{pc.gevtail}, see
+\texttt{inla.doc("pc.gevtail")} for more info.
+
+\subsection*{Specification}
+\begin{itemize}
+\item \texttt{family="gp"}
+\item Required arguments: $y$ and the quantile $\alpha$. 
+\end{itemize}
+The quantile is given as \texttt{control.family=list(control.link=list(quantile=$\alpha$))}.
+
+\subsubsection*{Hyperparameter spesification and default values}
+\input{../hyper/likelihood/gp.tex}
+
+\subsubsection*{Example}
+\verbatiminput{genPareto-example.R}
+
+\subsection*{Notes}
+
+The prior for $\xi$ is fixed to \texttt{pc.gevtail} or one that
+respect an given interval similarly. Note that the default prior (and
+the internal representation of it and its name) changed 2019/10/12.
+
+        
+\end{document}

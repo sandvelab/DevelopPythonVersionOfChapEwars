@@ -38,3 +38,5 @@ replaced by an updated import.
 - `dlnmpy/` — the Python DLNM port replacing R `dlnm` (pinned clone).
 - `dev-data/` — development data. `holdout/` — sealed held-out data.
 - `plan-as-delivered/` — the plan before batch 1.
+- `r-sources/` — R-INLA 25.10.19 and dlnm 2.4.10 sources, and what the reference image runs (batch 3).
+- `python-inla-candidates/` — evidence on existing Python INLA implementations (batch 3).

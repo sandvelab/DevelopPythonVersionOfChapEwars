@@ -1,0 +1,26 @@
+%% DO NOT EDIT!
+%% This file is generated automatically from models.R
+\begin{description}
+	\item[doc] \verb!Generalized Pareto likelihood!
+	\item[hyper]\ 
+	 \begin{description}
+	 	\item[theta]\ 
+	 	 \begin{description}
+	 	 	\item[hyperid] \verb!101201!
+	 	 	\item[name] \verb!tail!
+	 	 	\item[short.name] \verb!xi!
+	 	 	\item[output.name] \verb!Tail parameter for the gp observations!
+	 	 	\item[output.name.intern] \verb!Intern tail parameter for the gp observations!
+	 	 	\item[initial] \verb!-4!
+	 	 	\item[fixed] \verb!FALSE!
+	 	 	\item[prior] \verb!pc.gevtail!
+	 	 	\item[param] \verb!7 0 0.5!
+	 	 	\item[to.theta] \verb!function(x, interval = c(REPLACE.ME.low, REPLACE.ME.high)) log(-(interval[1] - x) / (interval[2] - x))!
+	 	 	\item[from.theta] \verb!function(x, interval = c(REPLACE.ME.low, REPLACE.ME.high)) interval[1] + (interval[2] - interval[1]) * exp(x) / (1.0 + exp(x))!
+	 	 \end{description}
+	 \end{description}
+	\item[survival] \verb!FALSE!
+	\item[discrete] \verb!TRUE!
+	\item[link] \verb!default quantile!
+	\item[pdf] \verb!genPareto!
+\end{description}

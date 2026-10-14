@@ -1,0 +1,46 @@
+group	setting	value	source
+nbinomial theta (size)	prior	"pc.mgamma"	inla.models()$likelihood$nbinomial$hyper$theta
+nbinomial theta (size)	prior parameters	7	inla.models()$likelihood$nbinomial$hyper$theta
+nbinomial theta (size)	initial (internal scale)	2.30258509299405	inla.models()$likelihood$nbinomial$hyper$theta
+nbinomial theta (size)	fixed	FALSE	inla.models()$likelihood$nbinomial$hyper$theta
+nbinomial theta (size)	to.theta (user -> internal)	log(x)	inla.models()$likelihood$nbinomial$hyper$theta
+iid theta (log precision)	prior	"loggamma"	inla.models()$latent$iid$hyper$theta
+iid theta (log precision)	prior parameters	c(1, 5e-05)	inla.models()$latent$iid$hyper$theta
+iid theta (log precision)	initial (internal scale)	4	inla.models()$latent$iid$hyper$theta
+iid theta (log precision)	fixed	FALSE	inla.models()$latent$iid$hyper$theta
+iid theta (log precision)	to.theta (user -> internal)	log(x)	inla.models()$latent$iid$hyper$theta
+iid	constr (sum-to-zero by default)	FALSE	inla.models()$latent$iid$constr
+rw1 theta (log precision)	prior	"loggamma"	inla.models()$latent$rw1$hyper$theta
+rw1 theta (log precision)	prior parameters	c(1, 5e-05)	inla.models()$latent$rw1$hyper$theta
+rw1 theta (log precision)	initial (internal scale)	4	inla.models()$latent$rw1$hyper$theta
+rw1 theta (log precision)	fixed	FALSE	inla.models()$latent$rw1$hyper$theta
+rw1 theta (log precision)	to.theta (user -> internal)	log(x)	inla.models()$latent$rw1$hyper$theta
+rw1	constr (sum-to-zero by default)	TRUE	inla.models()$latent$rw1$constr
+rw1	min.diff	1e-06	inla.models()$latent$rw1$min.diff
+control.inla default	strategy	"auto"	inla.set.control.inla.default()
+control.inla default	int.strategy	"auto"	inla.set.control.inla.default()
+control.inla default	fast	TRUE	inla.set.control.inla.default()
+control.inla default	h	0.005	inla.set.control.inla.default()
+control.inla default	dz	0.75	inla.set.control.inla.default()
+control.inla default	diff.logdens	6	inla.set.control.inla.default()
+control.inla default	npoints	9	inla.set.control.inla.default()
+control.inla default	adaptive.max	25L	inla.set.control.inla.default()
+control.inla default	improved.simplified.laplace	FALSE	inla.set.control.inla.default()
+control.inla default	control.vb$enable	"auto"	inla.set.control.inla.default()$control.vb
+control.inla default	control.vb$strategy	c("mean", "variance")	inla.set.control.inla.default()$control.vb
+control.fixed default	mean	0	inla.set.control.fixed.default()
+control.fixed default	mean.intercept	0	inla.set.control.fixed.default()
+control.fixed default	prec	0.001	inla.set.control.fixed.default()
+control.fixed default	prec.intercept	0	inla.set.control.fixed.default()
+inla() default	inla.mode	"compact"	inla.getOption('inla.mode')
+inla() default	num.threads	"8:1"	inla.getOption('num.threads')
+set by predict.R	family	"nbinomial"	predict.R:192
+set by predict.R	offset	log(E)	predict.R:192
+set by predict.R	control.inla$strategy	"adaptive"	predict.R:193
+set by predict.R	control.compute	list(dic = TRUE, config = TRUE, cpo = TRUE, return.marginals = FALSE)	predict.R:194
+set by predict.R	control.fixed	list(correlation.matrix = TRUE, prec.intercept = 1e-04, prec = precision)	predict.R:195
+set by predict.R	control.predictor	list(link = 1, compute = TRUE)	predict.R:196
+inla.posterior.sample default	intern	FALSE	formals(inla.posterior.sample)
+inla.posterior.sample default	use.improved.mean	TRUE	formals(inla.posterior.sample)
+inla.posterior.sample default	skew.corr	TRUE	formals(inla.posterior.sample)
+inla.posterior.sample default	seed	0L	formals(inla.posterior.sample)
