@@ -1,0 +1,66 @@
+call	python	status	batch	note
+inla	inference candidate (alternatives node: a Laplace/INLA-style port, b MCMC; c none usable, JC-10)	gap-inference	7-10	Fits NB GLMM: family nbinomial, offset log(E), control.fixed(prec.intercept=1e-4, prec=precision), strategy 'adaptive', int.strategy default 'auto', VB correction default 'auto', inla.mode default 'compact' (results/inla_defaults.tsv). NA fixed-effect covariates are set to 0 (inla.R:794-802, CH-16). The model part (likelihood, priors, constraints) is reproduced exactly by every candidate; the engine part is candidate-specific (JC-13).
+inla.posterior.sample	candidate-specific sampler; for (a): pick configuration k with prob proportional to exp(log posterior) (no integration weights), draw latent from N(improved mean, Q_k^-1) under the sum-to-zero constraints, skew-corrected	gap-inference	7-10	Defaults intern=FALSE, use.improved.mean=TRUE, skew.corr=TRUE, seed=0 (posterior.sample.R:375-379, 488-496). Unseeded in predict.R (CH-10). CH-15.
+inla.posterior.sample.eval	plain indexing of each sample: (size, Predictor[idx.pred])	port	8	theta[1] is the NB size on the user scale (intern=FALSE). Predictor includes the log(E) offset (posterior.sample.R:437-440, compact-mode path), so exp(Predictor) is the mean mu; to be confirmed numerically in batch 4 (CH-19).
+rnbinom	numpy Generator.negative_binomial(n=size, p=size/(size+mu)), or scipy.stats.nbinom with the same (n, p)	counterpart-verify	8	R's (size, mu) parametrisation equals INLA's (nbinomial.tex: mean mu, var mu(1+mu/size)). RNG streams differ from R by construction (plan §3); distributional equality checked at L4.
+f(ID_spat, model='iid', replicate=ID_year)	block-diagonal iid precision: one iid N(0, 1/tau) vector per ID_year replicate, shared tau	gap-port	7	Prior on log tau: loggamma(1, 5e-05), initial 4; no constraint (results/inla_defaults.tsv). ID_year is the offset-shifted year index (lib.R), re-based to 1 (predict.R:177).
+f(ID_time_cyclic, model='rw1', cyclic=TRUE, scale.model=TRUE)	cyclic RW1 structure matrix on 1..12 or 1..52, scaled by inla.scale.model (geometric mean of the generalised-inverse marginal variances = 1), sum-to-zero constraint	gap-port	7	Prior on log precision: loggamma(1, 5e-05), initial 4; constr TRUE; min.diff 1e-06 (the check CH-07 tripped). Port from Archive/r-sources/r-inla (scale.model.R, gmrflib/rw.c), verified against R output (plan §1).
+f(ID_time_cyclic2, model='rw1', cyclic=TRUE, scale.model=TRUE, replicate=ID_spat)	the same scaled cyclic RW1, replicated per location (one constrained field per ID_spat), own precision	gap-port	7	Only when region_seasonal=true. Replicated fields each get the sum-to-zero constraint; to verify against R in batch 7.
+as.formula	explicit design: intercept + basis columns as fixed effects, plus the latent blocks above	port	6-7	Formula assembled from strings (predict.R:56-123). Intercept prior N(0, 1/1e-4); basis coefficients N(0, 1/precision).
+crossbasis	dlnmpy.crossbasis(x, lag=(1, nlag), argvar={'fun':'ns','knots':...}, arglag={'fun':'ns','df':min(nlag, round(nlag/2)+2)}, group=location)	counterpart-verify	6	dlnmpy 0.8.4 @ 8c5edd79 implements lag=(min,max), ns with knots, ns lag basis with intercept, group lagging in row order (Archive/dlnmpy/src/src/dlnmpy/core.py:284-369). L2 test <= 1e-8 against R dlnm 2.4.10 in batch 6. Column names: basis_<cov>.v<i>.l<j>. NA rows at the start of each group become 0 in INLA (CH-16).
+equalknots	dlnmpy.equalknots(x, nk=2)	counterpart-verify	6	Equally spaced interior knots over range(x, na.rm); checked with crossbasis in batch 6.
+round	R round() is round-half-to-even (IEC 60559); numpy.round is too, Python round() is too	direct	6	Only in round(nlag/2): nlag=3 gives round(1.5)=2 in both.
+mutate	pandas column assignment	direct	6	Two uses: ID_time_cyclic <- week or month (predict.R:167,170), before the offset functions run, so ID_time_cyclic keeps the raw season index.
+rbind	pandas.concat (historic then future, same column order)	direct	6	
+cbind	pandas.concat(axis=1)	direct	6	
+data.frame	pandas.DataFrame	direct	6	
+as.factor	pandas.Categorical (levels sorted as R does for character: locale collation; see note)	direct	6	ID_spat integer codes follow the factor level order; locale collation of location names must match R's in the image (C.UTF-8 or en_US?); checked at L1 in batch 6.
+as.integer	astype(int) (truncation toward zero, as R)	direct	6	week from 'YYYY-Wnn' and month from 'YYYY-MM' (CH-12).
+substr	str slicing	direct	6	
+sub	re.sub	direct	6	
+grepl	str.contains / re.search	direct	6	
+is.na	pandas isna	direct	6	
+which	numpy.nonzero (1-based in R)	direct	6	idx.pred: rows with NA Cases, historic ones included (CH-13, JC-11).
+ifelse	numpy.where	direct	6	
+min	min	direct	6	
+log	numpy.log	direct	6	
+exp	numpy.exp	direct	6	
+matrix	numpy.full	direct	6	
+rep	list repetition	direct	6	
+length	len	direct	6	
+nrow	len / shape[0]	direct	6	
+ncol	shape[1]	direct	6	
+names	keys / columns	direct	6	
+colnames	DataFrame.columns	direct	6	
+c	list / numpy array	direct	6	
+list	dict / list	direct	6	
+paste	' '.join / f-strings	direct	6	
+paste0	f-strings	direct	6	
+seq_along	range(len(...))	direct	6	
+do.call	function call with unpacked arguments	direct	6	
+stopifnot	assert / raise ValueError	direct	6	
+is.null	is None	direct	6	
+character	empty list	direct	6	
+return	return	direct	6	
+read.csv	pandas.read_csv	direct	6	R read.csv type inference (e.g. integer vs double, NA strings) checked at L1.
+write.csv	DataFrame.to_csv(index=False)	direct	11	Output columns time_period, location, sample_0..sample_999.
+yaml.load_file	yaml.safe_load	direct	11	Config file written by chapkit.
+apply_adapters	Python function of the same name	port	6	
+parse_config	Python function of the same name	port	6	
+generate_bacic_model	Python function of the same name	port	6	
+generate_lagged_model	Python function of the same name	port	6	
+predict_chap	Python function of the same name	port	11	
+get_last_month	Python function of the same name	port	6	Ported verbatim, quirks included: the shift uses the last row with non-NA Cases of the whole frame; ((x-1) %% 52)+1 folds ISO week 53 (CH-13, JC-11).
+get_last_week	Python function of the same name	port	6	Ported verbatim, quirks included: the shift uses the last row with non-NA Cases of the whole frame; ((x-1) %% 52)+1 folds ISO week 53 (CH-13, JC-11).
+get_week_diff	Python function of the same name	port	6	Ported verbatim, quirks included: the shift uses the last row with non-NA Cases of the whole frame; ((x-1) %% 52)+1 folds ISO week 53 (CH-13, JC-11).
+offset_years_and_weeks	Python function of the same name	port	6	Ported verbatim, quirks included: the shift uses the last row with non-NA Cases of the whole frame; ((x-1) %% 52)+1 folds ISO week 53 (CH-13, JC-11).
+get_month_diff	Python function of the same name	port	6	Ported verbatim, quirks included: the shift uses the last row with non-NA Cases of the whole frame; ((x-1) %% 52)+1 folds ISO week 53 (CH-13, JC-11).
+offset_years_and_months	Python function of the same name	port	6	Ported verbatim, quirks included: the shift uses the last row with non-NA Cases of the whole frame; ((x-1) %% 52)+1 folds ISO week 53 (CH-13, JC-11).
+library	imports	not-needed	11	sf, spdep, jsonlite are loaded but no call resolves to them (CH-05 resolved, CH-17).
+source	import	not-needed	11	
+commandArgs	chapkit runner arguments	not-needed	11	
+interactive	-	not-needed	11	
+cat	logging	not-needed	11	
+print	logging	not-needed	11	
+file.exists	pathlib exists	not-needed	11	
+saveRDS	-	not-needed	11	model.rds is written but nothing reads it; train.R's placeholder likewise.

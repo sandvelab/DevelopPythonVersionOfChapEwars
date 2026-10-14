@@ -17,16 +17,21 @@ convention `AGENTS.md` §8 sets for `.venv`. Note this is *not* the `.venv` at t
 root, which runs the repository's own machinery (`node.py`, `check_invariants.py`). A node's
 `run.sh` sets `PYTHON` to this interpreter; `node.py` writes that line.
 
-## Not yet pinned
+## Pinned
 
-This copy has no project, so `environment.yml` lists nothing and `lock.txt` does not exist.
-Pin in the first batch that knows what the first model needs — a library guessed in advance
-is a library pinned for no reason — and record here what was verified: the two-pass check
-(`RESOLVE=1`, then a clean rebuild from the resulting `lock.txt`, confirmed to match exactly)
-and the date.
+Pinned 2026-10-14 in batch 3, from the translation inventory (JC-12): Python 3.13.0, numpy,
+scipy, pandas, pyyaml, and dlnmpy at commit `8c5edd79` (0.8.4). Verified by the two-pass
+check: `RESOLVE=1 bash environment/install-env.sh` wrote `lock.txt` (7 packages), and a clean
+rebuild from it reported "Built environment matches environment/lock.txt exactly". The
+inference libraries are added, and the lock re-resolved, when batches 8–10 build the
+inference candidates. No `Dockerfile` yet: the Python service gets its own image in batch 11.
 
 ## Say what cannot be pinned
 
 A vanished data source, a licence server, a specific GPU, an evaluation platform run as a
 hosted service — none of this survives pinning. Where such a dependency exists, state it here
 plainly rather than leaving a reproducer to discover it.
+
+Here: the R reference runs as a Docker image pinned by digest, which outlives a vanished
+registry only if the image is kept locally (`docker save`); the image is not archived in this
+repository.

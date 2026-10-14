@@ -2,9 +2,13 @@
 # One library per line under `dependencies:`, with a comment saying what it is for. Version
 # constraints may be given (`numpy>=2`); the resolved versions live in lock.txt, written by
 # `RESOLVE=1 bash environment/install-env.sh` (which is what /pin-environment runs).
+# Pinned in batch 3 from the translation inventory (JC-12); the inference libraries are
+# added, and the lock re-resolved, when batches 8-10 build the inference candidates.
 name: analysis
 python: "3.13"
-dependencies: []
-#  - numpy          # numerics
-#  - pandas         # data handling
-#  - scikit-learn   # <which model family, and which node needs it>
+dependencies:
+  - numpy          # arrays, linear algebra
+  - scipy          # sparse matrices and solvers, optimisation, distributions (nbinom, gammaln)
+  - pandas         # the data adapters (the R dplyr/base data-frame code)
+  - pyyaml         # the chapkit config file (R yaml::yaml.load_file)
+  - dlnmpy @ git+https://github.com/Logic06183/dlnmpy@8c5edd79ea989d22b457bfb93e03b0c5e125792c  # the cross-basis (R dlnm), pinned commit

@@ -1,0 +1,7 @@
+dlnmpy @ git+https://github.com/Logic06183/dlnmpy@8c5edd79ea989d22b457bfb93e03b0c5e125792c
+numpy==2.5.4
+pandas==3.0.6
+python-dateutil==2.9.0.post0
+pyyaml==6.0.3
+scipy==1.18.1
+six==1.17.0
