@@ -1,0 +1,107 @@
+site_name: Chapkit
+site_description: ML service modules built on servicekit - config management and ML workflows
+site_url: https://dhis2-chap.github.io/chapkit
+repo_url: https://github.com/dhis2-chap/chapkit
+repo_name: dhis2-chap/chapkit
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - content.code.copy
+
+nav:
+  - Home: index.md
+  - Guides:
+      - R Quickstart: guides/r-quickstart.md
+      - CLI Scaffolding: guides/cli-scaffolding.md
+      - MLproject Runner: guides/mlproject-runner.md
+      - MLproject Migration Checklist: guides/mlproject-migration-checklist.md
+      - MLproject Migrate: guides/mlproject-migrate.md
+      - Deploying to chap-core: guides/deploying-to-chap-core.md
+      - Testing ML Services: guides/testing-ml-services.md
+      - Configuration Management: guides/configuration-management.md
+      - Artifact Storage: guides/artifact-storage.md
+      - ML Workflows: guides/ml-workflows.md
+      - Shell-runner Contract: guides/shell-runner-contract.md
+      - Monitoring: guides/monitoring.md
+      - DataFrame: guides/dataframe.md
+      - Database Migrations: guides/database-migrations.md
+      - Web Console: guides/web-console.md
+  - API Reference: api-reference.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - meta
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: dhis2-chap
+      repo: chapkit
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            show_root_full_path: false
+            show_object_full_path: false
+            show_category_heading: true
+            members_order: source
+            heading_level: 2
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/dhis2-chap/chapkit

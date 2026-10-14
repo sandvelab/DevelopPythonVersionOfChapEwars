@@ -188,6 +188,17 @@ Append-only, oldest first.
 |---|---|---|
 | `origin` repointed from `sandvelab/agentic-model-development-start` to `sandvelab/DevelopPythonVersionOfChapEwars`; repo created public; `main` pushed; local `old-history` branch not pushed | the human's instruction | human-set |
 
+### 2026-10-14 — batch 1: anchors, data partition, ledgers
+
+| Decision | Basis | Agency |
+|---|---|---|
+| Pinned commits: chapkit_ewars_model `964eea8bfdb194ca8985723216e94f1ac63aa4f1`, chap-core `b8c8f788fbc011f3d9d8a18ba9e993725023a6e4`, chapkit `b8ccd072cbf0d4c70fa34f8e818551ca5937aa75`, dlnmpy `8c5edd79ea989d22b457bfb93e03b0c5e125792c` | the HEAD of each default branch on 2026-10-14, cloned by `AI-internal/data-acquisition/fetch_repos.sh` | agent-autonomous; information: human-pointed |
+| The chap documentation is archived as part of the chap-core clone (`Archive/chap-core/src/docs/`, the mkdocs source of chap.dhis2.org) rather than scraped from the website | the same text, pinned by commit; the website is built from it | agent-autonomous |
+| **Data selection differs from the §4 default** (JC-01): development is the EWARS monthly example plus Nicaragua weekly before 2018-01-01; the holdout is the Laos monthly subset plus Nicaragua weekly targets from 2018-01-01. The EWARS `example_data/` is a smoke test only | the default's weekly development set has 8 periods (CH-01), so the weekly path would first meet real data at the holdout | agent-autonomous; information: agent-retrieved |
+| Translation ledgers are JSON (`judgment_calls.json`, `challenges.json`), not the YAML §4 names | the repository machinery is standard-library only (`setup-guide.md` §3), and Python's standard library has no YAML parser | agent-autonomous |
+| `.claude/settings.json` placeholders filled in; the excludes also cover `~/ai/CLAUDE.md` | setup-guide §2; that grandparent `CLAUDE.md` was observed to load into this project's sessions, which would silently change the method | agent-autonomous |
+| `Archive/chap-core/src/` is gitignored (65 MB, CH-04) | plan §4 storage rule | agent-autonomous |
+
 ## 5. How this plan is used
 
 `/do` runs the next open batch of §6 and stops. Sketched phases become concrete batches as
@@ -200,7 +211,7 @@ it makes a call or meets an obstacle, and re-renders the two documents at its en
 | Batch | Phase | Aim | Status |
 |---|---|---|---|
 | 0 | — (outside the plan) | Repoint the git remote and create the public GitHub repository (§4b). | done |
-| 1 | A — Orient & set up | Read `readme-at-start.md`, `AGENTS.md`, `MOTIVATION.md`. Archive this plan to `Archive/plan-as-delivered/`. **Clone chap-core, chapkit_ewars_model, chapkit and dlnmpy** with a fetch script in `AI-internal/data-acquisition/`; record each commit, and archive them under `Archive/` with `provenance.md` (`IS_SHADOW`) and checksums. If a clone fails, that is the batch's finding (`CH-01`…). Archive the chap documentation pages needed (evaluating a chapkit model, the CLI) as source material. Archive the development data; select and seal the holdout (§4). Create the two translation ledgers and the renderer. Fill in `readme-at-start.md` from this plan, and write the root `analysis/claim.md`. Re-verify the §4 facts about the R code against the pinned clone. No modelling. | open |
+| 1 | A — Orient & set up | Read `readme-at-start.md`, `AGENTS.md`, `MOTIVATION.md`. Archive this plan to `Archive/plan-as-delivered/`. **Clone chap-core, chapkit_ewars_model, chapkit and dlnmpy** with a fetch script in `AI-internal/data-acquisition/`; record each commit, and archive them under `Archive/` with `provenance.md` (`IS_SHADOW`) and checksums. If a clone fails, that is the batch's finding (`CH-01`…). Archive the chap documentation pages needed (evaluating a chapkit model, the CLI) as source material. Archive the development data; select and seal the holdout (§4). Create the two translation ledgers and the renderer. Fill in `readme-at-start.md` from this plan, and write the root `analysis/claim.md`. Re-verify the §4 facts about the R code against the pinned clone. No modelling. | done |
 | 2 | B — Reference through chap + tutorial | Find from the archived docs how chap-core evaluates a chapkit service. Script it from a *fresh shell* (no inherited env): install chap-core per its docs (uv), start the original EWARS service (pinned image), run chap's evaluation on the development data with the backtest settings fixed here and written to file, and capture every command and its output. Produce the R reference's first file-grounded chap scores, plus the chap baselines through the same pipeline. Write the **tutorial** from the script and its log. A second clean-shell run of the tutorial's commands, diffed, confirms they are complete. | open |
 | 3 | B — Translation inventory | Read `predict.R`, `lib.R`, `train.R` and `main.py` in full. Produce a file mapping **every R call** to its Python counterpart or a gap (dplyr→pandas; `crossbasis`/`equalknots`→dlnmpy; `inla`, `f(...)`, `inla.posterior.sample`, `rnbinom`→?). Retrieve INLA's default hyperpriors and parametrisations from the INLA documentation and source inside the reference image, and archive them. Search for existing Python INLA implementations and assess any that exist. Archive the R sources needing parallel ports. Seed the JC and CH ledgers with what this inventory reveals. | open |
 | 4 | B — Reference harness | An R instrumentation node, run inside the reference image, that emits for each development dataset × config variant (defaults; `region_seasonal=true`; `n_lags=[3,6]`; covariates `[]`): the L1 derived frame, the L2 cross-basis matrices, the L3 INLA posterior summaries, and the L4 predictive samples, each **for at least 5 seeds**, to measure the R noise floor at L3–L5. Also run 2+ chap evaluations of the R model with different seeds for the L5 noise floor. | open |
@@ -218,3 +229,5 @@ it makes a call or meets an obstacle, and re-renders the two documents at its en
 ## Batch ledger — reports
 
 *(One link per completed batch, added by `/do`. Never overwritten.)*
+
+- Batch 1 — [[26-10-14_b01_orientAndSetUp]]

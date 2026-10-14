@@ -49,3 +49,25 @@ acceptable for a file carrying results or data.
 
 **Follow-ups**: a copy of this repository that is made into a real project should re-read
 `How-to-use-vault.md` for statements that its own set-up has made untrue.
+
+## T2 (2026-10-14) — new remote and the project plan
+
+`origin` moved from `sandvelab/agentic-model-development-start` to
+`sandvelab/DevelopPythonVersionOfChapEwars` (created public on the human's instruction);
+`old-history` was left local. The plan was written after reading the EWARS README,
+`predict.R` and the dlnmpy README through the GitHub API, so its model description is
+retrieved, not recalled. The main design choice: "similar results" is measured at five
+layers (L1 adapters → L5 chap scores) against the R model's own seed-to-seed noise floor,
+with the tolerance frozen before any Python prediction exists. INLA, which has no
+established Python equivalent, is treated as an alternatives node (Laplace-style port,
+MCMC, an existing Python INLA if one turns up).
+
+## T3 (2026-10-14) — batch 1
+
+See `AI-generated/batch-reports/26-10-14_b01_orientAndSetUp.md`. Departures from the plan,
+all logged in plan §4b: the data selection (JC-01, because the EWARS weekly example has
+only 8 periods); JSON instead of YAML for the ledgers (stdlib-only machinery); a
+grandparent `CLAUDE.md` added to the settings excludes. `partition_data.py` was run with
+`/usr/bin/python3` rather than `.venv/bin/python`; it is stdlib-only, so the output does not
+depend on which, but later runs should use `.venv`. Docker was not running, so nothing from
+the reference image (R package versions, image digest) was obtained yet.

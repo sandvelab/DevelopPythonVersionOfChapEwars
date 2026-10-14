@@ -1,0 +1,27 @@
+services:
+  ewars:
+    build:
+      context: .
+      # Bakes the commit into the image: GIT_REVISION=$(git rev-parse HEAD) docker compose up --build
+      args:
+        GIT_REVISION: ${GIT_REVISION:-}
+    ports:
+      - "8000:8000"
+    # Runtime hardening, mirroring chap-core's compose.yml: unprivileged user, read-only root
+    # filesystem, writable only at /app/data (SQLite) and /tmp (ML workspaces, tmpfs in RAM).
+    init: true
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    user: chapkit:chapkit
+    volumes:
+      - ewars_data:/app/data
+      - type: tmpfs
+        target: /tmp
+        tmpfs:
+          size: 2000000000
+
+volumes:
+  ewars_data:

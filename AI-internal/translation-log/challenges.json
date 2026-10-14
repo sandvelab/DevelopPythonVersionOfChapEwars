@@ -1,0 +1,56 @@
+[
+  {
+    "id": "CH-01",
+    "date": "2026-10-14",
+    "batch": 1,
+    "challenge": "The EWARS repo's 'weekly' example data is not usable as weekly development data",
+    "solution": "Kept as a smoke test only; weekly development uses Nicaragua weekly data (JC-01)",
+    "status": "solved",
+    "details": "`example_data/` has a `week` column but month-formatted `time_period` values (2023-05 ... 2023-12), 13 locations and 8 periods, with the derived columns (`Cases`, `E`=200000, `ID_year`, ...) precomputed. It is too short for a backtest with lagged covariates."
+  },
+  {
+    "id": "CH-02",
+    "date": "2026-10-14",
+    "batch": 1,
+    "challenge": "The R reference needs Docker, the Docker daemon is not running, and R-INLA is amd64-only on an arm64 Mac",
+    "solution": "Open: the human starts Docker Desktop before batch 2; the reference runs under amd64 emulation and its slowness is recorded",
+    "status": "open",
+    "details": "`docker info` returned 'Cannot connect to the Docker daemon'. The EWARS Dockerfile pins linux/amd64 on both stages because R-INLA has no arm64 Linux build."
+  },
+  {
+    "id": "CH-03",
+    "date": "2026-10-14",
+    "batch": 1,
+    "challenge": "No data-specific licence for the example datasets",
+    "solution": "Treated as distributed under the licences of the repositories that ship them (GPL-3.0, AGPL-3.0); to be re-checked by /release",
+    "status": "provisional",
+    "details": "No LICENSE, README or DESCRIPTION in chap-core `example_data/` names a licence for the data (`DESCRIPTION` there is an unfilled R-package template)."
+  },
+  {
+    "id": "CH-04",
+    "date": "2026-10-14",
+    "batch": 1,
+    "challenge": "The chap-core clone (65 MB) is too large to commit",
+    "solution": "`Archive/chap-core/src/` is gitignored; it can be re-obtained exactly from the commit in its provenance.md, and its checksum manifest is committed",
+    "status": "solved",
+    "details": "The plan's storage rule: archived clones over about 50 MB are gitignored and re-obtainable."
+  },
+  {
+    "id": "CH-05",
+    "date": "2026-10-14",
+    "batch": 1,
+    "challenge": "predict.R loads `sf` and `spdep`, but no call to either was found",
+    "solution": "To confirm in batch 3 by a full read; if they are unused, the Python port needs no spatial-geometry counterpart",
+    "status": "open",
+    "details": "A grep for st_*, poly2nb, nb2* and sf::/spdep:: found nothing. The spatial effect is `iid`, which needs no adjacency graph."
+  },
+  {
+    "id": "CH-06",
+    "date": "2026-10-14",
+    "batch": 1,
+    "challenge": "The period formats differ: predict.R parses weeks as '...W<nn>', while chap-core's weekly CSVs use date ranges ('2003-12-29/2004-01-04')",
+    "solution": "To settle in batch 2: observe exactly what chap passes to the service for weekly data",
+    "status": "open",
+    "details": "predict.R:158-162 derives `week` from `sub('.*W','',time_period)` when neither `week` nor `month` is present."
+  }
+]

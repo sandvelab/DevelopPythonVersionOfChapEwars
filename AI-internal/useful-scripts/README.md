@@ -14,6 +14,7 @@ analysis itself runs under the pinned analysis environment at `environment/env/`
 | `check_invariants.py` | The deterministic checks: tree, provenance, hashes, plots, seeds, claims, git, and values crossing steps by hand | `/validate invariants` |
 | `claims.py` | Maintain and audit the claim collection; flag draft sentences with no supporting claim | `/claims` |
 | `build_hierarchical_report.py` | Generate the linked static-HTML drill-down report from the tree | `/hierarchical-report` |
+| `render_translation_record.py` | Render the JC/CH ledgers into `AI-generated/translation-record/` (short main list + appendix) | every batch, at its end |
 
 `check_invariants.py` exits non-zero on any failure, so it works in a pre-commit hook or CI.
 **When it fails, fix the cause — never weaken the check.**

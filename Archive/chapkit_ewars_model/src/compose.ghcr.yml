@@ -1,0 +1,6 @@
+services:
+  ewars:
+    image: ghcr.io/chap-models/chapkit_ewars_model:latest
+    pull_policy: always
+    ports:
+      - "8000:8000"

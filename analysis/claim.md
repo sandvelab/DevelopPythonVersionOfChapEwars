@@ -1,9 +1,9 @@
 # Claim
 
-<The one analytical aim this project answers, in one or two sentences — a question to be
-explored, not an assertion. Typically: develop or improve <model> for <target> on <data>, and
-establish whether it earns its place against <baselines and reference> under <evaluation
-scheme>. Everything in the tree hangs off this; see `readme-at-start.md` and the plan.>
+How closely can a Python translation of the CHAP-EWARS model (R-INLA + `dlnm`, with `dlnmpy`
+replacing `dlnm`) reproduce the R original's probabilistic forecasts when both are run
+through chap-core on identical data and backtests — relative to the R original's own
+seed-to-seed variability — and which translation choices drive any difference?
 
 ## Children
 

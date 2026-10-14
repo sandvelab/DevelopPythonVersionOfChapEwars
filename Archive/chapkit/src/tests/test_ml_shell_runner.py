@@ -1,0 +1,929 @@
+"""Tests for ShellModelRunner implementation."""
+
+import shutil
+import tempfile
+from pathlib import Path
+from typing import TypedDict
+
+import pytest
+
+from chapkit import BaseConfig
+from chapkit.data import DataFrame
+from chapkit.ml import ShellModelRunner
+
+
+class MockConfig(BaseConfig):
+    """Mock config for testing."""
+
+    prediction_periods: int = 3
+    threshold: float = 0.5
+    features: list[str] = ["feature1", "feature2"]
+
+
+class WorkspaceArtifact(TypedDict):
+    """Type for workspace artifact returned by ShellModelRunner.on_train()."""
+
+    content: object | None  # Model content (None for ShellModelRunner train, DataFrame for predict)
+    workspace_dir: str
+    exit_code: int
+    stdout: str
+    stderr: str
+
+
+def create_mock_workspace() -> WorkspaceArtifact:
+    """Create a mock workspace artifact for testing on_predict()."""
+    temp_dir = Path(tempfile.mkdtemp(prefix="chapkit_test_workspace_"))
+    return {
+        "content": None,  # ShellModelRunner train returns None for content
+        "workspace_dir": str(temp_dir),
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": "",
+    }
+
+
+@pytest.mark.asyncio
+async def test_shell_runner_train_basic() -> None:
+    """Test basic training with shell runner using echo command."""
+    # Create a pickled model file using python
+    train_command = "python -c \"import pickle; pickle.dump('trained_model', open('model.pickle', 'wb'))\""
+
+    runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+        train_command=train_command,
+        predict_command="echo 'predictions' > {output_file}",
+    )
+
+    config = MockConfig()
+    data = DataFrame(columns=["feature1", "target"], data=[[1, 0], [2, 1], [3, 0]])
+
+    # Train should execute command and return workspace info
+    result = await runner.on_train(config, data)
+
+    # Result should be workspace dict (v0.10.0+)
+    assert isinstance(result, dict)
+    assert "workspace_dir" in result
+    assert "exit_code" in result
+    assert result["exit_code"] == 0
+    assert Path(result["workspace_dir"]).exists()
+
+    # Verify model file exists in workspace
+    workspace_dir = Path(result["workspace_dir"])
+    model_file = workspace_dir / "model.pickle"
+    assert model_file.exists()
+
+    # Verify model content is correct
+    with open(model_file, "rb") as f:
+        import pickle
+
+        model = pickle.load(f)
+        assert model == "trained_model"
+
+
+@pytest.mark.asyncio
+async def test_shell_runner_predict_basic() -> None:
+    """Test basic prediction with shell runner."""
+    # Create a simple script that writes CSV output
+    predict_command = 'echo "feature1,prediction\\n1,0.5\\n2,0.6" > {output_file}'
+
+    runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+        train_command="echo 'model' > model.pickle",
+        predict_command=predict_command,
+    )
+
+    config = MockConfig()
+    model = create_mock_workspace()  # Use workspace artifact
+    historic = DataFrame(columns=["feature1"], data=[])
+    future = DataFrame(columns=["feature1"], data=[[1], [2]])
+
+    try:
+        # Predict should execute command and return workspace with predictions
+        result = await runner.on_predict(config, model, historic, future)
+
+        # Result should be workspace dict with predictions
+        assert isinstance(result, dict)
+        assert "workspace_dir" in result
+        assert "exit_code" in result
+        assert "content" in result
+        assert result["exit_code"] == 0
+
+        predictions = result["content"]
+        assert len(predictions.data) == 2
+        assert "prediction" in predictions.columns
+        pred_idx = predictions.columns.index("prediction")
+        assert float(predictions.data[0][pred_idx]) == 0.5
+
+        # Cleanup prediction workspace
+        shutil.rmtree(result["workspace_dir"], ignore_errors=True)
+    finally:
+        # Cleanup mock workspace
+        shutil.rmtree(model["workspace_dir"], ignore_errors=True)
+
+
+@pytest.mark.asyncio
+async def test_shell_runner_train_with_real_script() -> None:
+    """Test training with actual Python script."""
+    # Create a temp script that trains a simple model
+    script = """
+import sys
+import pickle
+import csv
+import yaml
+
+# Read config
+with open("config.yml") as f:
+    config = yaml.safe_load(f)
+
+# Read data from CSV
+with open(sys.argv[1]) as f:
+    reader = csv.DictReader(f)
+    feature1_values = [float(row['feature1']) for row in reader]
+
+# Create simple model (just store mean of feature1)
+mean_value = sum(feature1_values) / len(feature1_values)
+model = {"mean": mean_value, "config": config}
+
+# Save model
+with open("model.pickle", "wb") as f:
+    pickle.dump(model, f)
+
+print("Training completed")
+"""
+
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(script)
+        script_path = f.name
+
+    try:
+        train_command = f"python {script_path} {{data_file}}"
+
+        runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+            train_command=train_command,
+            predict_command="echo 'predictions' > {output_file}",
+        )
+
+        config = MockConfig()
+        data = DataFrame(columns=["feature1", "target"], data=[[10, 1], [20, 2], [30, 3]])
+
+        result = await runner.on_train(config, data)
+
+        # Check result is workspace dict (v0.10.0+)
+        assert isinstance(result, dict)
+        assert "workspace_dir" in result
+        assert result["exit_code"] == 0
+
+        # Load model from workspace
+        workspace_dir = Path(result["workspace_dir"])
+        model_file = workspace_dir / "model.pickle"
+        assert model_file.exists()
+
+        with open(model_file, "rb") as f:
+            import pickle
+
+            model = pickle.load(f)
+
+        # Check model contains expected data
+        assert isinstance(model, dict)
+        assert model["mean"] == 20.0
+        assert model["config"]["threshold"] == 0.5
+
+    finally:
+        Path(script_path).unlink()
+
+
+@pytest.mark.asyncio
+async def test_shell_runner_predict_with_real_script() -> None:
+    """Test prediction with actual Python script."""
+    # Create a temp script that makes predictions
+    script = """
+import sys
+import pickle
+import csv
+
+# Load model
+with open("model.pickle", "rb") as f:
+    model = pickle.load(f)
+
+# Read future data
+with open(sys.argv[1]) as f:
+    reader = csv.DictReader(f)
+    rows = list(reader)
+
+# Make predictions (just add model value to feature1)
+with open(sys.argv[2], "w", newline='') as f:
+    writer = csv.DictWriter(f, fieldnames=["feature1", "prediction"])
+    writer.writeheader()
+    for row in rows:
+        writer.writerow({
+            "feature1": row["feature1"],
+            "prediction": float(row["feature1"]) + model
+        })
+
+print("Prediction completed")
+"""
+
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(script)
+        script_path = f.name
+
+    try:
+        predict_command = f"python {script_path} {{future_file}} {{output_file}}"
+
+        runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+            train_command="echo 'model' > model.pickle",
+            predict_command=predict_command,
+        )
+
+        config = MockConfig()
+        model = create_mock_workspace()  # Create workspace artifact
+
+        # Create model file in workspace (script expects to load it)
+        import pickle
+
+        workspace_dir = Path(model["workspace_dir"])
+        model_file = workspace_dir / "model.pickle"
+        with open(model_file, "wb") as f:
+            pickle.dump(100, f)  # Model is just a number
+
+        historic = DataFrame(columns=["feature1"], data=[])
+        future = DataFrame(columns=["feature1"], data=[[1], [2], [3]])
+
+        result = await runner.on_predict(config, model, historic, future)
+
+        # Result should be workspace dict with predictions
+        assert isinstance(result, dict)
+        assert "workspace_dir" in result
+        assert result["exit_code"] == 0
+
+        predictions = result["content"]
+        assert len(predictions.data) == 3
+        assert "prediction" in predictions.columns
+        pred_idx = predictions.columns.index("prediction")
+        assert float(predictions.data[0][pred_idx]) == 101  # 1 + 100
+
+        # Cleanup prediction workspace and training workspace
+        shutil.rmtree(result["workspace_dir"], ignore_errors=True)
+        shutil.rmtree(workspace_dir, ignore_errors=True)
+
+    finally:
+        Path(script_path).unlink()
+
+
+@pytest.mark.asyncio
+async def test_shell_runner_train_failure() -> None:
+    """Test that a failed training script preserves the workspace and reports the exit code."""
+    # Command that will fail
+    train_command = "echo 'train boom' >&2; exit 1"
+
+    runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+        train_command=train_command,
+        predict_command="echo 'predictions' > {output_file}",
+    )
+
+    config = MockConfig()
+    data = DataFrame(columns=["feature1"], data=[[1], [2], [3]])
+
+    # on_train itself does not raise: it hands the failure to MLManager, which stores the
+    # diagnostic artifact and then raises ModelRunFailedError so the job ends as failed.
+    result = await runner.on_train(config, data)
+
+    try:
+        assert isinstance(result, dict)
+        assert "workspace_dir" in result
+        assert result["exit_code"] == 1  # Non-zero exit code
+        assert "train boom" in result["stderr"]
+        assert Path(result["workspace_dir"]).exists()  # Workspace preserved for debugging
+    finally:
+        shutil.rmtree(result["workspace_dir"], ignore_errors=True)
+
+
+@pytest.mark.asyncio
+async def test_shell_runner_predict_failure() -> None:
+    """Test that a failed prediction script preserves the workspace instead of raising."""
+    # Command that will fail and not create output file
+    predict_command = "echo 'predict boom' >&2; exit 2"
+
+    runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+        train_command="echo 'model' > model.pickle",
+        predict_command=predict_command,
+    )
+
+    config = MockConfig()
+    model = create_mock_workspace()  # Use workspace artifact
+    historic = DataFrame(columns=["feature1"], data=[])
+    future = DataFrame(columns=["feature1"], data=[[1], [2]])
+
+    result: dict[str, object] | None = None
+    try:
+        # The failed script keeps its workspace so MLManager can store a diagnostic artifact
+        # before failing the job; a missing output file is only an error on a successful exit.
+        result = await runner.on_predict(config, model, historic, future)
+        assert isinstance(result, dict)
+        assert result["exit_code"] == 2
+        assert result["content"] is None
+        assert "predict boom" in str(result["stderr"])
+        assert Path(str(result["workspace_dir"])).exists()
+    finally:
+        # Cleanup mock workspace
+        shutil.rmtree(model["workspace_dir"], ignore_errors=True)
+        if result is not None:
+            shutil.rmtree(str(result["workspace_dir"]), ignore_errors=True)
+
+
+@pytest.mark.asyncio
+async def test_shell_runner_predict_success_requires_output_file() -> None:
+    """Test that a successful prediction script must still produce the output file."""
+    runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+        train_command="echo 'model' > model.pickle",
+        predict_command="echo 'no output written'",
+    )
+
+    config = MockConfig()
+    model = create_mock_workspace()
+    historic = DataFrame(columns=["feature1"], data=[])
+    future = DataFrame(columns=["feature1"], data=[[1], [2]])
+
+    try:
+        with pytest.raises(RuntimeError, match="Prediction script did not create output file"):
+            await runner.on_predict(config, model, historic, future)
+    finally:
+        shutil.rmtree(model["workspace_dir"], ignore_errors=True)
+
+
+def test_workspace_exclude_patterns_drop_sqlite_sidecar_files() -> None:
+    """Test that SQLite WAL, shared-memory and journal sidecar files are excluded from workspaces."""
+    from chapkit.ml.runner import prepare_workspace
+
+    source_dir = Path(tempfile.mkdtemp(prefix="chapkit_test_source_"))
+    dest_dir = Path(tempfile.mkdtemp(prefix="chapkit_test_dest_"))
+
+    try:
+        data_dir = source_dir / "data"
+        data_dir.mkdir()
+        (data_dir / "chapkit.db").write_text("db")
+        (data_dir / "chapkit.db-wal").write_text("wal")
+        (data_dir / "chapkit.db-shm").write_text("shm")
+        (data_dir / "chapkit.db-journal").write_text("journal")
+        (data_dir / "keep.csv").write_text("a,b\n1,2\n")
+
+        prepare_workspace(source_dir, dest_dir)
+
+        copied = {path.name for path in (dest_dir / "data").iterdir()}
+        assert copied == {"keep.csv"}
+    finally:
+        shutil.rmtree(source_dir, ignore_errors=True)
+        shutil.rmtree(dest_dir, ignore_errors=True)
+
+
+@pytest.mark.asyncio
+async def test_shell_runner_missing_model_file() -> None:
+    """Test handling when training script doesn't create model file (v0.10.0+: still creates workspace)."""
+    # Command that doesn't create model file
+    train_command = "echo 'no model created'"
+
+    runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+        train_command=train_command,
+        predict_command="echo 'predictions' > {output_file}",
+    )
+
+    config = MockConfig()
+    data = DataFrame(columns=["feature1"], data=[[1], [2], [3]])
+
+    # v0.10.0+: Returns workspace dict even without model file
+    result = await runner.on_train(config, data)
+    assert isinstance(result, dict)
+    assert "workspace_dir" in result
+    assert "exit_code" in result
+    assert result["exit_code"] == 0
+    assert "stdout" in result
+    assert "stderr" in result
+
+    # Workspace exists but no model file
+    workspace_dir = Path(result["workspace_dir"])
+    assert workspace_dir.exists()
+    model_file = workspace_dir / "model.pickle"
+    assert not model_file.exists()  # No model file created
+
+
+@pytest.mark.asyncio
+async def test_shell_runner_predict_with_placeholder_model() -> None:
+    """Test prediction without model file (workspace contains no model.pickle)."""
+    # Create a predict script that doesn't need a model file
+    predict_script = """
+import sys
+import csv
+
+# Read future data (note: no model file to load)
+with open(sys.argv[1]) as f:
+    reader = csv.DictReader(f)
+    rows = list(reader)
+
+# Make predictions without model (simple rule-based)
+with open(sys.argv[2], "w", newline='') as f:
+    writer = csv.DictWriter(f, fieldnames=["feature1", "prediction"])
+    writer.writeheader()
+    for row in rows:
+        writer.writerow({
+            "feature1": row["feature1"],
+            "prediction": float(row["feature1"]) * 2  # Simple rule
+        })
+
+print("Prediction completed without model file")
+"""
+
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
+        f.write(predict_script)
+        script_path = f.name
+
+    try:
+        # Note: predict command doesn't use {model_file}
+        predict_command = f"python {script_path} {{future_file}} {{output_file}}"
+
+        runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+            train_command="echo 'no model file'",
+            predict_command=predict_command,
+        )
+
+        config = MockConfig()
+
+        # Create workspace artifact without model file (simulates training that didn't create one)
+        model = create_mock_workspace()
+
+        historic = DataFrame(columns=["feature1"], data=[])
+        future = DataFrame(columns=["feature1"], data=[[5], [10]])
+
+        result = await runner.on_predict(config, model, historic, future)
+
+        # Result should be workspace dict with predictions
+        assert isinstance(result, dict)
+        assert "workspace_dir" in result
+        assert result["exit_code"] == 0
+
+        predictions = result["content"]
+        # Should successfully predict without model file
+        assert len(predictions.data) == 2
+        assert "prediction" in predictions.columns
+        pred_idx = predictions.columns.index("prediction")
+        assert float(predictions.data[0][pred_idx]) == 10  # 5 * 2
+        assert float(predictions.data[1][pred_idx]) == 20  # 10 * 2
+
+        # Cleanup prediction workspace and training workspace
+        shutil.rmtree(result["workspace_dir"], ignore_errors=True)
+        shutil.rmtree(model["workspace_dir"], ignore_errors=True)
+
+    finally:
+        Path(script_path).unlink()
+
+
+@pytest.mark.asyncio
+async def test_shell_runner_missing_output_file() -> None:
+    """Test error when prediction script doesn't create output file."""
+    # Command that doesn't create output file
+    predict_command = "echo 'no predictions created'"
+
+    runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+        train_command="echo 'model' > model.pickle",
+        predict_command=predict_command,
+    )
+
+    config = MockConfig()
+    model = create_mock_workspace()  # Use workspace artifact
+    historic = DataFrame(columns=["feature1"], data=[])
+    future = DataFrame(columns=["feature1"], data=[[1], [2]])
+
+    try:
+        with pytest.raises(RuntimeError, match="Prediction script did not create output file"):
+            await runner.on_predict(config, model, historic, future)
+    finally:
+        # Cleanup mock workspace
+        shutil.rmtree(model["workspace_dir"], ignore_errors=True)
+
+
+@pytest.mark.asyncio
+async def test_shell_runner_variable_substitution() -> None:
+    """Test that all variables are properly substituted in commands."""
+    # Test that the runner creates the expected files with substituted paths
+    # This is implicitly tested by the other tests, but we verify explicitly here
+
+    train_command = "python -c \"import pickle; pickle.dump('model', open('model.pickle', 'wb'))\""
+
+    runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+        train_command=train_command,
+        predict_command='echo "feature1,prediction\\n1,0.5" > {output_file}',
+    )
+
+    config = MockConfig()
+    data = DataFrame(columns=["feature1"], data=[[1], [2], [3]])
+
+    # Train - this will verify {model_file} substitution works
+    result = await runner.on_train(config, data)
+    assert isinstance(result, dict)
+    assert "workspace_dir" in result
+    assert result["exit_code"] == 0
+
+    # Verify model was created
+    workspace_dir = Path(result["workspace_dir"])
+    model_file = workspace_dir / "model.pickle"
+    assert model_file.exists()
+
+    # Predict - this will verify {output_file} substitution works
+    # Use workspace from training
+    historic = DataFrame(columns=["feature1"], data=[])
+    future = DataFrame(columns=["feature1"], data=[[1]])
+    predict_result = await runner.on_predict(config, result, historic, future)
+
+    # Result should be workspace dict with predictions
+    assert isinstance(predict_result, dict)
+    assert "workspace_dir" in predict_result
+    assert predict_result["exit_code"] == 0
+
+    predictions = predict_result["content"]
+    assert len(predictions.data) == 1
+    assert "prediction" in predictions.columns
+
+    # Cleanup workspaces
+    shutil.rmtree(predict_result["workspace_dir"], ignore_errors=True)
+    shutil.rmtree(workspace_dir, ignore_errors=True)
+
+
+@pytest.mark.asyncio
+async def test_shell_runner_cleanup_temp_files() -> None:
+    """Test workspace preservation (v0.10.0+: workspace NOT cleaned up by runner)."""
+
+    temp_dirs_before = len(list(Path(tempfile.gettempdir()).glob("chapkit_ml_*")))
+
+    train_command = "python -c \"import pickle; pickle.dump('model', open('model.pickle', 'wb'))\""
+    runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+        train_command=train_command,
+        predict_command="echo 'predictions' > {output_file}",
+    )
+
+    config = MockConfig()
+    data = DataFrame(columns=["feature1"], data=[[1], [2], [3]])
+
+    result = await runner.on_train(config, data)
+
+    # v0.10.0+: Workspace is NOT cleaned up by runner (manager will cleanup after storing artifact)
+    temp_dirs_after = len(list(Path(tempfile.gettempdir()).glob("chapkit_ml_*")))
+    assert temp_dirs_after == temp_dirs_before + 1  # One workspace dir exists
+
+    # Verify workspace exists and contains model
+    workspace_dir = Path(result["workspace_dir"])
+    assert workspace_dir.exists()
+    model_file = workspace_dir / "model.pickle"
+    assert model_file.exists()
+
+    # Manual cleanup for test
+    shutil.rmtree(workspace_dir, ignore_errors=True)
+
+
+@pytest.mark.asyncio
+async def test_copies_entire_project_directory() -> None:
+    """Test that entire project directory is copied to temp workspace."""
+    # Use Python inline command to verify project files and create model
+    train_command = (
+        'python -c "'
+        "import sys; "
+        "from pathlib import Path; "
+        "import pickle; "
+        "expected = ['pyproject.toml', 'src', 'tests']; "
+        "missing = [f for f in expected if not Path(f).exists()]; "
+        "sys.exit(1) if missing else None; "
+        "pickle.dump('success', open('model.pickle', 'wb'))"
+        '"'
+    )
+
+    runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+        train_command=train_command,
+        predict_command="echo 'predictions' > {output_file}",
+    )
+
+    config = MockConfig()
+    data = DataFrame(columns=["feature1"], data=[[1], [2]])
+
+    # Should succeed if project files are copied
+    result = await runner.on_train(config, data)
+    assert isinstance(result, dict)
+    assert "workspace_dir" in result
+    assert result["exit_code"] == 0  # Should succeed
+
+
+@pytest.mark.asyncio
+async def test_ignores_venv_directory() -> None:
+    """Test that .venv directory is not copied to workspace."""
+    train_command = (
+        'python -c "'
+        "import sys; "
+        "from pathlib import Path; "
+        "import pickle; "
+        "sys.exit(1) if Path('.venv').exists() else None; "
+        "pickle.dump('venv_ignored', open('model.pickle', 'wb'))"
+        '"'
+    )
+
+    runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+        train_command=train_command,
+        predict_command="echo 'predictions' > {output_file}",
+    )
+
+    config = MockConfig()
+    data = DataFrame(columns=["feature1"], data=[[1], [2]])
+
+    result = await runner.on_train(config, data)
+    assert isinstance(result, dict)
+    assert "workspace_dir" in result
+    assert result["exit_code"] == 0  # Should succeed (.venv not copied)
+
+
+@pytest.mark.asyncio
+async def test_ignores_node_modules() -> None:
+    """Test that node_modules directory is not copied to workspace."""
+    train_command = (
+        'python -c "'
+        "import sys; "
+        "from pathlib import Path; "
+        "import pickle; "
+        "sys.exit(1) if Path('node_modules').exists() else None; "
+        "pickle.dump('node_modules_ignored', open('model.pickle', 'wb'))"
+        '"'
+    )
+
+    runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+        train_command=train_command,
+        predict_command="echo 'predictions' > {output_file}",
+    )
+
+    config = MockConfig()
+    data = DataFrame(columns=["feature1"], data=[[1], [2]])
+
+    result = await runner.on_train(config, data)
+    assert isinstance(result, dict)
+    assert "workspace_dir" in result
+    assert result["exit_code"] == 0  # Should succeed (node_modules not copied)
+
+
+@pytest.mark.asyncio
+async def test_ignores_pycache() -> None:
+    """Test that __pycache__ directories are not copied to workspace."""
+    train_command = (
+        'python -c "'
+        "import sys; "
+        "from pathlib import Path; "
+        "import pickle; "
+        "pycache = list(Path('.').rglob('__pycache__')); "
+        "sys.exit(1) if pycache else None; "
+        "pickle.dump('pycache_ignored', open('model.pickle', 'wb'))"
+        '"'
+    )
+
+    runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+        train_command=train_command,
+        predict_command="echo 'predictions' > {output_file}",
+    )
+
+    config = MockConfig()
+    data = DataFrame(columns=["feature1"], data=[[1], [2]])
+
+    result = await runner.on_train(config, data)
+    assert isinstance(result, dict)
+    assert "workspace_dir" in result
+    assert result["exit_code"] == 0  # Should succeed (__pycache__ not copied)
+
+
+@pytest.mark.asyncio
+async def test_project_structure_preserved() -> None:
+    """Test that project directory structure is preserved in workspace."""
+    train_command = (
+        'python -c "'
+        "import sys; "
+        "from pathlib import Path; "
+        "import pickle; "
+        "missing = []; "
+        "missing.append('src') if not Path('src').exists() else None; "
+        "missing.append('src/chapkit') if not Path('src/chapkit').exists() else None; "
+        "sys.exit(1) if missing else None; "
+        "pickle.dump('structure_preserved', open('model.pickle', 'wb'))"
+        '"'
+    )
+
+    runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+        train_command=train_command,
+        predict_command="echo 'predictions' > {output_file}",
+    )
+
+    config = MockConfig()
+    data = DataFrame(columns=["feature1"], data=[[1], [2]])
+
+    result = await runner.on_train(config, data)
+    assert isinstance(result, dict)
+    assert "workspace_dir" in result
+    assert result["exit_code"] == 0  # Should succeed (structure preserved)
+
+
+@pytest.mark.asyncio
+async def test_uses_relative_paths() -> None:
+    """Test that variable substitution uses relative paths and supports relative imports."""
+    # Create a helper module in the project root temporarily
+    lib_content = "def process_data(value):\n    return value * 2\n"
+    lib_file = Path.cwd() / "test_helper_lib.py"
+    lib_file.write_text(lib_content)
+
+    try:
+        # Command that imports the helper module and creates model
+        train_command = (
+            'python -c "'
+            "import pickle; "
+            "from test_helper_lib import process_data; "
+            "result = process_data(42); "
+            "pickle.dump(result, open('model.pickle', 'wb'))"
+            '"'
+        )
+
+        runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+            train_command=train_command,
+            predict_command="echo 'predictions' > {output_file}",
+        )
+
+        config = MockConfig()
+        data = DataFrame(columns=["feature1"], data=[[1], [2]])
+
+        # Should succeed with relative imports (lib file copied to workspace)
+        result = await runner.on_train(config, data)
+        assert isinstance(result, dict)
+        assert "workspace_dir" in result
+        assert result["exit_code"] == 0  # Should succeed
+
+        # Verify model file was created with correct value
+        workspace_dir = Path(result["workspace_dir"])
+        model_file = workspace_dir / "model.pickle"
+        assert model_file.exists()
+
+        with open(model_file, "rb") as f:
+            import pickle
+
+            model = pickle.load(f)
+            assert model == 84  # 42 * 2
+
+    finally:
+        # Cleanup
+        if lib_file.exists():
+            lib_file.unlink()
+
+
+def test_dump_config_yaml_flat_default() -> None:
+    """Flat format writes every BaseConfig field at the top level."""
+    import yaml
+
+    from chapkit.ml.runner import dump_config_yaml
+
+    config = MockConfig(prediction_periods=4, threshold=0.9, features=["a", "b"])
+    parsed = yaml.safe_load(dump_config_yaml(config))
+
+    assert parsed == {
+        "prediction_periods": 4,
+        "threshold": 0.9,
+        "features": ["a", "b"],
+        "additional_continuous_covariates": [],
+    }
+
+
+def test_dump_config_yaml_chap_core_wraps_user_options() -> None:
+    """chap_core format keeps reserved fields flat and nests everything else."""
+    import yaml
+
+    from chapkit.ml.runner import dump_config_yaml
+
+    config = MockConfig(prediction_periods=4, threshold=0.9, features=["a", "b"])
+    parsed = yaml.safe_load(dump_config_yaml(config, format="chap_core"))
+
+    assert parsed == {
+        "prediction_periods": 4,
+        "additional_continuous_covariates": [],
+        "user_option_values": {
+            "threshold": 0.9,
+            "features": ["a", "b"],
+        },
+    }
+
+
+def test_dump_config_yaml_chap_core_from_chap_core_payload() -> None:
+    """A config created from chap-core's nested payload dumps its options one level deep."""
+    import yaml
+
+    from chapkit.ml.runner import dump_config_yaml
+
+    class PortedConfig(BaseConfig):
+        """Config with one declared tunable."""
+
+        prediction_periods: int = 3
+        threshold: float = 0.5
+
+    config = PortedConfig.model_validate(
+        {"name": "ported_cfg", "user_option_values": {"threshold": 0.25, "extra_knob": 1}}
+    )
+    parsed = yaml.safe_load(dump_config_yaml(config, format="chap_core"))
+
+    assert parsed["prediction_periods"] == 3
+    assert parsed["user_option_values"]["threshold"] == 0.25
+    assert parsed["user_option_values"]["extra_knob"] == 1
+    assert "user_option_values" not in parsed["user_option_values"]
+
+
+def test_dump_config_yaml_chap_core_omits_user_options_when_empty() -> None:
+    """chap_core format skips the user_option_values key when there are no user fields."""
+    import yaml
+
+    from chapkit.ml.runner import dump_config_yaml
+
+    class BareConfig(BaseConfig):
+        """Config with no user fields beyond BaseConfig reserved ones."""
+
+    config = BareConfig(prediction_periods=3)
+    parsed = yaml.safe_load(dump_config_yaml(config, format="chap_core"))
+
+    assert parsed == {"prediction_periods": 3, "additional_continuous_covariates": []}
+    assert "user_option_values" not in parsed
+
+
+@pytest.mark.asyncio
+async def test_shell_runner_chap_core_config_format_end_to_end(tmp_path: Path) -> None:
+    """ShellModelRunner with config_format='chap_core' writes nested config.yml readable by ported scripts."""
+    import os
+
+    import yaml
+
+    # Script that reads config.yml the way a chap-core-ported model does.
+    script = tmp_path / "train.py"
+    script.write_text(
+        "import sys, yaml, pickle\n"
+        "with open('config.yml') as f:\n"
+        "    cfg = yaml.safe_load(f)\n"
+        "assert cfg['prediction_periods'] == 5\n"
+        "assert cfg['user_option_values']['threshold'] == 0.25\n"
+        "pickle.dump('ok', open('model.pickle', 'wb'))\n"
+    )
+
+    runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+        train_command=f"python {script}",
+        predict_command="true",
+        config_format="chap_core",
+    )
+    config = MockConfig(prediction_periods=5, threshold=0.25)
+    data = DataFrame(columns=["feature1"], data=[[1], [2]])
+
+    cwd = os.getcwd()
+    os.chdir(tmp_path)
+    try:
+        runner.project_root = tmp_path
+        result = await runner.on_train(config, data)
+    finally:
+        os.chdir(cwd)
+
+    assert result["exit_code"] == 0, result.get("stderr")
+    written = yaml.safe_load((Path(result["workspace_dir"]) / "config.yml").read_text())
+    assert written["prediction_periods"] == 5
+    assert written["user_option_values"] == {"threshold": 0.25, "features": ["feature1", "feature2"]}
+    shutil.rmtree(result["workspace_dir"], ignore_errors=True)
+
+
+@pytest.mark.asyncio
+async def test_shell_runner_predict_reemits_config_yaml_for_this_request(tmp_path: Path) -> None:
+    """The predict workspace's config.yml carries this request's horizon, not the training one."""
+    import os
+
+    import yaml
+
+    # A restored training workspace whose config.yml was written for a different horizon.
+    training_workspace = tmp_path / "training_workspace"
+    training_workspace.mkdir()
+    (training_workspace / "config.yml").write_text("prediction_periods: 3\n")
+
+    script = tmp_path / "predict.py"
+    script.write_text(
+        "import yaml\n"
+        "with open('config.yml') as f:\n"
+        "    cfg = yaml.safe_load(f)\n"
+        "assert cfg['prediction_periods'] == 7, cfg\n"
+        "with open('predictions.csv', 'w') as f:\n"
+        "    f.write('time_period,location,sample_0\\n2020-01,location_0,1.0\\n')\n"
+    )
+
+    runner: ShellModelRunner[MockConfig] = ShellModelRunner(
+        train_command="true",
+        predict_command=f"python {script}",
+    )
+    config = MockConfig(prediction_periods=7)
+    historic = DataFrame(columns=["time_period", "location"], data=[["2019-12", "location_0"]])
+    future = DataFrame(columns=["time_period", "location"], data=[["2020-01", "location_0"]])
+
+    cwd = os.getcwd()
+    os.chdir(tmp_path)
+    try:
+        runner.project_root = tmp_path
+        result = await runner.on_predict(config, {"workspace_dir": str(training_workspace)}, historic, future)
+    finally:
+        os.chdir(cwd)
+
+    assert result["exit_code"] == 0, result.get("stderr")
+    written = yaml.safe_load((Path(result["workspace_dir"]) / "config.yml").read_text())
+    assert written["prediction_periods"] == 7
+    shutil.rmtree(result["workspace_dir"], ignore_errors=True)

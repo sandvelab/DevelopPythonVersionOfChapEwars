@@ -1,0 +1,69 @@
+"""dlnmpy: distributed lag non-linear models in Python.
+
+A faithful port of the R package ``dlnm`` (Gasparrini) built from the
+published methodology and the R source, and validated numerically against
+R on the ``chicagoNMMAPS`` examples.
+
+Typical workflow::
+
+    import dlnmpy as dl
+    df = dl.datasets.chicago_nmmaps()
+    cb = dl.crossbasis(df["temp"], lag=21, argvar={"fun": "ns", "df": 4},
+                       arglag={"fun": "ns", "df": 4})
+    ns_time = dl.onebasis(df["time"], "ns", df=7 * 14)
+    X = dl.design_matrix(df, ("cb", cb), ("ns_time", ns_time), intercept=False)
+    fit = dl.fit_glm("death ~ " + " + ".join(X.columns) + " + C(dow)",
+                     df.join(X), family="quasipoisson")
+    pred = dl.crosspred(cb, fit, cen=21, by=1, name="cb")
+    pred.plot("overall")
+"""
+
+from . import attribution, basis, datasets, plot, twostage, uncertainty, workflow
+from ._rcompat import pretty, quantile7
+from .basis import bs, cr, integer, lin, ns, poly, ps, strata, thr
+from .core import CrossBasis, OneBasis, crossbasis, onebasis
+from .knots import equalknots, logknots
+from .lag import exphist, lag_matrix, mklag, seqlag
+from .model import design_matrix, extract_coef_vcov, fit_clogit, fit_glm, get_link
+from .penalty import cbpen
+from .predict import CrossPred, CrossReduce, crosspred, crossreduce
+from .attribution import attr_table, attrdl, findmin, mmt, simulate_coef
+from .twostage import predict_reduced, stack_reduced
+from .penalized import PenalizedGLMResults, fit_pgam, fit_pglm
+from .uncertainty import bootstrap, bootstrap_ci, empirical_ci, model_grid, qaic, simulate_pred
+from .workflow import DLNM, dlnm, percentile_knots, percentile_of
+
+try:                                    # single source of truth: pyproject.toml
+    from importlib.metadata import PackageNotFoundError, version as _pkg_version
+
+    __version__ = _pkg_version("dlnmpy")
+except (ImportError, PackageNotFoundError):  # running from a source tree
+    __version__ = "0.8.0"
+
+
+def __getattr__(name):
+    # dl.meta, dl.mixmeta and dl.MixMeta worked until 0.7; the meta-analysis now
+    # lives in mixmetapy. Resolve them lazily so that importing dlnmpy never
+    # needs mixmetapy, and say where they went when it is missing.
+    if name in ("meta", "mixmeta", "MixMeta"):
+        import importlib
+        import warnings
+
+        meta = importlib.import_module(".meta", __name__)
+        if name == "meta":
+            return meta
+        warnings.warn(f"dlnmpy.{name} is deprecated and will be removed in dlnmpy 1.0; "
+                      f"use mixmetapy.{name}", DeprecationWarning, stacklevel=2)
+        return getattr(meta._mixmetapy, name)
+    raise AttributeError(f"module 'dlnmpy' has no attribute {name!r}")
+
+__all__ = [
+    "onebasis", "crossbasis", "crosspred", "crossreduce", "exphist", "logknots",
+    "equalknots", "cbpen", "OneBasis", "CrossBasis", "CrossPred", "CrossReduce",
+    "lin", "poly", "strata", "thr", "integer", "ns", "bs", "ps", "cr",
+    "fit_pgam", "fit_pglm", "PenalizedGLMResults", "bootstrap", "empirical_ci", "model_grid", "qaic", "simulate_pred",
+    "lag_matrix", "mklag", "seqlag", "fit_glm", "fit_clogit", "design_matrix", "extract_coef_vcov",
+    "get_link", "pretty", "quantile7", "basis", "datasets", "attribution", "plot", "uncertainty",
+    "attrdl", "findmin", "mmt", "attr_table", "simulate_coef", "twostage", "predict_reduced", "stack_reduced",
+    "dlnm", "DLNM", "percentile_knots", "percentile_of", "workflow", "bootstrap_ci",
+]

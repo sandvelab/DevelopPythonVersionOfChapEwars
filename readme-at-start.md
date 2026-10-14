@@ -8,57 +8,50 @@ work is done here.
 
 ---
 
-> **This copy has not been given a project yet.** Every `<…>` below is a placeholder. Until
-> they are filled in — by the human, in dialogue with the agent, before any analysis — the
-> only work to do here is the set-up in `setup-guide.md` and the writing of the first plan
-> from `Human-input/Plans for AI generation/plan-template.md`. `AGENTS.md` §0 says exactly
-> what an agent does in this state. Delete this box when the project is defined.
-
 ## The project
 
-**<One or two sentences: develop or improve which model, for which target, on which data,
-and establish what about it — typically whether it earns its place against the named
-baselines and reference.>** Full aim, success criteria and non-negotiables:
-`Human-input/Plans for AI generation/<YY-MM-DD_planName>.md`.
+**Translate the CHAP-EWARS disease-forecasting model (`chap-models/chapkit_ewars_model`,
+R-INLA + `dlnm`) into Python, with `dlnmpy` in place of `dlnm`, run it through chap-core as a
+chapkit service, and establish how close its forecasts are to the R original's, measured
+against the R original's own seed-to-seed variability.** Full aim, success criteria and
+non-negotiables: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForChap.md`.
 
 ## Where the project starts from
 
-The three anchors every project here is bound to. Each is pinned, archived under `Archive/`
-with a `provenance.md`, and named here so that no session has to rediscover it.
-
 | Anchor | This project |
 |---|---|
-| Evaluation platform or harness | `<platform and version, or "own scoring code, verified against <reference> in node <path>">` |
-| Metric | `<primary metric; secondary metrics>` |
-| Backtest or split scheme | `<scheme, and where it is recorded as a file>` |
-| Required baselines | `<baselines every model is compared against, scored through the same pipeline>` |
-| Reference model | `<external reference, pinned by version — or "none", and why>` |
-| Modelling resources to start from | `<model library / reference implementation / method, pinned by commit or version, at Archive/<dir>>` |
-| Data | `<source, exact version fetched, licence, at Archive/<dir> with sha256sums.txt>` |
-| Target | `<what is predicted, at what resolution>` |
-| Development data | `<the only slice development ever sees>` |
-| Held-out data | `<sealed until the final validation; opened once>` |
+| Evaluation platform or harness | chap-core @ `b8c8f788` with chapkit @ `b8ccd072`, at `Archive/chap-core/`, `Archive/chapkit/` |
+| Metric | chap-core's CRPS (or its default probabilistic metric; confirmed in batch 2); secondary: fidelity layers L1–L4 (plan §2) |
+| Backtest or split scheme | chap-core's backtest from its evaluate command, identical settings for R and Python; recorded as a file in batch 2 |
+| Required baselines | chap-core's standard naive baselines (identified in batch 2) |
+| Reference model | the R original, chapkit_ewars_model @ `964eea8b`, run as its Docker image (pinned by digest in batch 2) |
+| Modelling resources to start from | dlnmpy @ `8c5edd79` at `Archive/dlnmpy/`; the R `dlnm` and R-INLA sources from inside the reference image (archived in batch 3) |
+| Data | EWARS repo and chap-core example data, at `Archive/dev-data/` and `Archive/holdout/` with `sha256sums.txt`; licence: that of the shipping repositories (CH-03) |
+| Target | `disease_cases` per location per period (week or month), as 1000 predictive samples per row |
+| Development data | `Archive/dev-data/`: EWARS monthly example (23 locations, 2001-01..2017-06); Nicaragua weekly, periods before 2018-01-01 |
+| Held-out data | `Archive/holdout/`, sealed: Laos monthly subset (3 locations); Nicaragua weekly targets from 2018-01-01 |
 
 ## The article
 
-- **Target venue**: `<not yet decided | venue>`.
-- **Status**: `<which batches are done, what they established, what is open — kept current>`.
+- **Target venue**: not yet decided.
+- **Status**: batch 1 done: anchors cloned and pinned, data partitioned and holdout sealed,
+  translation ledgers started. Next: batch 2, the R reference through chap and the tutorial.
 - **Manuscript**: `Human-AI-collaboration/manuscript/` (empty).
-- **The plan being executed**: `Human-input/Plans for AI generation/<YY-MM-DD_planName>.md`.
+- **The plan being executed**: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForChap.md`.
   It carries the batch ledger (§6); `/do` runs the next open batch and stops.
 
 ## Settings this project has fixed
 
 | Setting | Value |
 |---|---|
-| Project random seed | `<integer>`. Every component seed derives from it (`AI-internal/skill-references/provenance-record.md`). |
-| Main environment | `<pinned in batch N: interpreter and the libraries the analysis needs>`. Installed from `environment/lock.txt` by `environment/install-env.sh`. Invoked as `environment/env/bin/python`. `<Docker image: yes/no, and why>` |
+| Project random seed | `20261014`. Every component seed derives from it (`AI-internal/skill-references/provenance-record.md`). |
+| Main environment | Python 3.13 with dlnmpy, chapkit, chap-core and the inference libraries, pinned once batch 3's inventory is known. Installed from `environment/lock.txt` by `environment/install-env.sh`. Invoked as `environment/env/bin/python`. Docker image: yes — the R reference is one, and the Python model ships one so chap drives both identically. |
 | Repository machinery interpreter | `.venv`, per `setup-guide.md` §3. |
-| Tracking level | `<full | standard | light>` (`AGENTS.md` §6). Raise it with the human rather than drifting. |
-| Compute budget for stability work | `<not yet set — set once the per-run cost is known | budget>` |
-| Storage budget | `<not a constraint by default | budget>` |
-| Data governance | `<public and redistributable | restricted: what may and may not be published>` |
-| Git remote | `<owner/repository, public or private>`. Nothing is pushed without the human's instruction; `/release` runs the secrets and data-permission scan before anything becomes public. |
+| Tracking level | standard (`AGENTS.md` §6). |
+| Compute budget for stability work | not yet set — set in phase D once the per-run cost is known |
+| Storage budget | not a constraint; clones over ~50 MB gitignored and re-obtainable by commit |
+| Data governance | public example data, redistributable under the shipping repositories' licences (re-checked at release) |
+| Git remote | `sandvelab/DevelopPythonVersionOfChapEwars`, public. Nothing is pushed without the human's instruction; `/release` runs the secrets and data-permission scan before anything becomes public. |
 
 ## What must not happen
 
@@ -69,8 +62,10 @@ These override everything else here; the plan's §3 states them in full for this
    re-run on the holdout after a number from it has been seen.
 2. **No number reaches a claim except through a file.** Whatever computes a score writes it
    to a file; every reported figure is read from that file by a script.
-3. **Every judgment call is a node or a logged decision, never silent** — model family,
-   specification, inputs, preprocessing, training window, the combination rule, the metric.
+3. **Every judgment call is a node or a logged decision, never silent**, and carries a
+   `JC-NN` id in `AI-internal/translation-log/judgment_calls.json`; every obstacle a `CH-NN`
+   id in `challenges.json`.
 4. **Agency is recorded on every decision.**
-5. **Failures are kept**: a model that does not fit, a specification that does not converge,
-   an ablation showing no benefit — all stay in the record.
+5. **Failures are kept**: an inference strategy that does not converge or does not match
+   INLA stays in the record, runnable.
+6. **The original R model is never modified**; it is instrumented by separate scripts.

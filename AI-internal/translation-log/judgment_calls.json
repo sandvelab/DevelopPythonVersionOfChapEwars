@@ -1,0 +1,16 @@
+[
+  {
+    "id": "JC-01",
+    "date": "2026-10-14",
+    "batch": 1,
+    "area": "evaluation",
+    "call": "Which data is development and which is the sealed holdout",
+    "choice": "Dev: EWARS monthly example + Nicaragua weekly before 2018; holdout: Laos monthly subset + Nicaragua weekly from 2018",
+    "alternatives": "(a) The plan's default, holdout = one or two whole chap-core datasets with weekly development on the EWARS `example_data/`. Rejected: that weekly example has 8 periods, too short for a lagged backtest, so the weekly code path would first meet real data at the holdout. (b) A location split of the Nicaragua data. Rejected: chap backtests forecast every location jointly, and the iid spatial effect is fitted per location, so a location holdout tests a different thing from a time holdout. (c) Monthly holdout from `small_laos_data_with_polygons3.csv`. Rejected: its periods are weekly ranges, so it is not monthly.",
+    "basis": "Chosen from file names, columns, row counts, location ids (no overlap with the monthly development locations) and period ranges only, before any values were looked at. The 2018 cut leaves 14 years of weekly history for development and about 5 years of held-out targets.",
+    "agency": "agent-autonomous",
+    "information": "agent-retrieved",
+    "where": "AI-internal/data-acquisition/partition_data.py; plan §4b 2026-10-14",
+    "matters": "not yet tested (phase D)"
+  }
+]

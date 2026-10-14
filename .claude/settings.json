@@ -2,13 +2,15 @@
   "claudeMdExcludes": [
     "/CLAUDE.md",
     "/CLAUDE.local.md",
-    "<PARENT_DIR>/CLAUDE.md",
-    "<PARENT_DIR>/CLAUDE.local.md",
-    "<HOME>/CLAUDE.md",
-    "<HOME>/CLAUDE.local.md",
-    "<HOME>/.claude/CLAUDE.md",
-    "<HOME>/.claude/CLAUDE.local.md",
-    "<HOME>/.claude/rules/**"
+    "/Users/geirksa_1_2_3/ai/special-purpose vaults/CLAUDE.md",
+    "/Users/geirksa_1_2_3/ai/special-purpose vaults/CLAUDE.local.md",
+    "/Users/geirksa_1_2_3/ai/CLAUDE.local.md",
+    "/Users/geirksa_1_2_3/ai/CLAUDE.md",
+    "/Users/geirksa_1_2_3/CLAUDE.md",
+    "/Users/geirksa_1_2_3/CLAUDE.local.md",
+    "/Users/geirksa_1_2_3/.claude/CLAUDE.md",
+    "/Users/geirksa_1_2_3/.claude/CLAUDE.local.md",
+    "/Users/geirksa_1_2_3/.claude/rules/**"
   ],
   "permissions": {
     "allow": [

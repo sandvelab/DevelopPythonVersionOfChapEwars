@@ -1,0 +1,268 @@
+"""{{ PROJECT_DESCRIPTION }}."""
+
+# =====================================================================
+# What is this file?
+# =====================================================================
+# main.py defines your chapkit service. The bits you typically edit are:
+#   1. The Config class below (the parameters your model takes).
+#   2. The on_train and on_predict functions (your actual ML logic).
+#   3. The ServiceInfo block (your name, email, model description).
+#
+# Everything else (database wiring, HTTP routing, async plumbing) is
+# boilerplate that chapkit needs and you almost never have to touch.
+# =====================================================================
+
+import os
+from pathlib import Path
+from typing import Any
+
+import structlog
+from geojson_pydantic import FeatureCollection
+
+from chapkit import BaseConfig
+from chapkit.data import DataFrame
+from chapkit.api import AssessedStatus, MLServiceBuilder, MLServiceInfo, ModelMetadata, PeriodType
+from chapkit.artifact import ArtifactHierarchy
+{% if WITH_VALIDATION %}
+from chapkit.ml import FunctionalModelRunner, ValidationDiagnostic
+{% else %}
+from chapkit.ml import FunctionalModelRunner
+{% endif %}
+
+log = structlog.get_logger()
+
+
+class {{ PROJECT_SLUG.replace('_', ' ').title().replace(' ', '') }}Config(BaseConfig):
+    """Configuration for {{ PROJECT_NAME }}."""
+
+    # Fallback forecast horizon. At request time chapkit overrides it with the
+    # horizon from chap-core's run info, or from the future frame when run info
+    # omits it, so the value your code reads is the one for that request.
+    prediction_periods: int = 3
+
+    # Add your model-specific parameters here
+    # For example:
+    # min_samples: int = 5
+    # learning_rate: float = 0.01
+
+
+async def on_train(
+    config: {{ PROJECT_SLUG.replace('_', ' ').title().replace(' ', '') }}Config,
+    data: DataFrame,
+    geo: FeatureCollection | None = None,
+) -> Any:
+    """Train a simple model.
+
+    Args:
+        config: Model configuration
+        data: Training data
+        geo: Optional geographic metadata
+
+    Returns:
+        Trained model (dict with column means)
+    """
+    # Convert to pandas for processing
+    df = data.to_pandas()
+
+    # Simple example: compute mean of each numeric column
+    model = {"means": df.select_dtypes(include=["number"]).mean().to_dict()}
+
+    log.info(
+        "model_trained",
+        columns=list(model["means"].keys()),
+        samples=len(df),
+    )
+
+    return model
+
+
+async def on_predict(
+    config: {{ PROJECT_SLUG.replace('_', ' ').title().replace(' ', '') }}Config,
+    model: Any,
+    historic: DataFrame,
+    future: DataFrame,
+    geo: FeatureCollection | None = None,
+) -> DataFrame:
+    """Make predictions using the trained model.
+
+    Args:
+        config: Model configuration
+        model: Trained model object
+        historic: Historical data (not used in this example)
+        future: Future data to make predictions for
+        geo: Optional geographic metadata
+
+    Returns:
+        Future data with predictions added
+    """
+    # Convert to pandas for processing
+    future_df = future.to_pandas()
+
+    # Simple example: use the mean from training as prediction
+    means = model.get("means", {})
+    prediction = sum(means.values()) / len(means) if means else 0.0
+
+    # Add predictions to future data
+    future_df["sample_0"] = prediction
+
+    log.info(
+        "predictions_made",
+        sample_count=len(future_df),
+        prediction_value=float(prediction),
+    )
+
+    # Convert back to chapkit DataFrame
+    return DataFrame.from_pandas(future_df)
+
+
+{% if WITH_VALIDATION %}
+# ====================================================================================
+# $validate hooks (optional)
+# ====================================================================================
+# These functions power POST /api/v1/ml/$validate, which returns structured
+# diagnostics for a train or predict payload WITHOUT running a job. The frontend
+# can call $validate first to surface problems (e.g. "n_lags exceeds available
+# context") before submitting an expensive training run.
+#
+# Both functions receive the same inputs as on_train / on_predict and return a
+# list of ValidationDiagnostic. Returning [] means "no issues found".
+#
+# ValidationDiagnostic fields:
+#   severity: "error" | "warning" | "info"
+#       - error:   blocks submission (response has valid=False)
+#       - warning: surfaces an issue but does not block
+#       - info:    informational only
+#   code: stable machine-readable identifier (use snake_case); the frontend
+#         branches on this for rendering / i18n / documentation links.
+#   message: human-readable fallback — bake specifics into the text.
+#   field: optional dotted path to the offending input — e.g. "config.n_lags",
+#          "data", "historic", or "artifact_id".
+#
+# Framework-level checks (config existence, prediction_periods bounds, empty
+# data, failed training artifacts) are ALREADY performed by chapkit — you only
+# need to add domain checks that chapkit cannot know about.
+#
+# See docs/guides/ml-workflows.md for the full endpoint reference.
+
+
+async def on_validate_train(
+    config: {{ PROJECT_SLUG.replace('_', ' ').title().replace(' ', '') }}Config,
+    data: DataFrame,
+    geo: FeatureCollection | None = None,
+) -> list[ValidationDiagnostic]:
+    """Return domain-specific diagnostics for a train payload.
+
+    Called in-request (no scheduler) AFTER chapkit's framework checks
+    (config exists, prediction_periods bounds, data non-empty). Add your own
+    checks here.
+
+    Example - require at least N rows of training data:
+
+        diagnostics: list[ValidationDiagnostic] = []
+        min_rows = 10
+        if len(data) < min_rows:
+            diagnostics.append(ValidationDiagnostic.error(
+                code="insufficient_training_samples",
+                message=f"Got {len(data)} rows, need at least {min_rows}",
+                field="data",
+            ))
+        return diagnostics
+    """
+    return []
+
+
+async def on_validate_predict(
+    config: {{ PROJECT_SLUG.replace('_', ' ').title().replace(' ', '') }}Config,
+    historic: DataFrame,
+    future: DataFrame,
+    geo: FeatureCollection | None = None,
+) -> list[ValidationDiagnostic]:
+    """Return domain-specific diagnostics for a predict payload.
+
+    Runs AFTER framework checks (artifact exists, training did not fail,
+    historic/future non-empty). Typical use: verify historic context length
+    is sufficient for the model's lookback window.
+
+    Example - require historic to cover at least `lookback` periods:
+
+        diagnostics: list[ValidationDiagnostic] = []
+        lookback = getattr(config, "lookback", 0)
+        if lookback and len(historic) < lookback:
+            diagnostics.append(ValidationDiagnostic.error(
+                code="insufficient_historic_context",
+                message=f"historic has {len(historic)} rows, need {lookback}",
+                field="historic",
+            ))
+        return diagnostics
+    """
+    return []
+
+
+{% endif %}
+# Create ML service info with metadata
+info = MLServiceInfo(
+    id="{{ PROJECT_SERVICE_ID }}",
+    display_name="{{ PROJECT_NAME }}",
+    version="1.0.0",
+    description="A simple ML service template. Customize with your own model implementation.",
+    model_metadata=ModelMetadata(
+        author="Your Name",
+        # Maturity colour shown in chap-core's UI. Pick conservatively:
+        # green=validated for production, yellow=ready for rigorous testing,
+        # orange=promising on limited data, red=highly experimental,
+        # gray=deprecated. See README.md for full meanings.
+        author_assessed_status=AssessedStatus.yellow,
+        contact_email="your.email@example.com",
+    ),
+    period_type=PeriodType.monthly,
+    min_prediction_periods=0,
+    max_prediction_periods=100,
+)
+
+# Create artifact hierarchy for ML artifacts
+HIERARCHY = ArtifactHierarchy(
+    name="{{ PROJECT_SLUG }}",
+    level_labels={0: "ml_training_workspace", 1: "ml_prediction"},
+)
+
+# Create functional model runner
+runner: FunctionalModelRunner[{{ PROJECT_SLUG.replace('_', ' ').title().replace(' ', '') }}Config] = FunctionalModelRunner(
+    on_train=on_train,
+    on_predict=on_predict,
+{% if WITH_VALIDATION %}
+    on_validate_train=on_validate_train,
+    on_validate_predict=on_validate_predict,
+{% endif %}
+)
+
+# Database configuration
+# Uses environment variable or defaults to data/chapkit.db
+# Creates data directory if it doesn't exist
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///data/chapkit.db")
+if DATABASE_URL.startswith("sqlite") and ":///" in DATABASE_URL:
+    db_path = Path(DATABASE_URL.split("///")[1])
+    db_path.parent.mkdir(parents=True, exist_ok=True)
+
+# Build the FastAPI application
+app = (
+    MLServiceBuilder(
+        info=info,
+        config_schema={{ PROJECT_SLUG.replace('_', ' ').title().replace(' ', '') }}Config,
+        hierarchy=HIERARCHY,
+        runner=runner,
+        database_url=DATABASE_URL,
+    )
+    .with_monitoring()
+    # See compose.yml for chap-core self-registration env vars.
+    .with_registration()
+    .build()
+)
+
+
+if __name__ == "__main__":
+    from chapkit.api import run_app
+
+    # Default to port 9090 to match the Docker compose host port and avoid the usual
+    # busy ports (8000, 8080). Override with the PORT env var. Set reload=True to
+    # enable hot reloading during development.
+    run_app("main:app", reload=False, port=9090)

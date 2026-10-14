@@ -1,0 +1,931 @@
+"""Model runner implementations for ML train/predict operations."""
+
+from __future__ import annotations
+
+import datetime
+import os
+import pickle
+import re
+import shutil
+import tempfile
+import zipfile
+from abc import ABC, abstractmethod
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, Awaitable, Callable, Generic, Literal, TypeVar
+
+import yaml
+from geojson_pydantic import FeatureCollection
+from servicekit.logging import get_logger
+
+from chapkit.config.schemas import BaseConfig
+from chapkit.data import DataFrame
+from chapkit.utils import run_shell
+
+if TYPE_CHECKING:
+    # Typing-only: every use of ValidationDiagnostic below is a type annotation
+    # (stringified via `from __future__ import annotations`) or a lazily-evaluated
+    # PEP 695 `type` alias. Keeping the import guarded means this module loads
+    # cleanly even when installed alongside an older chapkit where
+    # ValidationDiagnostic did not yet exist - which matters when a container
+    # ships a pinned chapkit version and we volume-mount this file on top.
+    from chapkit.ml.schemas import ValidationDiagnostic
+
+ConfigT = TypeVar("ConfigT", bound=BaseConfig)
+
+# Type aliases for ML runner functions
+type TrainFunction[ConfigT] = Callable[[ConfigT, DataFrame, FeatureCollection | None], Awaitable[Any]]
+type PredictFunction[ConfigT] = Callable[
+    [ConfigT, Any, DataFrame, DataFrame, FeatureCollection | None], Awaitable[DataFrame]
+]
+type ValidateTrainFunction[ConfigT] = Callable[
+    [ConfigT, DataFrame, FeatureCollection | None], Awaitable[list[ValidationDiagnostic]]
+]
+type ValidatePredictFunction[ConfigT] = Callable[
+    [ConfigT, DataFrame, DataFrame, FeatureCollection | None], Awaitable[list[ValidationDiagnostic]]
+]
+
+logger = get_logger(__name__)
+
+
+# Number of trailing stderr lines embedded in a ModelRunFailedError message.
+STDERR_TAIL_LINES = 10
+
+# R prints deferred warnings after the error under one of these headers, pushing the error out of the tail.
+R_DEFERRED_WARNING_HEADERS = ("In addition: Warning message:", "In addition: Warning messages:")
+
+# R error lines start with "Error in <call> :" or "Error:"; one after a warning block means that block is not trailing.
+R_ERROR_LINE_PREFIXES = ("Error in ", "Error:")
+
+
+def _strip_trailing_r_noise(lines: list[str]) -> list[str]:
+    """Drop a trailing R 'Execution halted' line and the deferred warning block printed after the final error."""
+    if lines and lines[-1].strip() == "Execution halted":
+        lines = lines[:-1]
+    for index in range(len(lines) - 1, -1, -1):
+        line = lines[index].strip()
+        if line.startswith(R_ERROR_LINE_PREFIXES):
+            # A later error (e.g. after one caught by try()) is the fatal one; there is no trailing block to drop.
+            return lines
+        if line in R_DEFERRED_WARNING_HEADERS:
+            return lines[:index]
+    return lines
+
+
+def format_stderr_tail(stderr: str, tail_lines: int = STDERR_TAIL_LINES) -> str:
+    """Return the last few meaningful stderr lines joined for a single-line error message."""
+    lines = [line for line in stderr.strip().splitlines() if line.strip()]
+    if not lines:
+        return "<no stderr output>"
+    meaningful_lines = _strip_trailing_r_noise(lines) or lines
+    return " | ".join(meaningful_lines[-tail_lines:])
+
+
+class ModelRunFailedError(RuntimeError):
+    """Raised when a shell script exits non-zero, after its diagnostic artifact has been stored."""
+
+    def __init__(self, phase: Literal["train", "predict"], exit_code: int, artifact_id: Any, stderr: str) -> None:
+        """Build a readable failure message carrying phase, exit code, artifact id and stderr tail."""
+        self.phase = phase
+        self.exit_code = exit_code
+        self.artifact_id = str(artifact_id)
+        self.stderr = stderr
+        super().__init__(
+            f"{phase} script failed with exit code {exit_code}; "
+            f"diagnostic artifact {self.artifact_id} holds the workspace, stdout and stderr; "
+            f"stderr tail: {format_stderr_tail(stderr)}"
+        )
+
+
+def get_temp_dir() -> str | None:
+    """Get temp directory from CHAPKIT_TEMP_DIR or use system default."""
+    return os.getenv("CHAPKIT_TEMP_DIR")
+
+
+# Patterns to exclude when copying project to workspace
+WORKSPACE_EXCLUDE_PATTERNS = (
+    # Python
+    ".venv",
+    "venv",
+    "__pycache__",
+    "*.pyc",
+    "*.pyo",
+    "*.egg-info",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".ruff_cache",
+    # JavaScript/Node
+    "node_modules",
+    # Version control
+    ".git",
+    ".gitignore",
+    # IDEs
+    ".vscode",
+    ".idea",
+    ".DS_Store",
+    # Build artifacts
+    "build",
+    "dist",
+    "*.so",
+    "*.dylib",
+    # Databases (including SQLite sidecar files: WAL, shared-memory, rollback journal)
+    "*.db",
+    "*.db-wal",
+    "*.db-shm",
+    "*.db-journal",
+    "*.sqlite",
+    "*.sqlite-wal",
+    "*.sqlite-shm",
+    "*.sqlite-journal",
+    "*.sqlite3",
+    "*.sqlite3-wal",
+    "*.sqlite3-shm",
+    "*.sqlite3-journal",
+)
+
+
+# A monthly period is "YYYY-MM"; anything else chap-core sends is weekly ("YYYY-Www" or "start/end" dates).
+_MONTHLY_PERIOD = re.compile(r"^\d{4}-\d{2}$")
+
+
+def _period_year(period: str) -> int:
+    """Return the year of a period the way chap-core's adapters compute it (the end date's year for ranges)."""
+    if "/" in period:
+        return datetime.date.fromisoformat(period.split("/")[1]).year
+    return int(re.split(r"[-WS]", period, maxsplit=1)[0])
+
+
+def _period_week(period: str) -> int:
+    """Return the week number of a weekly period the way chap-core's adapters compute it (ISO week of the start)."""
+    if "/" in period:
+        return datetime.date.fromisoformat(period.split("/")[0]).isocalendar().week
+    return int(re.split(r"SunW|-W|-S|W", period)[-1])
+
+
+def apply_adapters(frame: DataFrame, adapters: dict[str, str]) -> DataFrame:
+    """Add the columns an MLproject `adapters` mapping declares, following chap-core's rules.
+
+    Each entry maps a new column name to a source. The sources `year`, `month` and `week`
+    are derived from `time_period` (month only for monthly data, week only for weekly
+    data, as in chap-core); any other source copies that column. A missing source column
+    is skipped, which covers `disease_cases` in a future frame.
+    """
+    if not adapters:
+        return frame
+    columns = list(frame.columns)
+    rows = [list(row) for row in frame.data]
+    periods = [str(value) for value in frame.get_column("time_period")] if "time_period" in columns else []
+    monthly = bool(periods) and all(_MONTHLY_PERIOD.match(period) for period in periods)
+
+    for to_name, from_name in adapters.items():
+        values: list[Any] | None
+        if from_name == "year" and periods:
+            values = [_period_year(period) for period in periods]
+        elif from_name == "month" and periods:
+            values = [int(period.split("-")[1]) for period in periods] if monthly else None
+        elif from_name == "week" and periods:
+            values = [_period_week(period) for period in periods] if not monthly else None
+        elif from_name in columns:
+            source_index = columns.index(from_name)
+            values = [row[source_index] for row in rows]
+        else:
+            if from_name != "disease_cases":
+                logger.warning("adapter_source_missing", to_name=to_name, from_name=from_name)
+            values = None
+        if values is None:
+            continue
+        if to_name in columns:
+            target_index = columns.index(to_name)
+            for row, value in zip(rows, values):
+                row[target_index] = value
+        else:
+            columns.append(to_name)
+            for row, value in zip(rows, values):
+                row.append(value)
+    return DataFrame(columns=columns, data=rows)
+
+
+def prepare_workspace(source_dir: Path, dest_dir: Path) -> None:
+    """Copy project directory to workspace, excluding build artifacts and virtual environments."""
+    shutil.copytree(
+        source_dir,
+        dest_dir,
+        ignore=shutil.ignore_patterns(*WORKSPACE_EXCLUDE_PATTERNS),
+        dirs_exist_ok=True,
+    )
+    logger.info("copied_project_directory", src=str(source_dir), dest=str(dest_dir))
+
+
+# Top-level keys chap-core keeps flat in config.yml; everything else nests under
+# user_option_values to match chap-core's ModelConfiguration schema.
+_CHAP_CORE_RESERVED_FIELDS: frozenset[str] = frozenset({"prediction_periods", "additional_continuous_covariates"})
+
+
+def dump_config_yaml(config: BaseConfig, format: Literal["flat", "chap_core"] = "flat") -> str:
+    """Serialize a config to YAML for workspace config.yml.
+
+    Dumps with by_alias=True so fields declared with `Field(alias="...")` emit the
+    wire-format name instead of the Python attribute name. That keeps the YAML in
+    sync with the contract scripts expect - for instance, an MLproject user_option
+    `n-lags` is stored on the Python class as `n_lags` (Field(alias="n-lags")) but
+    scripts read `config["user_option_values"]["n-lags"]`, so the YAML must use
+    the hyphen form. Fields without aliases are unaffected.
+    """
+    payload = config.model_dump(by_alias=True)
+    if format == "chap_core":
+        top: dict[str, Any] = {k: payload[k] for k in _CHAP_CORE_RESERVED_FIELDS if k in payload}
+        user_option_values = {k: v for k, v in payload.items() if k not in _CHAP_CORE_RESERVED_FIELDS}
+        if user_option_values:
+            top["user_option_values"] = user_option_values
+        payload = top
+    return yaml.safe_dump(payload, indent=2)
+
+
+def write_training_inputs(
+    workspace_dir: Path,
+    config: BaseConfig,
+    data: DataFrame,
+    geo: FeatureCollection | None,
+    config_format: Literal["flat", "chap_core"] = "flat",
+) -> None:
+    """Write training input files (config.yml, data.csv, geo.json) to workspace."""
+    (workspace_dir / "config.yml").write_text(dump_config_yaml(config, config_format))
+    data.to_csv(workspace_dir / "data.csv")
+    if geo:
+        (workspace_dir / "geo.json").write_text(geo.model_dump_json(indent=2))
+
+
+def write_prediction_inputs(
+    workspace_dir: Path,
+    historic: DataFrame,
+    future: DataFrame,
+    geo: FeatureCollection | None,
+) -> None:
+    """Write prediction input files (historic.csv, future.csv, geo.json) to workspace."""
+    historic.to_csv(workspace_dir / "historic.csv")
+    future.to_csv(workspace_dir / "future.csv")
+    if geo:
+        (workspace_dir / "geo.json").write_text(geo.model_dump_json(indent=2))
+
+
+def zip_workspace(workspace_dir: Path) -> bytes:
+    """Zip workspace directory and return bytes."""
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".zip", dir=get_temp_dir()) as tmp:
+        zip_file_path = Path(tmp.name)
+
+    try:
+        with zipfile.ZipFile(zip_file_path, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+            for root, _, files in os.walk(workspace_dir):
+                for file in files:
+                    file_path = Path(root) / file
+                    arcname = file_path.relative_to(workspace_dir)
+                    zf.write(file_path, arcname)
+
+        # Validate zip integrity
+        with zipfile.ZipFile(zip_file_path, "r") as zf:
+            bad_file = zf.testzip()
+            if bad_file is not None:
+                raise ValueError(f"Corrupted file in workspace zip: {bad_file}")
+
+        return zip_file_path.read_bytes()
+
+    finally:
+        if zip_file_path.exists():
+            zip_file_path.unlink()
+
+
+def create_workspace_artifact(
+    workspace_content: bytes,
+    artifact_type: str,
+    config_id: str,
+    started_at: datetime.datetime,
+    completed_at: datetime.datetime,
+    duration_seconds: float,
+    status: Literal["success", "failed"] = "success",
+    exit_code: int | None = None,
+    stdout: str | None = None,
+    stderr: str | None = None,
+) -> dict[str, Any]:
+    """Create artifact dict from workspace ZIP content."""
+    from chapkit.artifact.schemas import MLMetadata
+
+    metadata = MLMetadata(
+        status=status,
+        config_id=config_id,
+        started_at=started_at.isoformat(),
+        completed_at=completed_at.isoformat(),
+        duration_seconds=duration_seconds,
+        exit_code=exit_code,
+        stdout=stdout,
+        stderr=stderr,
+    )
+
+    return {
+        "type": artifact_type,
+        "metadata": metadata.model_dump(),
+        "content": workspace_content,
+        "content_type": "application/zip",
+        "content_size": len(workspace_content),
+    }
+
+
+class BaseModelRunner(ABC, Generic[ConfigT]):
+    """Abstract base class for model runners with lifecycle hooks."""
+
+    async def on_init(self) -> None:
+        """Optional initialization hook called before training or prediction."""
+        pass
+
+    async def on_cleanup(self) -> None:
+        """Optional cleanup hook called after training or prediction."""
+        pass
+
+    async def create_training_artifact(
+        self,
+        training_result: Any,
+        config_id: str,
+        started_at: datetime.datetime,
+        completed_at: datetime.datetime,
+        duration_seconds: float,
+    ) -> dict[str, Any]:
+        """Create artifact data structure from training result.
+
+        Default implementation assumes training_result is a pickleable object.
+        Runners can override to customize artifact creation (e.g., workspace zipping).
+
+        Returns dict compatible with MLTrainingWorkspaceArtifactData structure.
+        """
+        from chapkit.artifact.schemas import MLMetadata
+
+        metadata = MLMetadata(
+            status="success",
+            config_id=config_id,
+            started_at=started_at.isoformat(),
+            completed_at=completed_at.isoformat(),
+            duration_seconds=duration_seconds,
+        )
+
+        return {
+            "type": "ml_training_workspace",
+            "metadata": metadata.model_dump(),
+            "content": training_result,  # Pickled model
+            "content_type": "application/x-pickle",
+            "content_size": None,
+        }
+
+    async def create_prediction_artifact(
+        self,
+        prediction_result: Any,
+        config_id: str,
+        started_at: datetime.datetime,
+        completed_at: datetime.datetime,
+        duration_seconds: float,
+    ) -> dict[str, Any]:
+        """Create artifact data structure from prediction result.
+
+        Default implementation assumes prediction_result is a DataFrame.
+        Runners can override to customize artifact creation (e.g., workspace zipping).
+
+        Returns dict compatible with MLPredictionArtifactData structure.
+        """
+        from chapkit.artifact.schemas import MLMetadata
+
+        metadata = MLMetadata(
+            status="success",
+            config_id=config_id,
+            started_at=started_at.isoformat(),
+            completed_at=completed_at.isoformat(),
+            duration_seconds=duration_seconds,
+        )
+
+        return {
+            "type": "ml_prediction",
+            "metadata": metadata.model_dump(),
+            "content": prediction_result,  # DataFrame
+            "content_type": "application/vnd.chapkit.dataframe+json",
+            "content_size": None,
+        }
+
+    @abstractmethod
+    async def on_train(
+        self,
+        config: ConfigT,
+        data: DataFrame,
+        geo: FeatureCollection | None = None,
+    ) -> Any:
+        """Train a model and return the trained model object (must be pickleable)."""
+        ...
+
+    @abstractmethod
+    async def on_predict(
+        self,
+        config: ConfigT,
+        model: Any,
+        historic: DataFrame,
+        future: DataFrame,
+        geo: FeatureCollection | None = None,
+    ) -> DataFrame:
+        """Make predictions using a trained model and return predictions as DataFrame."""
+        ...
+
+    async def on_validate_train(
+        self,
+        config: ConfigT,
+        data: DataFrame,
+        geo: FeatureCollection | None = None,
+    ) -> list[ValidationDiagnostic]:
+        """Return domain-specific diagnostics for a train payload (default: empty)."""
+        return []
+
+    async def on_validate_predict(
+        self,
+        config: ConfigT,
+        historic: DataFrame,
+        future: DataFrame,
+        geo: FeatureCollection | None = None,
+    ) -> list[ValidationDiagnostic]:
+        """Return domain-specific diagnostics for a predict payload (default: empty)."""
+        return []
+
+
+class FunctionalModelRunner(BaseModelRunner[ConfigT]):
+    """Functional model runner wrapping train and predict functions."""
+
+    def __init__(
+        self,
+        on_train: TrainFunction[ConfigT],
+        on_predict: PredictFunction[ConfigT],
+        on_validate_train: ValidateTrainFunction[ConfigT] | None = None,
+        on_validate_predict: ValidatePredictFunction[ConfigT] | None = None,
+    ) -> None:
+        """Initialize functional runner with train, predict, and optional validate functions."""
+        self._on_train = on_train
+        self._on_predict = on_predict
+        self._on_validate_train = on_validate_train
+        self._on_validate_predict = on_validate_predict
+
+    async def on_validate_train(
+        self,
+        config: ConfigT,
+        data: DataFrame,
+        geo: FeatureCollection | None = None,
+    ) -> list[ValidationDiagnostic]:
+        """Delegate to the provided validate-train callback, or return no diagnostics."""
+        if self._on_validate_train is None:
+            return []
+        return await self._on_validate_train(config, data, geo)
+
+    async def on_validate_predict(
+        self,
+        config: ConfigT,
+        historic: DataFrame,
+        future: DataFrame,
+        geo: FeatureCollection | None = None,
+    ) -> list[ValidationDiagnostic]:
+        """Delegate to the provided validate-predict callback, or return no diagnostics."""
+        if self._on_validate_predict is None:
+            return []
+        return await self._on_validate_predict(config, historic, future, geo)
+
+    async def on_train(
+        self,
+        config: ConfigT,
+        data: DataFrame,
+        geo: FeatureCollection | None = None,
+    ) -> Any:
+        """Train a model and return dict with content and workspace.
+
+        Returns:
+            Dict with keys: content (model), workspace_dir, exit_code, stdout, stderr
+        """
+        workspace_dir = Path(tempfile.mkdtemp(prefix="chapkit_functional_train_", dir=get_temp_dir()))
+        # Copy full project directory for reproducibility
+        prepare_workspace(Path.cwd(), workspace_dir)
+        # Write training input files
+        write_training_inputs(workspace_dir, config, data, geo)
+
+        # Execute training function
+        model = await self._on_train(config, data, geo)
+
+        # Write model.pickle
+        (workspace_dir / "model.pickle").write_bytes(pickle.dumps(model))
+
+        return {
+            "content": model,
+            "workspace_dir": str(workspace_dir),
+            "exit_code": None,
+            "stdout": None,
+            "stderr": None,
+        }
+
+    async def on_predict(
+        self,
+        config: ConfigT,
+        model: Any,
+        historic: DataFrame,
+        future: DataFrame,
+        geo: FeatureCollection | None = None,
+    ) -> Any:
+        """Make predictions and return dict with content and workspace.
+
+        Returns:
+            Dict with keys: content (DataFrame), workspace_dir, exit_code, stdout, stderr
+        """
+        workspace_dir = Path(tempfile.mkdtemp(prefix="chapkit_functional_predict_", dir=get_temp_dir()))
+        # Copy full project directory for reproducibility
+        prepare_workspace(Path.cwd(), workspace_dir)
+        # Write config.yml
+        (workspace_dir / "config.yml").write_text(yaml.safe_dump(config.model_dump(), indent=2))
+        # Write prediction input files
+        write_prediction_inputs(workspace_dir, historic, future, geo)
+        # Write model.pickle (input model for prediction)
+        (workspace_dir / "model.pickle").write_bytes(pickle.dumps(model))
+
+        # Execute prediction function
+        predictions = await self._on_predict(config, model, historic, future, geo)
+
+        # Write predictions.csv
+        predictions.to_csv(workspace_dir / "predictions.csv")
+
+        return {
+            "content": predictions,
+            "workspace_dir": str(workspace_dir),
+            "exit_code": None,
+            "stdout": None,
+            "stderr": None,
+        }
+
+    async def create_training_artifact(
+        self,
+        training_result: Any,
+        config_id: str,
+        started_at: datetime.datetime,
+        completed_at: datetime.datetime,
+        duration_seconds: float,
+    ) -> dict[str, Any]:
+        """Create artifact from training result by zipping workspace."""
+        # Extract content and workspace from unified result dict
+        if isinstance(training_result, dict) and "content" in training_result:
+            workspace_dir = training_result.get("workspace_dir")
+        else:
+            workspace_dir = None
+
+        if not workspace_dir:
+            raise ValueError(
+                "FunctionalModelRunner.create_training_artifact() requires workspace dict from on_train(). "
+                "Got result without workspace_dir."
+            )
+
+        # Zip workspace like ShellModelRunner
+        return await self._create_workspace_artifact(
+            workspace_dir=Path(workspace_dir),
+            config_id=config_id,
+            started_at=started_at,
+            completed_at=completed_at,
+            duration_seconds=duration_seconds,
+            artifact_type="ml_training_workspace",
+        )
+
+    async def create_prediction_artifact(
+        self,
+        prediction_result: Any,
+        config_id: str,
+        started_at: datetime.datetime,
+        completed_at: datetime.datetime,
+        duration_seconds: float,
+    ) -> dict[str, Any]:
+        """Create artifact from prediction result by zipping workspace."""
+        # Extract content and workspace from unified result dict
+        if isinstance(prediction_result, dict) and "content" in prediction_result:
+            workspace_dir = prediction_result.get("workspace_dir")
+        else:
+            workspace_dir = None
+
+        if not workspace_dir:
+            raise ValueError(
+                "FunctionalModelRunner.create_prediction_artifact() requires workspace dict from on_predict(). "
+                "Got result without workspace_dir."
+            )
+
+        # Zip workspace like ShellModelRunner (workspace artifact for debugging)
+        return await self._create_workspace_artifact(
+            workspace_dir=Path(workspace_dir),
+            config_id=config_id,
+            started_at=started_at,
+            completed_at=completed_at,
+            duration_seconds=duration_seconds,
+            artifact_type="ml_prediction_workspace",
+        )
+
+    async def _create_workspace_artifact(
+        self,
+        workspace_dir: Path,
+        config_id: str,
+        started_at: datetime.datetime,
+        completed_at: datetime.datetime,
+        duration_seconds: float,
+        artifact_type: str,
+    ) -> dict[str, Any]:
+        """Create artifact with workspace zip."""
+        workspace_content = zip_workspace(workspace_dir)
+        return create_workspace_artifact(
+            workspace_content=workspace_content,
+            artifact_type=artifact_type,
+            config_id=config_id,
+            started_at=started_at,
+            completed_at=completed_at,
+            duration_seconds=duration_seconds,
+        )
+
+
+class ShellModelRunner(BaseModelRunner[ConfigT]):
+    """Shell-based model runner that executes external scripts for train/predict operations."""
+
+    def __init__(
+        self,
+        train_command: str,
+        predict_command: str,
+        on_validate_train: ValidateTrainFunction[ConfigT] | None = None,
+        on_validate_predict: ValidatePredictFunction[ConfigT] | None = None,
+        config_format: Literal["flat", "chap_core"] = "flat",
+        adapters: dict[str, str] | None = None,
+    ) -> None:
+        """Initialize shell runner with full isolation support.
+
+        The runner automatically copies the entire project directory (current working directory)
+        to a temporary workspace, excluding .venv, node_modules, __pycache__, .git, and other
+        build artifacts.
+
+        Args:
+            train_command: Command template for training (use relative paths)
+            predict_command: Command template for prediction (use relative paths)
+            on_validate_train: Optional Python callback for domain-level train validation
+            on_validate_predict: Optional Python callback for domain-level predict validation
+            config_format: Layout for generated config.yml. "flat" (default) writes every
+                BaseConfig field at the top level. "chap_core" keeps prediction_periods and
+                additional_continuous_covariates at the top level and nests remaining fields
+                under user_option_values, matching chap-core's ModelConfiguration schema so
+                scripts ported from chap-models repos can read
+                ``config["user_option_values"]["<key>"]`` unchanged.
+            adapters: Optional MLproject `adapters` mapping (new column -> source column, or
+                `year` / `month` / `week` derived from time_period). The columns are added to
+                the data, historic and future CSVs, as chap-core does for MLproject models.
+        """
+        self.train_command = train_command
+        self.predict_command = predict_command
+        self._on_validate_train = on_validate_train
+        self._on_validate_predict = on_validate_predict
+        self.config_format: Literal["flat", "chap_core"] = config_format
+        self.adapters: dict[str, str] = dict(adapters or {})
+
+        # Project root is current working directory
+        # Users run: fastapi dev main.py (from project dir)
+        # Docker sets WORKDIR to project root
+        self.project_root = Path.cwd()
+
+        logger.info("shell_runner_initialized", project_root=str(self.project_root))
+
+    async def on_validate_train(
+        self,
+        config: ConfigT,
+        data: DataFrame,
+        geo: FeatureCollection | None = None,
+    ) -> list[ValidationDiagnostic]:
+        """Delegate to the provided validate-train callback, or return no diagnostics."""
+        if self._on_validate_train is None:
+            return []
+        return await self._on_validate_train(config, data, geo)
+
+    async def on_validate_predict(
+        self,
+        config: ConfigT,
+        historic: DataFrame,
+        future: DataFrame,
+        geo: FeatureCollection | None = None,
+    ) -> list[ValidationDiagnostic]:
+        """Delegate to the provided validate-predict callback, or return no diagnostics."""
+        if self._on_validate_predict is None:
+            return []
+        return await self._on_validate_predict(config, historic, future, geo)
+
+    async def create_training_artifact(
+        self,
+        training_result: Any,
+        config_id: str,
+        started_at: datetime.datetime,
+        completed_at: datetime.datetime,
+        duration_seconds: float,
+    ) -> dict[str, Any]:
+        """Create artifact with workspace zip from training result."""
+        # Validate training_result is workspace dict from on_train()
+        if not isinstance(training_result, dict) or "workspace_dir" not in training_result:
+            raise ValueError(
+                "ShellModelRunner.create_training_artifact() requires workspace dict from on_train(). "
+                f"Got: {type(training_result)}"
+            )
+
+        # Extract workspace info from training_result dict
+        workspace_dir = Path(training_result["workspace_dir"])
+        exit_code = training_result["exit_code"]
+        stdout = training_result.get("stdout", "")
+        stderr = training_result.get("stderr", "")
+
+        # Determine status from exit code
+        status: Literal["success", "failed"] = "success" if exit_code == 0 else "failed"
+
+        # Zip workspace and create artifact
+        workspace_content = zip_workspace(workspace_dir)
+        return create_workspace_artifact(
+            workspace_content=workspace_content,
+            artifact_type="ml_training_workspace",
+            config_id=config_id,
+            started_at=started_at,
+            completed_at=completed_at,
+            duration_seconds=duration_seconds,
+            status=status,
+            exit_code=exit_code,
+            stdout=stdout,
+            stderr=stderr,
+        )
+
+    async def on_train(
+        self,
+        config: ConfigT,
+        data: DataFrame,
+        geo: FeatureCollection | None = None,
+    ) -> Any:
+        """Train a model by executing external training script (model file creation is optional)."""
+        temp_dir = Path(tempfile.mkdtemp(prefix="chapkit_ml_train_", dir=get_temp_dir()))
+
+        try:
+            # Copy entire project directory to temp workspace for full isolation
+            prepare_workspace(self.project_root, temp_dir)
+            # Write training input files
+            data = apply_adapters(data, self.adapters)
+            write_training_inputs(temp_dir, config, data, geo, config_format=self.config_format)
+
+            # Substitute variables in command (use relative paths)
+            command = self.train_command.format(
+                data_file="data.csv",
+                geo_file="geo.json" if geo else "",
+            )
+
+            logger.info("executing_train_script", command=command, temp_dir=str(temp_dir))
+
+            # Execute subprocess with cwd=temp_dir (scripts can now use relative imports!)
+            result = await run_shell(command, cwd=str(temp_dir))
+            stdout = result["stdout"]
+            stderr = result["stderr"]
+            exit_code = result["returncode"]
+
+            if exit_code != 0:
+                logger.error("train_script_failed", exit_code=exit_code, stderr=stderr)
+            else:
+                logger.info("train_script_completed", stdout=stdout, stderr=stderr)
+
+            # Return workspace directory for artifact storage
+            # Workspace preserved for both success and failure (manager will store artifact)
+            return {
+                "content": None,  # ShellRunner doesn't have in-memory model
+                "workspace_dir": str(temp_dir),
+                "exit_code": exit_code,
+                "stdout": stdout,
+                "stderr": stderr,
+            }
+
+        except BaseException:
+            # Cleanup on Python exception or job cancellation (not on script failure)
+            shutil.rmtree(temp_dir, ignore_errors=True)
+            raise
+
+    async def create_prediction_artifact(
+        self,
+        prediction_result: Any,
+        config_id: str,
+        started_at: datetime.datetime,
+        completed_at: datetime.datetime,
+        duration_seconds: float,
+    ) -> dict[str, Any]:
+        """Create artifact with workspace zip from prediction result."""
+        # Validate prediction_result is workspace dict from on_predict()
+        if not isinstance(prediction_result, dict) or "workspace_dir" not in prediction_result:
+            raise ValueError(
+                "ShellModelRunner.create_prediction_artifact() requires workspace dict from on_predict(). "
+                f"Got: {type(prediction_result)}"
+            )
+
+        # Extract workspace info from prediction_result dict
+        workspace_dir = Path(prediction_result["workspace_dir"])
+        exit_code = prediction_result["exit_code"]
+        stdout = prediction_result.get("stdout", "")
+        stderr = prediction_result.get("stderr", "")
+
+        # Determine status from exit code
+        status: Literal["success", "failed"] = "success" if exit_code == 0 else "failed"
+
+        # Zip workspace and create artifact
+        workspace_content = zip_workspace(workspace_dir)
+        return create_workspace_artifact(
+            workspace_content=workspace_content,
+            artifact_type="ml_prediction_workspace",
+            config_id=config_id,
+            started_at=started_at,
+            completed_at=completed_at,
+            duration_seconds=duration_seconds,
+            status=status,
+            exit_code=exit_code,
+            stdout=stdout,
+            stderr=stderr,
+        )
+
+    async def on_predict(
+        self,
+        config: ConfigT,
+        model: Any,
+        historic: DataFrame,
+        future: DataFrame,
+        geo: FeatureCollection | None = None,
+    ) -> Any:
+        """Make predictions by executing external prediction script."""
+        temp_dir = Path(tempfile.mkdtemp(prefix="chapkit_ml_predict_", dir=get_temp_dir()))
+
+        try:
+            # Model must be workspace artifact from ShellModelRunner.on_train()
+            if not (isinstance(model, dict) and "workspace_dir" in model):
+                raise ValueError(
+                    "ShellModelRunner.on_predict() requires workspace artifact from ShellModelRunner.on_train(). "
+                    f"Got: {type(model)}"
+                )
+
+            # Extract and restore workspace from training artifact
+            workspace_dir = Path(model["workspace_dir"])
+            logger.info("predict_using_workspace", workspace_dir=str(workspace_dir))
+
+            # Copy workspace contents to temp_dir (preserves all training artifacts)
+            shutil.copytree(workspace_dir, temp_dir, dirs_exist_ok=True)
+
+            # The restored workspace carries the config.yml written at train time, whose
+            # prediction_periods is the horizon resolved for that training request. Re-emit
+            # it from this request's config so the script reads this prediction's horizon.
+            (temp_dir / "config.yml").write_text(dump_config_yaml(config, self.config_format))
+
+            # Write prediction input files (always fresh for each prediction)
+            historic = apply_adapters(historic, self.adapters)
+            future = apply_adapters(future, self.adapters)
+            write_prediction_inputs(temp_dir, historic, future, geo)
+
+            # Output file path
+            output_file = temp_dir / "predictions.csv"
+
+            # Execute prediction command (workspace may contain model files, config, etc.)
+            command = self.predict_command.format(
+                historic_file="historic.csv",
+                future_file="future.csv",
+                output_file="predictions.csv",
+                geo_file="geo.json" if geo else "",
+            )
+
+            logger.info("executing_predict_script", command=command, temp_dir=str(temp_dir))
+
+            # Execute subprocess with cwd=temp_dir (scripts can now use relative imports!)
+            result = await run_shell(command, cwd=str(temp_dir))
+            stdout = result["stdout"]
+            stderr = result["stderr"]
+            exit_code = result["returncode"]
+
+            if exit_code != 0:
+                logger.error("predict_script_failed", exit_code=exit_code, stderr=stderr)
+            else:
+                logger.info("predict_script_completed", stdout=stdout, stderr=stderr)
+
+            # Load predictions from file. A failed script is reported by the manager once the
+            # diagnostic workspace artifact has been stored, so a missing output file is only an
+            # error when the script claimed success.
+            predictions: DataFrame | None
+            if exit_code == 0:
+                if not output_file.exists():
+                    raise RuntimeError(f"Prediction script did not create output file at {output_file}")
+                predictions = DataFrame.from_csv(output_file)
+            else:
+                # A failed script may leave a partial output file behind; never let parsing it
+                # raise, or the workspace (the diagnostic artifact) would be discarded.
+                predictions = None
+                if output_file.exists():
+                    try:
+                        predictions = DataFrame.from_csv(output_file)
+                    except Exception as parse_error:
+                        logger.warning("predict_output_unparseable", error=str(parse_error))
+
+            # Return workspace directory for artifact storage (like on_train)
+            # Workspace preserved for both success and failure (manager will store artifact)
+            return {
+                "content": predictions,  # DataFrame loaded from predictions.csv (None if the script failed)
+                "workspace_dir": str(temp_dir),
+                "exit_code": exit_code,
+                "stdout": stdout,
+                "stderr": stderr,
+            }
+
+        except BaseException:
+            # Cleanup on Python exception or job cancellation (not on script failure)
+            shutil.rmtree(temp_dir, ignore_errors=True)
+            raise

@@ -1,0 +1,800 @@
+"""Manager for ML train/predict operations with artifact-based storage."""
+
+from __future__ import annotations
+
+import asyncio
+import datetime
+import pickle
+import shutil
+import zipfile
+from io import BytesIO
+from pathlib import Path
+from typing import Any, Generic, Literal, TypeVar
+
+from servicekit import Database
+from servicekit.logging import get_logger
+from ulid import ULID
+
+from chapkit.artifact import ArtifactIn, ArtifactManager, ArtifactRepository
+from chapkit.config import ConfigManager, ConfigRepository
+from chapkit.config.schemas import BaseConfig
+from chapkit.data import DataFrame
+from chapkit.scheduler import ChapkitScheduler
+
+from .runner import ModelRunFailedError, get_temp_dir
+from .schemas import (
+    ModelRunnerProtocol,
+    PredictRequest,
+    PredictResponse,
+    RunInfo,
+    TrainRequest,
+    TrainResponse,
+    ValidatePredictRequest,
+    ValidateRequest,
+    ValidateTrainRequest,
+    ValidationDiagnostic,
+    ValidationResponse,
+)
+
+ConfigT = TypeVar("ConfigT", bound=BaseConfig)
+
+logger = get_logger(__name__)
+
+# Where a resolved forecast horizon came from, in precedence order.
+PredictionPeriodsSource = Literal["run_info", "future", "config"]
+
+# Dotted input path reported by a bounds diagnostic, per resolution source.
+_PREDICTION_PERIODS_FIELDS: dict[PredictionPeriodsSource, str] = {
+    "run_info": "run_info.prediction_periods",
+    "future": "future",
+    "config": "config.prediction_periods",
+}
+
+
+def derive_prediction_periods(future: DataFrame) -> int | None:
+    """Return the forecast horizon a future frame implies, or None when its columns do not describe one."""
+    if "time_period" not in future.columns or len(future) == 0:
+        return None
+    if "location" not in future.columns:
+        return future.nunique("time_period")
+
+    time_period_index = future.columns.index("time_period")
+    location_index = future.columns.index("location")
+    periods_by_location: dict[Any, set[Any]] = {}
+    for row in future.data:
+        periods_by_location.setdefault(row[location_index], set()).add(row[time_period_index])
+    return max(len(periods) for periods in periods_by_location.values())
+
+
+def resolve_prediction_periods(
+    config: BaseConfig,
+    run_info: RunInfo | None,
+    future: DataFrame | None,
+) -> tuple[int, PredictionPeriodsSource]:
+    """Resolve the forecast horizon for one request and report which input it came from."""
+    if run_info is not None and run_info.prediction_periods is not None:
+        return run_info.prediction_periods, "run_info"
+    if future is not None:
+        derived = derive_prediction_periods(future)
+        if derived is not None:
+            return derived, "future"
+    return config.prediction_periods, "config"
+
+
+def _exit_code_of(runner_result: Any) -> int:
+    """Return the shell exit code carried by a runner result, treating non-shell results as success."""
+    if isinstance(runner_result, dict):
+        return int(runner_result.get("exit_code", 0) or 0)
+    return 0
+
+
+def _stderr_of(runner_result: Any) -> str:
+    """Return the stderr captured by a runner result, or an empty string for non-shell results."""
+    if isinstance(runner_result, dict):
+        return str(runner_result.get("stderr", "") or "")
+    return ""
+
+
+def _has_error(diagnostics: list[ValidationDiagnostic]) -> bool:
+    """Return True if any diagnostic has severity='error'."""
+    return any(d.severity == "error" for d in diagnostics)
+
+
+class MLManager(Generic[ConfigT]):
+    """Manager for ML train/predict operations with job scheduling and artifact storage."""
+
+    def __init__(
+        self,
+        runner: ModelRunnerProtocol[ConfigT],
+        scheduler: ChapkitScheduler,
+        database: Database,
+        config_schema: type[ConfigT],
+        min_prediction_periods: int = 0,
+        max_prediction_periods: int = 100,
+    ) -> None:
+        """Initialize ML manager with runner, scheduler, database, and config schema."""
+        self.runner = runner
+        self.scheduler = scheduler
+        self.database = database
+        self.config_schema = config_schema
+        self.min_prediction_periods = min_prediction_periods
+        self.max_prediction_periods = max_prediction_periods
+
+    def _validate_prediction_periods(self, periods: int, source: PredictionPeriodsSource) -> None:
+        """Validate that the resolved prediction_periods is within allowed bounds (raises on failure)."""
+        for diagnostic in self._check_prediction_periods(periods, source):
+            if diagnostic.severity == "error":
+                raise ValueError(diagnostic.message)
+
+    def _check_prediction_periods(
+        self,
+        periods: int,
+        source: PredictionPeriodsSource,
+    ) -> list[ValidationDiagnostic]:
+        """Non-raising variant of the prediction-periods bounds check returning diagnostics."""
+        diagnostics: list[ValidationDiagnostic] = []
+        field = _PREDICTION_PERIODS_FIELDS[source]
+        if periods < self.min_prediction_periods:
+            diagnostics.append(
+                ValidationDiagnostic.error(
+                    code="prediction_periods_out_of_bounds",
+                    message=(
+                        f"prediction_periods ({periods}, from {source}) is below the minimum allowed value "
+                        f"({self.min_prediction_periods})"
+                    ),
+                    field=field,
+                )
+            )
+        elif periods > self.max_prediction_periods:
+            diagnostics.append(
+                ValidationDiagnostic.error(
+                    code="prediction_periods_out_of_bounds",
+                    message=(
+                        f"prediction_periods ({periods}, from {source}) exceeds the maximum allowed value "
+                        f"({self.max_prediction_periods})"
+                    ),
+                    field=field,
+                )
+            )
+        return diagnostics
+
+    async def find_config_covariates(self, config_id: ULID) -> list[str] | None:
+        """Return a config's additional_continuous_covariates, or None when the config does not exist."""
+        async with self.database.session() as session:
+            config_repo = ConfigRepository(session)
+            config_manager: ConfigManager[ConfigT] = ConfigManager(config_repo, self.config_schema)
+            config = await config_manager.find_by_id(config_id)
+        if config is None:
+            return None
+        return [str(covariate) for covariate in config.data.additional_continuous_covariates]
+
+    async def validate(self, request: ValidateRequest) -> ValidationResponse:
+        """Run framework-level and runner validations for a train or predict payload."""
+        if request.type == "train":
+            diagnostics = await self._validate_train(request)
+        else:
+            diagnostics = await self._validate_predict(request)
+        return ValidationResponse(valid=not _has_error(diagnostics), diagnostics=diagnostics)
+
+    async def _validate_train(self, request: ValidateTrainRequest) -> list[ValidationDiagnostic]:
+        """Collect diagnostics for a train payload."""
+        diagnostics: list[ValidationDiagnostic] = []
+
+        async with self.database.session() as session:
+            config_repo = ConfigRepository(session)
+            config_manager: ConfigManager[ConfigT] = ConfigManager(config_repo, self.config_schema)
+            config = await config_manager.find_by_id(request.config_id)
+
+        if config is None:
+            diagnostics.append(
+                ValidationDiagnostic.error(
+                    code="config_not_found",
+                    message=f"Config {request.config_id} not found",
+                    field="config_id",
+                )
+            )
+            return diagnostics
+
+        # No future frame exists at train time, so run info is the only override.
+        resolved_periods, periods_source = resolve_prediction_periods(config.data, request.run_info, None)
+        diagnostics.extend(self._check_prediction_periods(resolved_periods, periods_source))
+
+        if len(request.data) == 0:
+            diagnostics.append(
+                ValidationDiagnostic.error(
+                    code="data_empty",
+                    message="Training data is empty",
+                    field="data",
+                )
+            )
+
+        if _has_error(diagnostics):
+            return diagnostics
+
+        hook = getattr(self.runner, "on_validate_train", None)
+        if hook is not None:
+            runner_diagnostics = await hook(
+                config=config.data.model_copy(update={"prediction_periods": resolved_periods}),
+                data=request.data,
+                geo=request.geo,
+            )
+            diagnostics.extend(runner_diagnostics)
+        return diagnostics
+
+    async def _validate_predict(self, request: ValidatePredictRequest) -> list[ValidationDiagnostic]:
+        """Collect diagnostics for a predict payload."""
+        diagnostics: list[ValidationDiagnostic] = []
+
+        async with self.database.session() as session:
+            artifact_repo = ArtifactRepository(session)
+            artifact_manager = ArtifactManager(artifact_repo)
+            training_artifact = await artifact_manager.find_by_id(request.artifact_id)
+
+        if training_artifact is None:
+            diagnostics.append(
+                ValidationDiagnostic.error(
+                    code="training_artifact_not_found",
+                    message=f"Training artifact {request.artifact_id} not found",
+                    field="artifact_id",
+                )
+            )
+            return diagnostics
+
+        training_data = training_artifact.data
+        if not isinstance(training_data, dict) or training_data.get("type") != "ml_training_workspace":
+            diagnostics.append(
+                ValidationDiagnostic.error(
+                    code="invalid_training_artifact",
+                    message=f"Artifact {request.artifact_id} is not a training artifact",
+                    field="artifact_id",
+                )
+            )
+            return diagnostics
+
+        training_metadata = training_data.get("metadata", {})
+        training_status = training_metadata.get("status", "unknown")
+        if training_status == "failed":
+            exit_code = training_metadata.get("exit_code", "unknown")
+            diagnostics.append(
+                ValidationDiagnostic.error(
+                    code="training_artifact_failed",
+                    message=(
+                        f"Training artifact {request.artifact_id} failed training "
+                        f"(exit_code={exit_code}); cannot predict with it"
+                    ),
+                    field="artifact_id",
+                )
+            )
+            return diagnostics
+
+        config_id_str = training_metadata.get("config_id")
+        if not config_id_str:
+            diagnostics.append(
+                ValidationDiagnostic.error(
+                    code="invalid_training_artifact",
+                    message=f"Training artifact {request.artifact_id} is missing config_id in metadata",
+                    field="artifact_id",
+                )
+            )
+            return diagnostics
+
+        try:
+            config_id = ULID.from_str(config_id_str)
+        except ValueError:
+            diagnostics.append(
+                ValidationDiagnostic.error(
+                    code="invalid_training_artifact",
+                    message=(
+                        f"Training artifact {request.artifact_id} has a malformed config_id "
+                        f"in metadata: {config_id_str!r}"
+                    ),
+                    field="artifact_id",
+                )
+            )
+            return diagnostics
+
+        async with self.database.session() as session:
+            config_repo = ConfigRepository(session)
+            config_manager = ConfigManager(config_repo, self.config_schema)
+            config = await config_manager.find_by_id(config_id)
+
+        if config is None:
+            diagnostics.append(
+                ValidationDiagnostic.error(
+                    code="config_not_found",
+                    message=f"Config {config_id} referenced by training artifact not found",
+                    field="artifact_id",
+                )
+            )
+            return diagnostics
+
+        resolved_periods, periods_source = resolve_prediction_periods(config.data, request.run_info, request.future)
+        diagnostics.extend(self._check_prediction_periods(resolved_periods, periods_source))
+
+        if request.run_info is not None and request.run_info.prediction_periods is not None:
+            derived_periods = derive_prediction_periods(request.future)
+            if derived_periods is not None and derived_periods != request.run_info.prediction_periods:
+                diagnostics.append(
+                    ValidationDiagnostic.warning(
+                        code="prediction_periods_mismatch",
+                        message=(
+                            f"run_info.prediction_periods ({request.run_info.prediction_periods}) does not match "
+                            f"the horizon implied by the future frame ({derived_periods}); run info wins"
+                        ),
+                        field="future",
+                    )
+                )
+
+        diagnostics.extend(await asyncio.to_thread(self._check_training_workspace, training_data, request.artifact_id))
+
+        if len(request.historic) == 0:
+            diagnostics.append(
+                ValidationDiagnostic.error(
+                    code="historic_empty",
+                    message="Historic data is empty",
+                    field="historic",
+                )
+            )
+        if len(request.future) == 0:
+            diagnostics.append(
+                ValidationDiagnostic.error(
+                    code="future_empty",
+                    message="Future data is empty",
+                    field="future",
+                )
+            )
+
+        if _has_error(diagnostics):
+            return diagnostics
+
+        hook = getattr(self.runner, "on_validate_predict", None)
+        if hook is not None:
+            runner_diagnostics = await hook(
+                config=config.data.model_copy(update={"prediction_periods": resolved_periods}),
+                historic=request.historic,
+                future=request.future,
+                geo=request.geo,
+            )
+            diagnostics.extend(runner_diagnostics)
+        return diagnostics
+
+    def _check_training_workspace(
+        self,
+        training_data: dict[str, Any],
+        artifact_id: ULID,
+    ) -> list[ValidationDiagnostic]:
+        """Mirror the deterministic integrity checks from _predict_task."""
+        from .runner import ShellModelRunner
+
+        diagnostics: list[ValidationDiagnostic] = []
+
+        if training_data.get("content_type") != "application/zip":
+            return diagnostics
+
+        workspace_content = training_data.get("content")
+        if not isinstance(workspace_content, (bytes, bytearray)) or len(workspace_content) == 0:
+            diagnostics.append(
+                ValidationDiagnostic.error(
+                    code="training_workspace_corrupted",
+                    message=f"Training artifact {artifact_id} has empty or non-binary workspace content",
+                    field="artifact_id",
+                )
+            )
+            return diagnostics
+
+        try:
+            with zipfile.ZipFile(BytesIO(workspace_content), "r") as zf:
+                bad_entry = zf.testzip()
+                if bad_entry is not None:
+                    diagnostics.append(
+                        ValidationDiagnostic.error(
+                            code="training_workspace_corrupted",
+                            message=f"Corrupt file in training workspace ZIP: {bad_entry}",
+                            field="artifact_id",
+                        )
+                    )
+                    return diagnostics
+                names = set(zf.namelist())
+                pickle_bytes = zf.read("model.pickle") if "model.pickle" in names else None
+        except zipfile.BadZipFile as exc:
+            diagnostics.append(
+                ValidationDiagnostic.error(
+                    code="training_workspace_corrupted",
+                    message=f"Training artifact workspace is not a valid ZIP: {exc}",
+                    field="artifact_id",
+                )
+            )
+            return diagnostics
+
+        if isinstance(self.runner, ShellModelRunner):
+            return diagnostics
+
+        if pickle_bytes is None:
+            diagnostics.append(
+                ValidationDiagnostic.error(
+                    code="model_pickle_missing",
+                    message="Training artifact workspace is missing model.pickle",
+                    field="artifact_id",
+                )
+            )
+            return diagnostics
+
+        try:
+            pickle.loads(pickle_bytes)
+        except (
+            pickle.UnpicklingError,
+            EOFError,
+            TypeError,
+            AttributeError,
+            ImportError,
+            ValueError,
+            MemoryError,
+        ) as exc:
+            diagnostics.append(
+                ValidationDiagnostic.error(
+                    code="model_pickle_corrupted",
+                    message=f"Training artifact model.pickle is corrupted or incompatible: {exc}",
+                    field="artifact_id",
+                )
+            )
+
+        return diagnostics
+
+    async def execute_train(self, request: TrainRequest) -> TrainResponse:
+        """Submit a training job to the scheduler and return job/artifact IDs."""
+        # Pre-allocate artifact ID for the trained model
+        artifact_id = ULID()
+
+        # Submit job to scheduler
+        job_id = await self.scheduler.add_job(
+            self._train_task,
+            request,
+            artifact_id,
+        )
+
+        return TrainResponse(
+            job_id=str(job_id),
+            artifact_id=str(artifact_id),
+            message=f"Training job submitted. Job ID: {job_id}",
+        )
+
+    async def execute_predict(self, request: PredictRequest) -> PredictResponse:
+        """Submit a prediction job to the scheduler and return job/artifact IDs."""
+        # Pre-allocate artifact ID for predictions
+        artifact_id = ULID()
+
+        # Submit job to scheduler
+        job_id = await self.scheduler.add_job(
+            self._predict_task,
+            request,
+            artifact_id,
+        )
+
+        return PredictResponse(
+            job_id=str(job_id),
+            artifact_id=str(artifact_id),
+            message=f"Prediction job submitted. Job ID: {job_id}",
+        )
+
+    async def _train_task(self, request: TrainRequest, artifact_id: ULID) -> ULID:
+        """Execute training task and store trained model in artifact."""
+        # Load config
+        async with self.database.session() as session:
+            config_repo = ConfigRepository(session)
+            config_manager: ConfigManager[ConfigT] = ConfigManager(config_repo, self.config_schema)
+            config = await config_manager.find_by_id(request.config_id)
+
+            if config is None:
+                raise ValueError(f"Config {request.config_id} not found")
+
+        # Resolve the horizon for this request and hand the runner a config that carries it.
+        # The stored config is never mutated; only the copy passed to the runner is.
+        resolved_periods, periods_source = resolve_prediction_periods(config.data, request.run_info, None)
+        self._validate_prediction_periods(resolved_periods, periods_source)
+        logger.info("prediction_periods_resolved", value=resolved_periods, source=periods_source, operation="train")
+        run_config = config.data.model_copy(update={"prediction_periods": resolved_periods})
+
+        # Train model with timing
+        training_started_at = datetime.datetime.now(datetime.UTC)
+        training_result = await self.runner.on_train(
+            config=run_config,
+            data=request.data,
+            geo=request.geo,
+        )
+        training_completed_at = datetime.datetime.now(datetime.UTC)
+        training_duration = (training_completed_at - training_started_at).total_seconds()
+
+        # Extract workspace_dir before try block (for cleanup in finally)
+        workspace_dir_str = training_result.get("workspace_dir") if isinstance(training_result, dict) else None
+        workspace_dir = Path(workspace_dir_str) if workspace_dir_str else None
+
+        try:
+            # Let runner create artifact structure
+            artifact_data_dict = await self.runner.create_training_artifact(
+                training_result=training_result,
+                config_id=str(request.config_id),
+                started_at=training_started_at,
+                completed_at=training_completed_at,
+                duration_seconds=round(training_duration, 2),
+            )
+
+            # Validate artifact structure with Pydantic
+            from chapkit.artifact.schemas import MLTrainingWorkspaceArtifactData
+
+            MLTrainingWorkspaceArtifactData.model_validate(artifact_data_dict)
+
+            # Store artifact
+            async with self.database.session() as session:
+                artifact_repo = ArtifactRepository(session)
+                artifact_manager = ArtifactManager(artifact_repo)
+                config_repo = ConfigRepository(session)
+
+                await artifact_manager.save(
+                    ArtifactIn(
+                        id=artifact_id,
+                        data=artifact_data_dict,  # Use dict directly (PickleType)
+                        parent_id=None,
+                        level=0,
+                    )
+                )
+
+                # Link config to root artifact for tree traversal
+                await config_repo.link_artifact(request.config_id, artifact_id)
+                await config_repo.commit()
+
+        finally:
+            # Cleanup workspace if created by ShellModelRunner
+            if workspace_dir and workspace_dir.exists():
+                shutil.rmtree(workspace_dir, ignore_errors=True)
+
+        # Fail the job when the training script exited non-zero. The diagnostic artifact above is
+        # already persisted; the scheduler never calls _on_job_result on the failure path, so the
+        # artifact id is carried in the error message instead of ChapkitJobRecord.artifact_id.
+        exit_code = _exit_code_of(training_result)
+        if exit_code != 0:
+            raise ModelRunFailedError("train", exit_code, artifact_id, _stderr_of(training_result))
+
+        return artifact_id
+
+    async def _predict_task(self, request: PredictRequest, artifact_id: ULID) -> ULID:
+        """Execute prediction task and store predictions in artifact."""
+        # Load training artifact
+        async with self.database.session() as session:
+            artifact_repo = ArtifactRepository(session)
+            artifact_manager = ArtifactManager(artifact_repo)
+            training_artifact = await artifact_manager.find_by_id(request.artifact_id)
+
+            if training_artifact is None:
+                raise ValueError(f"Training artifact {request.artifact_id} not found")
+
+        # Extract model and config_id from artifact
+        training_data = training_artifact.data
+        if not isinstance(training_data, dict) or training_data.get("type") != "ml_training_workspace":
+            raise ValueError(f"Artifact {request.artifact_id} is not a training artifact")
+
+        # Check training status - block prediction on failed training
+        training_metadata = training_data.get("metadata", {})
+        training_status = training_metadata.get("status", "unknown")
+
+        if training_status == "failed":
+            exit_code = training_metadata.get("exit_code", "unknown")
+            raise ValueError(
+                f"Cannot predict using failed training artifact {request.artifact_id}. "
+                f"Training script exited with code {exit_code}."
+            )
+
+        # Check if artifact is workspace (ZIP) or pickled model
+        is_workspace = training_data.get("content_type") == "application/zip"
+        extracted_workspace = None
+        prediction_workspace_dir = None
+
+        try:
+            if is_workspace:
+                # Extract workspace from zip
+                import pickle
+                import tempfile
+                import zipfile
+                from io import BytesIO
+
+                workspace_content = training_data["content"]
+                extracted_workspace = Path(tempfile.mkdtemp(prefix="chapkit_workspace_extract_", dir=get_temp_dir()))
+
+                # Extract zip to temp directory
+                zip_buffer = BytesIO(workspace_content)
+                with zipfile.ZipFile(zip_buffer, "r") as zf:
+                    zf.extractall(extracted_workspace)
+
+                # Determine how to pass model based on runner type
+                from .runner import ShellModelRunner
+
+                if isinstance(self.runner, ShellModelRunner):
+                    # ShellModelRunner: pass workspace directory to runner
+                    trained_model = {
+                        "workspace_dir": str(extracted_workspace),
+                    }
+                else:
+                    # FunctionalModelRunner with workspace: load pickled model from workspace
+                    model_pickle_path = extracted_workspace / "model.pickle"
+                    if model_pickle_path.exists():
+                        try:
+                            trained_model = pickle.loads(model_pickle_path.read_bytes())
+                        except (pickle.UnpicklingError, EOFError, TypeError) as e:
+                            raise ValueError(
+                                f"Failed to load model from {model_pickle_path}: "
+                                f"corrupted or incompatible pickle file. {e}"
+                            ) from e
+                    else:
+                        raise ValueError(
+                            f"Training artifact workspace missing model.pickle file at {model_pickle_path}"
+                        )
+            else:
+                # Pickled model handling (FunctionalModelRunner without workspace)
+                trained_model = training_data["content"]
+
+            config_id = ULID.from_str(training_metadata["config_id"])
+
+            # Load config
+            async with self.database.session() as session:
+                config_repo = ConfigRepository(session)
+                config_manager: ConfigManager[ConfigT] = ConfigManager(config_repo, self.config_schema)
+                config = await config_manager.find_by_id(config_id)
+
+                if config is None:
+                    raise ValueError(f"Config {config_id} not found")
+
+            # Resolve the horizon for this request and hand the runner a config that carries it.
+            # The stored config is never mutated; only the copy passed to the runner is.
+            resolved_periods, periods_source = resolve_prediction_periods(config.data, request.run_info, request.future)
+            self._validate_prediction_periods(resolved_periods, periods_source)
+            logger.info(
+                "prediction_periods_resolved",
+                value=resolved_periods,
+                source=periods_source,
+                operation="predict",
+            )
+            run_config = config.data.model_copy(update={"prediction_periods": resolved_periods})
+
+            # Make predictions with timing
+            prediction_started_at = datetime.datetime.now(datetime.UTC)
+            prediction_result = await self.runner.on_predict(
+                config=run_config,
+                model=trained_model,
+                historic=request.historic,
+                future=request.future,
+                geo=request.geo,
+            )
+            prediction_completed_at = datetime.datetime.now(datetime.UTC)
+            prediction_duration = (prediction_completed_at - prediction_started_at).total_seconds()
+
+            # A non-zero exit code means the predict script failed. Persist the diagnostic workspace
+            # under the pre-allocated artifact id (so clients can fetch stdout/stderr/exit code from
+            # the artifact_id they already received) and then fail the job. The scheduler never calls
+            # _on_job_result on the failure path, so the id is repeated in the error message.
+            prediction_exit_code = _exit_code_of(prediction_result)
+            if prediction_exit_code != 0:
+                failed_workspace_dir_str = prediction_result.get("workspace_dir")
+                if failed_workspace_dir_str:
+                    prediction_workspace_dir = Path(failed_workspace_dir_str)
+                    failed_workspace_artifact_dict = await self.runner.create_prediction_artifact(
+                        prediction_result=prediction_result,
+                        config_id=str(config_id),
+                        started_at=prediction_started_at,
+                        completed_at=prediction_completed_at,
+                        duration_seconds=round(prediction_duration, 2),
+                    )
+                    async with self.database.session() as session:
+                        artifact_repo = ArtifactRepository(session)
+                        artifact_manager = ArtifactManager(artifact_repo)
+                        await artifact_manager.save(
+                            ArtifactIn(
+                                id=artifact_id,
+                                data=failed_workspace_artifact_dict,
+                                parent_id=request.artifact_id,
+                                level=1,
+                            )
+                        )
+                raise ModelRunFailedError(
+                    "predict",
+                    prediction_exit_code,
+                    artifact_id,
+                    _stderr_of(prediction_result),
+                )
+
+            # Extract predictions from result (handles both new dict format and legacy DataFrame)
+            if isinstance(prediction_result, dict) and "content" in prediction_result:
+                # New unified format: {content, workspace_dir, exit_code, stdout, stderr}
+                predictions = prediction_result["content"]
+                workspace_dir_str = prediction_result.get("workspace_dir")
+            else:
+                # Legacy format: BaseModelRunner subclasses return DataFrame directly
+                predictions = prediction_result
+                workspace_dir_str = None
+
+            # Attach a self-describing schema to the prediction output when it is a
+            # DataFrame, so stored predictions and API responses are self-describing.
+            from chapkit.data import DataFrame as PredictionDataFrame
+
+            if isinstance(predictions, PredictionDataFrame) and predictions.table_schema is None:
+                predictions = predictions.with_schema()
+
+            # Create workspace artifact if workspace was created (both runners can produce workspace)
+            if workspace_dir_str:
+                prediction_workspace_dir = Path(workspace_dir_str)
+
+                # Create workspace artifact data (zips workspace)
+                # Runner returns ml_prediction_workspace type for debugging artifacts
+                workspace_artifact_dict = await self.runner.create_prediction_artifact(
+                    prediction_result=prediction_result,
+                    config_id=str(config_id),
+                    started_at=prediction_started_at,
+                    completed_at=prediction_completed_at,
+                    duration_seconds=round(prediction_duration, 2),
+                )
+            else:
+                workspace_artifact_dict = None
+
+            # Create prediction artifact with DataFrame (same for both runners)
+            from chapkit.artifact.schemas import MLMetadata, MLPredictionArtifactData
+
+            metadata = MLMetadata(
+                status="success",
+                config_id=str(config_id),
+                started_at=prediction_started_at.isoformat(),
+                completed_at=prediction_completed_at.isoformat(),
+                duration_seconds=round(prediction_duration, 2),
+            )
+
+            # Create and validate artifact data structure with Pydantic
+            artifact_data_model = MLPredictionArtifactData(
+                type="ml_prediction",
+                metadata=metadata,
+                content=predictions,
+                content_type="application/vnd.chapkit.dataframe+json",
+                content_size=None,
+            )
+
+            # Construct dict manually to preserve Python objects (database uses PickleType)
+            artifact_data_dict = {
+                "type": artifact_data_model.type,
+                "metadata": artifact_data_model.metadata.model_dump(),
+                "content": predictions,  # Keep as Python object (DataFrame)
+                "content_type": artifact_data_model.content_type,
+                "content_size": artifact_data_model.content_size,
+            }
+
+            # Store artifacts
+            async with self.database.session() as session:
+                artifact_repo = ArtifactRepository(session)
+                artifact_manager = ArtifactManager(artifact_repo)
+
+                # 1. Store prediction artifact (level 1, parent = training artifact)
+                await artifact_manager.save(
+                    ArtifactIn(
+                        id=artifact_id,
+                        data=artifact_data_dict,
+                        parent_id=request.artifact_id,
+                        level=1,
+                    )
+                )
+
+                # 2. Store workspace artifact if workspace was created (level 2, parent = prediction artifact)
+                if workspace_artifact_dict is not None:
+                    workspace_artifact_id = ULID()
+                    await artifact_manager.save(
+                        ArtifactIn(
+                            id=workspace_artifact_id,
+                            data=workspace_artifact_dict,
+                            parent_id=artifact_id,
+                            level=2,
+                        )
+                    )
+
+        finally:
+            # Cleanup extracted training workspace
+            if extracted_workspace and extracted_workspace.exists():
+                shutil.rmtree(extracted_workspace, ignore_errors=True)
+            # Cleanup prediction workspace (created by ShellModelRunner)
+            if prediction_workspace_dir and prediction_workspace_dir.exists():
+                shutil.rmtree(prediction_workspace_dir, ignore_errors=True)
+
+        return artifact_id

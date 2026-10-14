@@ -1,0 +1,333 @@
+# MLproject Runner
+
+`chapkit mlproject run` turns any directory containing an MLflow-style `MLproject` file into a running chapkit service — no code generation, no changes to the MLproject repo. It is aimed at users coming to chapkit with an existing `train.r` / `predict.py` (or any shell-command-driven model) who want a chapkit HTTP API around their scripts in seconds.
+
+## Quick Start
+
+Point it at an MLproject file or the directory that holds one:
+
+```bash
+chapkit mlproject run                              # uses current directory
+chapkit mlproject run /path/to/my_mlproject
+chapkit mlproject run /path/to/my_mlproject/MLproject.yaml
+```
+
+This parses the `MLproject` file, translates the entry-point commands to chapkit's workspace conventions, builds a FastAPI service with `/api/v1/ml/$train` and `/$predict` endpoints, and serves on `127.0.0.1:9090` by default. Override host/port with `--host` and `--port`. If the port is already taken, `chapkit mlproject run` stops with an error before starting anything.
+
+Nothing is written to your MLproject directory: configs, artifacts and jobs live in memory, and each train/predict runs in a temporary copy of the project.
+
+A minimal R MLproject like `dhis2-chap/minimalist_example_r`:
+
+```yaml
+name: minimalist_r
+renv_env: renv.lock
+entry_points:
+  train:
+    parameters:
+      train_data: path
+      model: str
+    command: "Rscript train.r {train_data} {model}"
+  predict:
+    parameters:
+      historic_data: path
+      future_data: path
+      model: str
+      out_file: path
+    command: "Rscript predict.r {model} {historic_data} {future_data} {out_file}"
+```
+
+...becomes a service that accepts `POST /api/v1/ml/$train` (with your CSV as a `DataFrame` payload), runs `Rscript train.r data.csv model` in an isolated workspace, and stores the resulting workspace as an artifact. Predict works the same way, re-entering the training workspace.
+
+---
+
+## Canonical Parameter Mapping
+
+`chapkit mlproject run` recognises the canonical MLproject parameter names used across chap-core-compatible models. Each is substituted with a fixed filename that matches chapkit's `ShellModelRunner` workspace layout:
+
+| MLproject parameter | Substitutes to  | Notes                                                                 |
+| ------------------- | --------------- | --------------------------------------------------------------------- |
+| `train_data`        | `data.csv`      | Training data CSV written by chapkit                                  |
+| `historic_data`     | `historic.csv`  | Historic data CSV during predict                                      |
+| `future_data`       | `future.csv`    | Future-period data CSV during predict                                 |
+| `out_file`          | `predictions.csv` | Where your script writes predictions                                 |
+| `model`             | `model`         | Literal path; your script saves to and loads from it. The file (or directory) persists across train → predict via workspace copy. |
+| `model_config`      | `config.yml`    | Config YAML chapkit writes from `user_options` + `prediction_periods` |
+| `polygons`          | `geo.json`      | Optional GeoJSON for spatial models                                   |
+
+These names are the lingua franca used by chap-core (`chap_core/runners/command_line_runner.py`) so any MLproject that already runs under chap-core is expected to run under `chapkit mlproject run` without change.
+
+### Overriding the Map
+
+If your MLproject uses a non-canonical placeholder (e.g. `{dataset}`), provide an override at launch:
+
+```bash
+chapkit mlproject run . --param dataset=data.csv
+```
+
+The `--param NAME=FILENAME` flag is repeatable. Overrides win over the canonical map, which lets you re-point `{model}` or any other parameter if your scripts expect a different filename.
+
+---
+
+## Model Contract from the MLproject
+
+`/api/v1/info` serves the same contract chap-core reads from an MLproject (`ModelTemplateConfigV2` in chap-core), so chap-core sees the model the same way whether it runs the MLproject itself or talks to `chapkit mlproject run`:
+
+| MLproject field | Served as |
+| --- | --- |
+| `name` | `id` (slugified) |
+| `version` | `version` |
+| `meta_data.display_name` | `display_name` (falls back to `name`) |
+| `meta_data.description` | `description` |
+| `meta_data.author`, `author_note`, `author_assessed_status`, `contact_email`, `organization`, `organization_logo_url`, `citation_info`, `documentation_url` | `model_metadata.*` (`author_note` falls back to `description`) |
+| `source_url` (top level or in `meta_data`) | `model_metadata.repository_url` |
+| `supported_period_type` | `period_type`: `week` / `weekly`, `month` / `monthly`, or `any` (the default) |
+| `min_prediction_periods`, `max_prediction_periods` (also the `*_prediction_length` and camelCase spellings) | `min_prediction_periods`, `max_prediction_periods` |
+| `required_covariates`, `allow_free_additional_continuous_covariates`, `requires_geo` | same names |
+| `target` | `target` (default `disease_cases`) |
+| `hpo_search_space` | `hpo_search_space` |
+
+Values that would not validate (a logo path that is not a URL, a malformed email, an unknown assessed status, a negative horizon bound) are reported as warnings at startup and left out, so an MLproject that ran before keeps running.
+
+### Adapters
+
+chap-core renames columns for MLproject models it runs itself, using the `adapters` mapping, but not for chapkit services. `chapkit mlproject run` therefore applies `adapters` in the runner, so scripts written for chap-core find the same columns in `data.csv`, `historic.csv` and `future.csv`:
+
+```yaml
+adapters:
+  Cases: disease_cases   # copy a column under a new name
+  E: population
+  ID_spat: location
+  ID_year: year          # derived from time_period
+  month: month           # monthly data only
+  week: week             # weekly data only
+```
+
+The rules follow chap-core: the original columns are kept, `year` / `month` / `week` are derived from `time_period` (the ISO week of a weekly period's start, the year of its end), and a source column that is missing, such as `disease_cases` in the future frame, is skipped. The same mapping is available to any shell model as `ShellModelRunner(..., adapters={...})`.
+
+---
+
+## Typed Config from `user_options`
+
+MLproject `user_options` are JSON Schema properties, the same way chap-core validates them. `chapkit mlproject run` turns them into typed fields on a `BaseConfig` subclass generated at startup with `pydantic.create_model`, so the config's JSON Schema, the OpenAPI document, the console's config form and request validation match what a hand-written `main.py` would produce. Given:
+
+```yaml
+name: ewars_template
+user_options:
+  n_lags:
+    type: [array, integer]
+    items:
+      type: integer
+    default: [3]
+    description: Number of lags per covariate, or one value for all.
+  cell:
+    title: Recurrent cell type
+    type: string
+    enum: [gru, simple]
+    default: gru
+  precision:
+    type: number
+    minimum: 0
+    default: 0.01
+  max_epochs:
+    anyOf:
+    - type: integer
+    - type: 'null'
+    default: null
+```
+
+`chapkit mlproject run` builds an `EwarsTemplateConfig` equivalent to:
+
+```python
+class EwarsTemplateConfig(BaseConfig):
+    """Configuration for ewars_template."""
+
+    n_lags: list[int] | int = Field([3], description="Number of lags per covariate, or one value for all.")
+    cell: Literal["gru", "simple"] = Field("gru", title="Recurrent cell type")
+    precision: float = Field(0.01, ge=0)
+    max_epochs: int | None = None
+    prediction_periods: int = Field(3, description="Number of periods to predict into the future.")
+```
+
+`prediction_periods` is added when the MLproject does not declare it; its default is kept inside the declared horizon bounds. Scripts read the values from `config.yml`, which chapkit writes to the workspace root before invoking your train/predict command.
+
+Supported keywords:
+
+| Keyword | Becomes |
+| --- | --- |
+| `type`: `integer` / `int`, `number` / `float`, `string` / `str` / `path`, `boolean` / `bool` | `int`, `float`, `str`, `bool` (unknown type names fall back to `str`; no `type` at all means any value) |
+| `type: array` with `items` | `list[...]` |
+| `type: object` | `dict[str, Any]` |
+| `type: [a, b]`, `anyOf`, `oneOf` | a union of the members; `null` makes the option optional |
+| `enum` | `Literal[...]` |
+| `minimum`, `maximum`, `exclusiveMinimum`, `exclusiveMaximum` | `ge`, `le`, `gt`, `lt` |
+| `minLength`, `maxLength`, `pattern`, `minItems`, `maxItems` | length and pattern constraints |
+| `title`, `description` | field title and description |
+| `default` | field default; options without one are required |
+
+Every value is also validated against the option's own JSON Schema with the `jsonschema` validator chap-core uses, so configs are accepted and rejected exactly as chap-core would: every keyword that applies must hold, `oneOf` needs exactly one matching branch, and keywords the table does not list (`allOf`, `not`, `const`, `multipleOf`, `uniqueItems`, ...) are enforced too. Options the typed translation cannot represent (those keywords, or boolean schemas such as `items: false`) are typed `Any` and validated by the JSON Schema alone. `pattern` is always checked by the JSON Schema validator (Python's `re`, as in chap-core), never by Pydantic's regex engine. Any option whose typed schema would leave out a constraint (those keywords, a `pattern`, or bounds on an option without a `type`) publishes its schema as declared in the MLproject, so schema consumers reject what the service rejects; the rest publish the typed schema shown above. chapkit's legacy type names (`int`, `str`, `path`, ...) and draft 4 boolean `exclusiveMinimum` / `exclusiveMaximum` are read as their standard forms.
+
+A default that does not fit its declared type is kept as written, as before typed options existed, and reported as a warning at startup. Configs then have to set that option explicitly, because the written default fails validation.
+
+---
+
+## Environment Hints
+
+If your MLproject declares a runtime environment (`docker_env`, `renv_env`, `python_env`, `uv_env`, `conda_env`), `chapkit mlproject run` **warns** about it on startup but does **not** auto-activate it:
+
+```
+WARNING: chapkit mlproject run does not auto-activate environments.
+  - uv_env: pyproject.toml
+Activate the right runtime (R/renv, conda, Docker image, etc.) before launching
+chapkit mlproject run, or invoke chapkit mlproject run from inside it.
+```
+
+Because `chapkit mlproject run` shells out `python ...` / `Rscript ...` via `ShellModelRunner`, the subprocess inherits whatever is on `PATH` at launch time. Invoking the chapkit entry point directly (e.g. `./.venv/bin/chapkit mlproject run .`) does **not** put `.venv/bin` on subprocess `PATH`, so `import pandas` (or similar) will fail.
+
+Recommended invocations:
+
+- **Python MLproject:** `uv run chapkit mlproject run .` (preferred) or `source .venv/bin/activate && chapkit mlproject run .`
+- **R MLproject:** run `chapkit mlproject run .` from inside an R-capable container or an `renv`-activated shell.
+
+The published container images (below) set `PATH` correctly so this is a non-issue there.
+
+---
+
+## Running in a Container
+
+The Dockerfiles and publish workflow live in the companion [dhis2-chap/chapkit-images](https://github.com/dhis2-chap/chapkit-images) repo so image builds don't block chapkit's own CI. Two variants are published per language flavour:
+
+- **`chapkit-py` / `chapkit-r` / `chapkit-r-tidyverse` / `chapkit-r-inla`** — runtime base only (Python+uv, plus the R toolchain / R + tidyverse / R + INLA where relevant). **Chapkit is not installed.** Use these as the `FROM` for your own Dockerfile when your project's `pyproject.toml` already pins chapkit and a `uv sync` step installs it. This is what `chapkit init` and `chapkit mlproject migrate` produce. See the [deployment guide](deploying-to-chap-core.md) for that flow.
+- **`chapkit-py-cli` / `chapkit-r-cli` / `chapkit-r-tidyverse-cli` / `chapkit-r-inla-cli`** — same runtime base, **with chapkit pre-installed**. Use these for the "no local chapkit needed" workflow: `docker run` an MLproject directly via the bundled `chapkit run .` CMD, or invoke any other `chapkit` subcommand (e.g. `chapkit mlproject migrate`) without installing chapkit on the host.
+
+The two-variant split exists because pre-installing chapkit in the runtime base caused a measurable runtime memory overhead for projects that pinned a different chapkit version than the base image — `uv sync` had to take an uninstall + reinstall path with a heavier profile. Splitting keeps the install path uniform for `FROM`-style use, while preserving the convenience of `docker run` for CLI-style use.
+
+The `-cli` images, all built on `debian:trixie-slim`:
+
+| Image                                              | Contents                                                                                        | Architectures                    | Typical size (amd64) |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------- | -------------------- |
+| `ghcr.io/dhis2-chap/chapkit-py-cli:latest`            | Python 3.13, chapkit, uv                                                                                    | `linux/amd64`, `linux/arm64`     | ~220 MB              |
+| `ghcr.io/dhis2-chap/chapkit-r-cli:latest`             | R 4.5 + `renv` + `pak`, Python 3.13, chapkit, uv                                                            | `linux/amd64`, `linux/arm64`     | ~400 MB              |
+| `ghcr.io/dhis2-chap/chapkit-r-tidyverse-cli:latest`   | R 4.5 + tidyverse + Posit forecasting / ML stack (fable, tsibble, feasts, forecast, ranger, xgboost, glmnet, lubridate, janitor, ...), Python 3.13, chapkit | `linux/amd64`, `linux/arm64`     | ~600 MB              |
+| `ghcr.io/dhis2-chap/chapkit-r-inla-cli:latest`        | R 4.5 + INLA + spatial / time-series R stack (sf, spdep, dlnm, tsModel, sn, xgboost, fmesher, ...), Python 3.13, chapkit | `linux/amd64` (INLA x86_64 only) | ~570 MB              |
+
+Each `-cli` image also publishes a `:dev` tag, rebuilt nightly with chapkit installed from the `main` branch instead of PyPI — use it to test against unreleased chapkit changes.
+
+Which one to pick:
+
+- **Python MLproject?** Use `chapkit-py-cli` — lean and multi-arch.
+- **R MLproject with no preinstalled stack?** (e.g. `minimalist_example_r`) Use `chapkit-r-cli`. Multi-arch, includes the R toolchain and `renv`/`pak` so you can install additional CRAN packages or restore a lockfile at runtime.
+- **R MLproject using the tidyverse / forecasting stack?** Use `chapkit-r-tidyverse-cli`. Multi-arch, ships tidyverse + fable/tsibble/feasts/forecast + ranger/xgboost/glmnet/lubridate/janitor and friends.
+- **R MLproject that uses INLA?** (e.g. EWARS-style) Use `chapkit-r-inla-cli`. INLA + fmesher + the chap-core R-model parity set (sf, spdep, sn, dlnm, tsModel, xgboost, ...) are pre-installed. amd64 only; you will need Rosetta emulation on Apple Silicon.
+
+All four set `WORKDIR /work` and default to `CMD ["chapkit", "run", ".", "--host", "0.0.0.0", "--port", "8000"]`, so mounting your MLproject into `/work` is enough:
+
+```bash
+# Python model
+docker run --rm -p 8000:8000 \
+  -v "$(pwd):/work" \
+  ghcr.io/dhis2-chap/chapkit-py-cli:latest
+
+# R model on a minimal R image (multi-arch)
+docker run --rm -p 8000:8000 \
+  -v "$(pwd):/work" \
+  ghcr.io/dhis2-chap/chapkit-r-cli:latest
+
+# R model with tidyverse / forecasting stack (multi-arch)
+docker run --rm -p 8000:8000 \
+  -v "$(pwd):/work" \
+  ghcr.io/dhis2-chap/chapkit-r-tidyverse-cli:latest
+
+# R model with INLA (amd64-only; Rosetta on Apple Silicon)
+docker run --rm -p 8000:8000 --platform=linux/amd64 \
+  -v "$(pwd):/work" \
+  ghcr.io/dhis2-chap/chapkit-r-inla-cli:latest
+```
+
+The same images run any other `chapkit` subcommand without local install — for example, migrating an existing MLproject directory:
+
+```bash
+docker run --rm -v "$(pwd):/work" \
+  ghcr.io/dhis2-chap/chapkit-py-cli:latest \
+  chapkit mlproject migrate . --yes
+```
+
+### Model-Level Dependencies
+
+The `-cli` images contain chapkit, Python, and (for `chapkit-r-cli`) the R toolchain (`renv` + `pak`, no preinstalled R packages); `chapkit-r-tidyverse-cli` and `chapkit-r-inla-cli` add the tidyverse / forecasting and INLA / spatial stacks respectively. They do **not** ship your model's extra dependencies (pandas, scikit-learn, additional CRAN packages, etc.). Add them in one of two ways:
+
+1. **Bake your own image** (production-recommended):
+
+    ```dockerfile
+    FROM ghcr.io/dhis2-chap/chapkit-py-cli:latest
+    WORKDIR /work
+    COPY . .
+    RUN uv pip install --python /app/.venv/bin/python -e .
+    ```
+
+2. **Install at container start** (quick dev):
+
+    ```bash
+    docker run --rm -p 8000:8000 -v "$(pwd):/work" \
+      ghcr.io/dhis2-chap/chapkit-py-cli:latest \
+      bash -c "uv pip install --python /app/.venv/bin/python -e . && exec chapkit mlproject run . --host 0.0.0.0"
+    ```
+
+### Security
+
+Both images currently run as `root`. Non-root hardening needs the usual volume-mapping dance (writable `/tmp`, per-user cache dirs, etc. — see `chap-core/compose.yml` for the reference pattern) and is a planned follow-up. The images are intended to sit in a trusted compose network behind chap-core.
+
+---
+
+## Integration with chap-core
+
+`chapkit mlproject run` is designed to sit on a `docker compose` network alongside chap-core. Self-registration with chap-core is handled by servicekit's `SERVICEKIT_ORCHESTRATOR_URL` environment variable (the same mechanism used by `chap-core/compose.ewars.yml`):
+
+```yaml
+services:
+  my-model:
+    image: ghcr.io/dhis2-chap/chapkit-r-cli:latest
+    platform: linux/amd64
+    volumes:
+      - ./my_mlproject:/work
+    environment:
+      SERVICEKIT_ORCHESTRATOR_URL: http://chap:8000/v2/services/$$register
+      # Optional shared secret, if chap has SERVICEKIT_REGISTRATION_KEY set:
+      # SERVICEKIT_REGISTRATION_KEY: ${SERVICEKIT_REGISTRATION_KEY:-}
+    depends_on:
+      chap:
+        condition: service_healthy
+    networks:
+      - chap
+```
+
+No chapkit-side configuration is needed: if `SERVICEKIT_ORCHESTRATOR_URL` is set, the service registers itself with chap-core on startup, and the startup output shows `registers with: <url>`. It advertises `SERVICEKIT_HOST` (default: the container's hostname) and `SERVICEKIT_PORT` (default: the `--port` it listens on), and waits until that local port answers before registering. Set both when chap-core reaches the service through a different address, for example a published host port. Without `SERVICEKIT_ORCHESTRATOR_URL` nothing is registered.
+
+The same settings are available as options, which take precedence over the variables. This is handy outside compose:
+
+```bash
+chapkit mlproject run ./my_mlproject --host 0.0.0.0 --port 9090 \
+  --register-url 'http://localhost:8000/v2/services/$register' \
+  --advertise-host host.docker.internal --advertise-port 9090
+```
+
+The shared registration secret is only read from `SERVICEKIT_REGISTRATION_KEY`, so it never appears in the process list or shell history.
+
+---
+
+## Limitations and When to Prefer `chapkit mlproject migrate` or `chapkit init`
+
+`chapkit mlproject run` is a thin runtime wrapper: it does not generate, edit, or version any files in your MLproject. That keeps it ideal for:
+
+- Rapid evaluation of an existing MLproject under chapkit.
+- Running a model in a docker-compose network alongside chap-core without a port to chapkit.
+- Models whose train/predict logic is stable and already well-tested outside chapkit.
+
+When you're ready to **own** the service code (commit it, extend it, ship it as your own image), reach for [`chapkit mlproject migrate`](mlproject-migrate.md): it's the code-generating sibling of `run` that adopts your MLproject in place and produces a committable `main.py`, `Dockerfile`, `pyproject.toml` (with your deps merged in), `compose.yml`, and `CHAPKIT.md`. Your train/predict scripts stay put; only chapkit-owned metadata and chaff moves to `_old/`.
+
+Use [`chapkit init`](cli-scaffolding.md) instead when you want to start a **greenfield** chapkit project — no existing MLproject to adopt, full template choice (`fn-py`, `shell-py`, `shell-r`, `shell-r-tidyverse`, `shell-r-inla`), validation-hook stubs.
+
+| You have… | Use |
+| --- | --- |
+| An MLproject you want to quickly evaluate | `chapkit mlproject run` |
+| An MLproject you want to own as a chapkit project | `chapkit mlproject migrate` |
+| Nothing yet | `chapkit init` |

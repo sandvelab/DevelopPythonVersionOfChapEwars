@@ -1,0 +1,8 @@
+weekly dev rows kept: 7310
+dev-data/monthly_ewars/future_data.csv	rows=138
+dev-data/monthly_ewars/historic_data.csv	rows=4416
+dev-data/smoke_ewars_example_data/future_data.csv	rows=52
+dev-data/smoke_ewars_example_data/training_data.csv	rows=104
+dev-data/weekly_nicaragua/nicaragua_weekly_data_pre2018.csv	rows=7310
+holdout/monthly_laos/laos_subset.csv	rows=108
+holdout/weekly_nicaragua/nicaragua_weekly_data.csv	rows=9840

@@ -22,4 +22,5 @@ meantime. If a derived document is wrong, its source is wrong.
 
 ## Currently here
 
-Nothing yet.
+- `translation-record/` — the judgment-call list and challenges overview (rendered).
+- `batch-reports/` — one report per executed batch.

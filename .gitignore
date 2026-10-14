@@ -40,3 +40,6 @@ AI-internal/useful-scripts/*.log
 # analysis/**/results/*.nc
 # analysis/**/results/*.h5
 # analysis/**/results/*.parquet
+
+# Archived clones over ~50 MB: re-obtainable by commit from their provenance.md (plan §4, storage)
+Archive/chap-core/src/

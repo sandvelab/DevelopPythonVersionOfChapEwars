@@ -12,7 +12,7 @@ and the log of what has been done.
 
 A project may add `reconnaissance/`, `data-acquisition/` or similar folders here as it needs
 them — scripts that establish facts about external systems, or bring external data into
-`Archive/` — following the pattern the useful-scripts convention sets. None exist yet.
+`Archive/` — following the pattern the useful-scripts convention sets. Present: `data-acquisition/` (fetch and partition scripts) and `translation-log/` (the JC/CH ledgers).
 
 The task log is **part of the published record** of how the work came about, not a private
 working note. Write entries a reader who was not present can follow, and keep them honest

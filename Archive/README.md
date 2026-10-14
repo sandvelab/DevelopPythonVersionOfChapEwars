@@ -32,4 +32,9 @@ replaced by an updated import.
 
 ## Currently here
 
-Nothing yet — the project's anchors (`readme-at-start.md`) have not been fetched.
+- `chapkit_ewars_model/` — the R reference model (pinned clone).
+- `chap-core/` — the evaluation platform, including its docs (pinned clone; `src/` gitignored, re-obtainable).
+- `chapkit/` — the service library models are wrapped in (pinned clone).
+- `dlnmpy/` — the Python DLNM port replacing R `dlnm` (pinned clone).
+- `dev-data/` — development data. `holdout/` — sealed held-out data.
+- `plan-as-delivered/` — the plan before batch 1.
