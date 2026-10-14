@@ -1,0 +1,34 @@
+workspace: failed_predict_workspace
+files:
+  config.yml  137 bytes
+  data.csv  469035 bytes
+  future.csv  12642 bytes
+  historic.csv  469035 bytes
+  main.py  4092 bytes
+  model.rds  99 bytes
+  pyproject.toml  572 bytes
+  scripts/lib.R  1087 bytes
+  scripts/predict.R  8200 bytes
+  scripts/train.R  967 bytes
+  uv.lock  208066 bytes
+
+== data.csv: 4347 rows x 14 columns
+columns: time_period:object, rainfall:float64, mean_temperature:float64, disease_cases:float64, population:float64, Cases:float64, E:float64, month:int64, ID_year:int64, ID_spat:object, rainsum:float64, meantemperature:float64, parent:object, location:object
+time_period: 2001-01 .. 2016-09, e.g. '2001-01'
+month: 4347 values, distinct 12, not whole: 0
+ID_year: 4347 values, distinct 16, not whole: 0
+
+== future.csv: 69 rows x 13 columns
+columns: time_period:object, rainfall:float64, mean_temperature:float64, population:float64, Cases:float64, E:float64, month:float64, ID_year:float64, ID_spat:object, rainsum:float64, meantemperature:float64, parent:object, location:object
+time_period: 2016-10 .. 2016-12, e.g. '2016-10'
+month: 69 values, distinct 3, not whole: 3
+    np.float64(10.00000000000001)
+    np.float64(10.999999999999986)
+    np.float64(12.000000000000018)
+ID_year: 69 values, distinct 1, not whole: 0
+
+== historic.csv: 4347 rows x 14 columns
+columns: time_period:object, rainfall:float64, mean_temperature:float64, disease_cases:float64, population:float64, Cases:float64, E:float64, month:int64, ID_year:int64, ID_spat:object, rainsum:float64, meantemperature:float64, parent:object, location:object
+time_period: 2001-01 .. 2016-09, e.g. '2001-01'
+month: 4347 values, distinct 12, not whole: 0
+ID_year: 4347 values, distinct 16, not whole: 0

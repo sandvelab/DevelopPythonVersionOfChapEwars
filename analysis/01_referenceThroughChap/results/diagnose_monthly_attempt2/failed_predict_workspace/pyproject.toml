@@ -1,0 +1,26 @@
+[project]
+name = "chapkit-ewars-model"
+version = "0.1.0"
+description = "Chapkit version of the modified WHO EWARS Bayesian INLA model for disease case forecasting — a chap-core model template showcasing chapkit integration."
+requires-python = ">=3.13"
+dependencies = [
+    "chapkit>=2.2.0,<3",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.17",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 120
+
+[tool.ruff.lint]
+fixable = ["ALL"]
+select = ["E", "W", "F", "I"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false

@@ -25,15 +25,16 @@ CONTAINER=ewars-reference
 BASELINES=(global_median seasonal_median persistence)
 
 # Development datasets (Archive/dev-data/, batch 1). The holdout is never named here.
+# Each is reduced to the six-column chap data contract before evaluation (JC-05, CH-07).
 DATASET_NAMES=(monthly_ewars weekly_nicaragua)
-DATASET_CSVS=(
+ARCHIVED_CSVS=(
   "$REPO_ROOT/Archive/dev-data/monthly_ewars/historic_data.csv"
   "$REPO_ROOT/Archive/dev-data/weekly_nicaragua/nicaragua_weekly_data_pre2018.csv"
 )
 
 source "$SCRIPT_DIR/backtest_settings.env"
 CONFIG_YAML="$SCRIPT_DIR/ewars_config.yaml"
-mkdir -p "$OUT_DIR/eval" "$OUT_DIR/metrics" "$OUT_DIR/chap_logs"
+mkdir -p "$OUT_DIR/eval" "$OUT_DIR/metrics" "$OUT_DIR/chap_logs" "$OUT_DIR/inputs"
 TIMINGS="$OUT_DIR/timings.tsv"
 printf 'dataset\tmodel\tseconds\texit_code\n' > "$TIMINGS"
 
@@ -52,6 +53,15 @@ git -C chap-core rev-parse HEAD > "$OUT_DIR/chap_core_commit.txt"
 (cd chap-core && uv sync --frozen --no-dev --python 3.13)
 CHAP="$WORK_DIR/chap-core/.venv/bin/chap"
 "$CHAP" --help > /dev/null
+
+# 1b. The model inputs: the development files reduced to the chap data contract.
+DATASET_CSVS=()
+for k in "${!DATASET_NAMES[@]}"; do
+  "$WORK_DIR/chap-core/.venv/bin/python" "$SCRIPT_DIR/prepare_inputs.py" \
+    "${ARCHIVED_CSVS[$k]}" "$OUT_DIR/inputs/${DATASET_NAMES[$k]}.csv"
+  DATASET_CSVS+=("$OUT_DIR/inputs/${DATASET_NAMES[$k]}.csv")
+done
+shasum -a 256 "$OUT_DIR"/inputs/*.csv
 
 # 2. The original EWARS chapkit service, from its image pinned by digest.
 docker pull --platform linux/amd64 "$EWARS_IMAGE"
@@ -78,6 +88,7 @@ run_eval() {  # run_eval <dataset_name> <csv> <model_label> <chap eval model arg
     --backtest-params.n-periods "$N_PERIODS" \
     --backtest-params.n-splits "$N_SPLITS" \
     --backtest-params.stride "$STRIDE" \
+    --backtest-params.future-weather-provider "$FUTURE_WEATHER_PROVIDER" \
     --run-config.log-file "$OUT_DIR/chap_logs/${name}__${label}.log" || rc=$?
   printf '%s\t%s\t%s\t%s\n' "$name" "$label" "$((SECONDS - start))" "$rc" >> "$TIMINGS"
   return 0
@@ -93,6 +104,14 @@ for k in "${!DATASET_NAMES[@]}"; do
     run_eval "$name" "$csv" "$b" --model-name "builtin:$b"
   done
 done
+
+# 3b. The data chap handed the service: the last workspace the weekly run left (CH-06).
+"$WORK_DIR/chap-core/.venv/bin/python" "$SCRIPT_DIR/fetch_last_workspace.py" \
+  "http://localhost:$PORT" "$OUT_DIR/weekly_workspace" || true
+if [ -d "$OUT_DIR/weekly_workspace/workspace" ]; then
+  "$WORK_DIR/chap-core/.venv/bin/python" "$SCRIPT_DIR/inspect_workspace.py" \
+    "$OUT_DIR/weekly_workspace/workspace" > "$OUT_DIR/weekly_workspace/inspection.txt"
+fi
 
 # 4. chap's own metrics, one CSV per dataset over every evaluation that produced a file.
 for name in "${DATASET_NAMES[@]}"; do
