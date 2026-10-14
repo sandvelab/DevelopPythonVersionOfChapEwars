@@ -1,0 +1,417 @@
++ [20:15:27] date -u
+Wed Oct 14 20:15:27 UTC 2026
++ [20:15:27] uname -a
+Darwin Mac.lan 27.0.0 Darwin Kernel Version 27.0.0: Tue Aug 11 21:05:41 PDT 2026; root:xnu-13432.1.9~1/RELEASE_ARM64_T8122 arm64
++ [20:15:27] uv --version
+uv 0.5.26 (5ef3d5139 2025-01-30)
++ [20:15:27] docker version --format '{{.Client.Version}} {{.Server.Version}} {{.Server.Arch}}'
+27.4.0 27.4.0 arm64
++ [20:15:28] git --version
+git version 2.54.0 (Apple Git-157)
++ [20:15:28] cd '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1'
++ [20:15:28] git clone --quiet https://github.com/dhis2-chap/chap-core.git chap-core
++ [20:15:39] git -C chap-core checkout --quiet b8c8f788fbc011f3d9d8a18ba9e993725023a6e4
++ [20:15:40] git -C chap-core rev-parse HEAD
++ [20:15:40] cd chap-core
++ [20:15:40] uv sync --frozen --no-dev --python 3.13
+Using CPython 3.13.0
+Creating virtual environment at: .venv
+Prepared 1 package in 351ms
+Installed 176 packages in 290ms
+ + aiosqlite==0.22.1
+ + alembic==1.19.1
+ + altair==6.3.0
+ + amqp==5.3.1
+ + annotated-doc==0.0.4
+ + annotated-types==0.7.0
+ + anyio==4.14.2
+ + attrs==26.1.0
+ + beautifulsoup4==4.15.0
+ + billiard==4.2.4
+ + bionumpy==1.0.14
+ + cachetools==7.1.4
+ + celery==5.6.3
+ + certifi==2026.5.20
+ + cffi==2.0.0
+ + cftime==1.6.5
+ + chap-core==2.5.0.dev0 (from file:///Users/geirksa_1_2_3/ai/special-purpose%20vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core)
+ + chapkit==2.3.1
+ + charset-normalizer==3.4.7
+ + click==8.4.1
+ + click-didyoumean==0.3.1
+ + click-plugins==1.1.1.2
+ + click-repl==0.3.0
+ + cloudpickle==3.1.2
+ + colorlog==6.10.1
+ + contourpy==1.3.3
+ + croniter==6.2.4
+ + cryptography==50.0.1
+ + cycler==0.12.1
+ + cyclopts==5.0.0
+ + databricks-sdk==0.115.0
+ + detect-installer==0.1.0
+ + distlib==0.4.1
+ + dnspython==2.8.0
+ + docker==7.2.0
+ + docstring-parser==0.18.0
+ + email-validator==2.3.0
+ + fastapi==0.142.2
+ + fastapi-cli==0.0.32
+ + fastapi-cloud-cli==0.19.0
+ + fastar==0.11.0
+ + fastdtw==0.3.4
+ + filelock==3.29.1
+ + fonttools==4.63.0
+ + formulaic==1.2.2
+ + geographiclib==2.1
+ + geojson-pydantic==2.1.1
+ + geopandas==1.1.4
+ + geopy==2.5.0
+ + gitdb==4.0.12
+ + gitpython==3.1.62
+ + gluonts==0.17.0
+ + google-auth==2.53.0
+ + googleapis-common-protos==1.75.5
+ + greenlet==3.5.1
+ + gunicorn==26.2.0
+ + h11==0.16.0
+ + httpcore==1.0.9
+ + httptools==0.8.0
+ + httpx==0.28.1
+ + idna==3.18
+ + importlib-metadata==9.0.0
+ + interface-meta==2.0.1
+ + jinja2==3.1.6
+ + joblib==1.5.3
+ + jsonschema==4.26.0
+ + jsonschema-specifications==2025.9.1
+ + kiwisolver==1.5.0
+ + kombu==5.6.2
+ + libpysal==4.15.0
+ + llvmlite==0.49.0
+ + mako==1.4.2
+ + markdown-it-py==4.2.0
+ + markupsafe==3.0.3
+ + matplotlib==3.11.2
+ + mdurl==0.1.2
+ + mlflow-skinny==3.13.0
+ + mypy-extensions==1.1.0
+ + narwhals==2.22.1
+ + netcdf4==1.7.4
+ + npstructures==0.2.19
+ + numba==0.67.0
+ + numpy==2.5.3
+ + opentelemetry-api==1.45.1
+ + opentelemetry-exporter-http-transport==0.66b1
+ + opentelemetry-exporter-otlp-common==0.66b1
+ + opentelemetry-exporter-otlp-proto-common==1.45.1
+ + opentelemetry-exporter-otlp-proto-http==1.45.1
+ + opentelemetry-exporter-prometheus==0.66b1
+ + opentelemetry-instrumentation==0.66b1
+ + opentelemetry-instrumentation-sqlalchemy==0.66b1
+ + opentelemetry-proto==1.45.1
+ + opentelemetry-sdk==1.45.1
+ + opentelemetry-semantic-conventions==0.66b1
+ + optuna==5.0.0
+ + packaging==26.3
+ + pandas==2.3.3
+ + pandera==0.33.1
+ + patsy==1.0.3
+ + pillow==12.3.0
+ + platformdirs==4.10.0
+ + plotly==6.9.0
+ + pooch==1.9.0
+ + prometheus-client==0.25.0
+ + prompt-toolkit==3.0.52
+ + protobuf==6.33.6
+ + psycopg2-binary==2.9.13
+ + pyasn1==0.6.4
+ + pyasn1-modules==0.4.2
+ + pycountry==26.2.16
+ + pycparser==3.0
+ + pydantic==2.13.5
+ + pydantic-core==2.46.5
+ + pydantic-extra-types==2.11.1
+ + pydantic-settings==2.14.2
+ + pygments==2.20.0
+ + pyogrio==0.12.1
+ + pyparsing==3.3.2
+ + pyproj==3.7.2
+ + python-dateutil==2.9.0.post0
+ + python-discovery==1.6.0
+ + python-dotenv==1.2.3
+ + python-multipart==0.0.32
+ + python-ulid==3.1.0
+ + pyts==0.13.0
+ + pytz==2026.2
+ + pyyaml==6.0.3
+ + redis==8.0.0
+ + referencing==0.37.0
+ + requests==2.34.2
+ + rich==15.0.0
+ + rich-rst==2.0.1
+ + rich-toolkit==0.20.1
+ + rignore==0.7.6
+ + rpds-py==2026.5.1
+ + rq==2.12.0
+ + scikit-learn==1.9.1
+ + scipy==1.17.1
+ + sentry-sdk==2.61.1
+ + servicekit==3.0.0
+ + shapely==2.1.2
+ + shellingham==1.5.4
+ + six==1.17.0
+ + smmap==5.0.3
+ + soupsieve==2.9
+ + sqlalchemy==2.0.50
+ + sqlmodel==0.0.42
+ + sqlparse==0.6.0
+ + starlette==1.7.0
+ + statsmodels==0.15.0
+ + structlog==26.1.0
+ + stumpy==1.14.1
+ + threadpoolctl==3.6.0
+ + toolz==0.12.1
+ + topojson==1.10
+ + tqdm==4.68.1
+ + typeguard==4.5.2
+ + typer==0.26.7
+ + typing-extensions==4.15.0
+ + typing-inspect==0.9.0
+ + typing-inspection==0.4.2
+ + tzdata==2026.2
+ + tzlocal==5.3.1
+ + unidecode==1.4.0
+ + urllib3==2.8.0
+ + uvicorn==0.54.0
+ + uvloop==0.22.1
+ + vine==5.1.0
+ + virtualenv==21.7.13
+ + vl-convert-python==1.9.0.post1
+ + watchfiles==1.2.0
+ + wcwidth==0.8.1
+ + websockets==16.0
+ + wrapt==2.2.1
+ + xarray==2026.7.0
+ + zipp==4.1.0
++ [20:15:41] CHAP='/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap'
++ [20:15:41] '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' --help
+/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/bionumpy/io/vcf_header.py:38: SyntaxWarning: invalid escape sequence '\d'
+  regex = re.match('(\d)', x)
+/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/bionumpy/io/vcf_header.py:80: SyntaxWarning: invalid escape sequence '\S'
+  regex = re.search('^##(\S+?)=(.*)$', line)
+/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/bionumpy/io/vcf_header.py:86: SyntaxWarning: invalid escape sequence '\S'
+  f'^##(\S+?)=(.*)$, get {line}. Ignore this line.'))
+/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/bionumpy/sequence/string_matcher.py:136: SyntaxWarning: invalid escape sequence '\['
+  r = re.compile('\[[^\]]+\]')
+/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/bionumpy/sequence/string_matcher.py:149: SyntaxWarning: invalid escape sequence '\['
+  r = re.compile('(([A-Z]|\[[A-Z]+\])+)\.\{(\d*)\,(\d+)\}(.+)')
++ [20:15:48] docker pull --platform linux/amd64 ghcr.io/chap-models/chapkit_ewars_model@sha256:959fb4f0f1b9d257a9697925f4500fd8ec4ffa9e1bb3ed7fc36e4f5c57c6ff88
+ghcr.io/chap-models/chapkit_ewars_model@sha256:959fb4f0f1b9d257a9697925f4500fd8ec4ffa9e1bb3ed7fc36e4f5c57c6ff88: Pulling from chap-models/chapkit_ewars_model
+Digest: sha256:959fb4f0f1b9d257a9697925f4500fd8ec4ffa9e1bb3ed7fc36e4f5c57c6ff88
+Status: Image is up to date for ghcr.io/chap-models/chapkit_ewars_model@sha256:959fb4f0f1b9d257a9697925f4500fd8ec4ffa9e1bb3ed7fc36e4f5c57c6ff88
+ghcr.io/chap-models/chapkit_ewars_model@sha256:959fb4f0f1b9d257a9697925f4500fd8ec4ffa9e1bb3ed7fc36e4f5c57c6ff88
++ [20:15:49] docker rm -f ewars-reference
++ [20:15:49] docker run -d --platform linux/amd64 --name ewars-reference -p 8000:8000 ghcr.io/chap-models/chapkit_ewars_model@sha256:959fb4f0f1b9d257a9697925f4500fd8ec4ffa9e1bb3ed7fc36e4f5c57c6ff88
+9579b88fbb9ad8ac5740189f34e2ad3bdbf7c911e01eebaeb9f69d9ca6d794c3
++ [20:15:49] trap 'docker logs "$CONTAINER" > "$OUT_DIR/service_container.log" 2>&1 || true; docker rm -f "$CONTAINER" > /dev/null 2>&1 || true' EXIT
+++ [20:15:49] seq 1 90
++ [20:15:49] for i in '$(seq 1 90)'
++ [20:15:49] curl -fsS http://localhost:8000/health
++ [20:15:49] grep -q healthy
+curl: (52) Empty reply from server
++ [20:15:49] sleep 2
++ [20:15:51] for i in '$(seq 1 90)'
++ [20:15:51] curl -fsS http://localhost:8000/health
++ [20:15:51] grep -q healthy
++ [20:15:51] break
++ [20:15:51] curl -fsS http://localhost:8000/health
+{"status":"healthy","checks":{"database":{"state":"healthy"},"registration":{"state":"healthy"}}}+ [20:15:51] curl -fsS http://localhost:8000/api/v1/info
++ [20:15:51] docker inspect --format '{{index .RepoDigests 0}} {{.Architecture}}' ghcr.io/chap-models/chapkit_ewars_model@sha256:959fb4f0f1b9d257a9697925f4500fd8ec4ffa9e1bb3ed7fc36e4f5c57c6ff88
++ [20:15:51] grep -q 964eea8bfdb194ca8985723216e94f1ac63aa4f1 '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/service_info.json'
++ [20:15:51] cd '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1'
++ [20:15:51] for k in '"${!DATASET_NAMES[@]}"'
++ [20:15:51] name=monthly_ewars
++ [20:15:51] csv='/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/dev-data/monthly_ewars/historic_data.csv'
++ [20:15:51] run_eval monthly_ewars '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/dev-data/monthly_ewars/historic_data.csv' ewars_r --model-name http://localhost:8000 --run-config.is-chapkit-model --model-configuration-yaml '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml'
++ [20:15:51] local name=monthly_ewars 'csv=/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/dev-data/monthly_ewars/historic_data.csv' label=ewars_r
++ [20:15:51] shift 3
++ [20:15:51] local start=24 rc=0
++ [20:15:51] '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name http://localhost:8000 --run-config.is-chapkit-model --model-configuration-yaml '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml' --dataset-csv '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/dev-data/monthly_ewars/historic_data.csv' --output-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__ewars_r.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --run-config.log-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/monthly_ewars__ewars_r.log'
+2026-10-14T22:15:59 [INFO   ] Database URL not set [chap_core.database.database]
+2026-10-14T22:15:59 [INFO   ] Database url not set. Database operations will not work [chap_core.database.database]
+2026-10-14T22:15:59 [INFO   ] Evaluating model http://localhost:8000 with xarray/NetCDF output [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:15:59 [INFO   ] Level set to INFO [root]
+2026-10-14T22:15:59 [INFO   ] Loading dataset from /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/dev-data/monthly_ewars/historic_data.csv [root]
+2026-10-14T22:15:59 [INFO   ] Remaining regions: ['Acre', 'Alagoas', 'Amapa', 'Amazonas', 'Bahia', 'Ceara', 'DistritoFederal', 'EspiritoSanto', 'Goias', 'Maranhao', 'MatoGrosso', 'MinasGerais', 'Para', 'Paraiba', 'Parana', 'Pernambuco', 'Piaui', 'Rondonia', 'Roraima', 'SantaCatarina', 'SaoPaulo', 'Sergipe', 'Tocantins'] with 23 entries [chap_core.rest_api.db_worker_functions]
+2026-10-14T22:15:59 [INFO   ] Loading model template from http://localhost:8000 [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:15:59 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:15:59 [INFO   ] Loading model configuration from /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml [chap_core.cli_endpoints._common]
+2026-10-14T22:15:59 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:15:59 [INFO   ] Creating model configuration with name chapkit-ewars-model_config_1792008959714388 at http://localhost:8000. Data: {'name': 'chapkit-ewars-model_config_1792008959714388', 'data': {'n_lags': [3], 'precision': 0.01, 'region_seasonal': False, 'additional_continuous_covariates': ['rainfall', 'mean_temperature']}} [chap_core.models.external_chapkit_model]
+2026-10-14T22:15:59 [INFO   ] HTTP Request: POST http://localhost:8000/api/v1/configs "HTTP/1.1 201 Created" [httpx]
+2026-10-14T22:15:59 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/configs "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:15:59 [INFO   ] Created model configuration with id 01M4Y0XDQZD1J65E6B1T05GAPP at http://localhost:8000 [chap_core.models.external_chapkit_model]
+2026-10-14T22:15:59 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:15:59 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:15:59 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/configs/$schema "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:15:59 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:15:59 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/configs/$schema "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:16:17 [WARNING] Column 'Cases' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
+2026-10-14T22:16:17 [WARNING] Column 'E' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
+2026-10-14T22:16:17 [WARNING] Column 'ID_spat' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
+2026-10-14T22:16:17 [WARNING] Column 'ID_year' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
+2026-10-14T22:16:17 [WARNING] Column 'meantemperature' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
+2026-10-14T22:16:17 [WARNING] Column 'month' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
+2026-10-14T22:16:17 [WARNING] Column 'rainsum' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
+2026-10-14T22:16:17 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:16:17 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/configs/$schema "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:16:17 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:16:17 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/configs/$schema "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:16:17 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:16:17 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/configs/$schema "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:16:17 [INFO   ] Running backtest with 7 splits, 3 periods, stride 1 [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:16:17 [INFO   ] HTTP Request: POST http://localhost:8000/api/v1/ml/$train "HTTP/1.1 202 Accepted" [httpx]
+2026-10-14T22:16:17 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M4Y0XZ8G9X65GGTYAYV7PRB1 "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:16:17 [INFO   ] Job 01M4Y0XZ8G9X65GGTYAYV7PRB1 status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-14T22:16:19 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M4Y0XZ8G9X65GGTYAYV7PRB1 "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:16:19 [INFO   ] Job 01M4Y0XZ8G9X65GGTYAYV7PRB1 status: completed [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-14T22:16:19 [INFO   ] HTTP Request: POST http://localhost:8000/api/v1/ml/$predict "HTTP/1.1 202 Accepted" [httpx]
+2026-10-14T22:16:19 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M4Y0Y1G8DE37BNCDEZG4CM29 "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:16:19 [INFO   ] Job 01M4Y0Y1G8DE37BNCDEZG4CM29 status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-14T22:16:22 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M4Y0Y1G8DE37BNCDEZG4CM29 "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:16:22 [INFO   ] Job 01M4Y0Y1G8DE37BNCDEZG4CM29 status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-14T22:16:24 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M4Y0Y1G8DE37BNCDEZG4CM29 "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:16:24 [INFO   ] Job 01M4Y0Y1G8DE37BNCDEZG4CM29 status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-14T22:16:26 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M4Y0Y1G8DE37BNCDEZG4CM29 "HTTP/1.1 200 OK" [httpx]
+2026-10-14T22:16:26 [INFO   ] Job 01M4Y0Y1G8DE37BNCDEZG4CM29 status: failed [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-14T22:16:26 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/artifacts/01M4Y0Y1G8DE37BNCDEZG4CM28 "HTTP/1.1 200 OK" [httpx]
+Traceback (most recent call last):
+  File "/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap", line 12, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/chap_core/cli.py", line 56, in main
+    app()
+    ~~~^^
+  File "/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/cyclopts/core.py", line 2223, in __call__
+    result = _run_maybe_async_command(command, bound, resolved_backend)
+  File "/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/cyclopts/_run.py", line 44, in _run_maybe_async_command
+    return command(*bound.args, **bound.kwargs)
+  File "/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/chap_core/cli_endpoints/evaluate.py", line 78, in eval_cmd
+    _run_eval(
+    ~~~~~~~~~^
+        model_name=model_name,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    ...<9 lines>...
+        estimator_options=estimator_options,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/chap_core/cli_endpoints/evaluate.py", line 309, in _run_eval
+    evaluation = Evaluation.create(
+        configured_model=configured_model_db,
+    ...<4 lines>...
+        historical_context_years=historical_context_years,
+    )
+  File "/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/chap_core/assessment/evaluation.py", line 540, in create
+    return cls.from_samples_with_truth(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        evaluation_results=evaluation_results,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        hpo=hpo_data,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/chap_core/assessment/evaluation.py", line 371, in from_samples_with_truth
+    for eval_result in evaluation_results:
+                       ^^^^^^^^^^^^^^^^^^
+  File "/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/chap_core/assessment/prediction_evaluator.py", line 165, in backtest
+    r = predictor.predict(historic_data, future_data)
+  File "/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/chap_core/models/external_chapkit_model.py", line 514, in predict
+    raise ModelFailedException(_failure_message("Prediction", job, artifact_id, self.client))
+chap_core.exceptions.ModelFailedException: Prediction job 01M4Y0Y1G8DE37BNCDEZG4CM29 ended with status 'failed': chapkit.ml.runner.ModelRunFailedError: predict script failed with exit code 1; diagnostic artifact 01M4Y0Y1G8DE37BNCDEZG4CM28 holds the workspace, stdout and stderr; stderr tail: repos='https://nowosad.github.io/drat/', type='source')` | Error in inla.check.location(location[[r]], term = gp$random.spec[[r]]$term,  :  |   Locations are too close for f(ID_time_cyclic, model="rw1", ...):  min(diff(sort(x)))/diff(range(x)) = 8.074e-17 < 1e-06 |   You can fix this by some kind of binning, see ?inla.group |   If you want/need to bypass this check at your own risk, do | 	> invisible(inla.models()) | 	> m = get("inla.models", inla.get.inlaEnv()) | 	> m$latent$rw1$min.diff = NULL | 	> assign("inla.models", m, inla.get.inlaEnv()) | Calls: predict_chap -> inla -> inla.core -> inla.check.location. Stacktrace: Traceback (most recent call last):
+  File "/app/.venv/lib/python3.13/site-packages/servicekit/scheduler.py", line 396, in _run_with_state
+    result = await execute_target()
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/.venv/lib/python3.13/site-packages/servicekit/scheduler.py", line 192, in execute_target
+    return await self._execute_target(job_id, target, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/.venv/lib/python3.13/site-packages/servicekit/scheduler.py", line 460, in _execute_target
+    return await target(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/.venv/lib/python3.13/site-packages/chapkit/ml/manager.py", line 696, in _predict_task
+    raise ModelRunFailedError(
+    ...<4 lines>...
+    )
+chapkit.ml.runner.ModelRunFailedError: predict script failed with exit code 1; diagnostic artifact 01M4Y0Y1G8DE37BNCDEZG4CM28 holds the workspace, stdout and stderr; stderr tail: repos='https://nowosad.github.io/drat/', type='source')` | Error in inla.check.location(location[[r]], term = gp$random.spec[[r]]$term,  :  |   Locations are too close for f(ID_time_cyclic, model="rw1", ...):  min(diff(sort(x)))/diff(range(x)) = 8.074e-17 < 1e-06 |   You can fix this by some kind of binning, see ?inla.group |   If you want/need to bypass this check at your own risk, do | 	> invisible(inla.models()) | 	> m = get("inla.models", inla.get.inlaEnv()) | 	> m$latent$rw1$min.diff = NULL | 	> assign("inla.models", m, inla.get.inlaEnv()) | Calls: predict_chap -> inla -> inla.core -> inla.check.location
+
+Model output:
+--- stdout ---
+Running predictions...
+Historic: historic.csv 
+Future: future.csv 
+Output: predictions.csv 
+Config: n_lags= 3  precision= 0.01  region_seasonal= FALSE 
+Covariates: rainfall, mean_temperature 
+[1] "basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3"
+ [1] "time_period"      "rainfall"         "mean_temperature" "disease_cases"   
+ [5] "population"       "Cases"            "E"                "month"           
+ [9] "ID_year"          "ID_spat"          "rainsum"          "meantemperature" 
+[13] "parent"           "location"         "ID_time_cyclic"   "ID_time_cyclic2" 
+ [1] "time_period"                  "rainfall"                    
+ [3] "mean_temperature"             "disease_cases"               
+ [5] "population"                   "Cases"                       
+ [7] "E"                            "month"                       
+ [9] "ID_year"                      "ID_spat"                     
+[11] "rainsum"                      "meantemperature"             
+[13] "parent"                       "location"                    
+[15] "ID_time_cyclic"               "ID_time_cyclic2"             
+[17] "basis_rainfall.v1.l1"         "basis_rainfall.v1.l2"        
+[19] "basis_rainfall.v1.l3"         "basis_rainfall.v2.l1"        
+[21] "basis_rainfall.v2.l2"         "basis_rainfall.v2.l3"        
+[23] "basis_rainfall.v3.l1"         "basis_rainfall.v3.l2"        
+[25] "basis_rainfall.v3.l3"         "basis_mean_temperature.v1.l1"
+[27] "basis_mean_temperature.v1.l2" "basis_mean_temperature.v1.l3"
+[29] "basis_mean_temperature.v2.l1" "basis_mean_temperature.v2.l2"
+[31] "basis_mean_temperature.v2.l3" "basis_mean_temperature.v3.l1"
+[33] "basis_mean_temperature.v3.l2" "basis_mean_temperature.v3.l3"
+
+--- stderr ---
+Loading required package: Matrix
+This is INLA_25.10.19 built 2025-10-19 19:10:20 UTC.
+ - See www.r-inla.org/contact-us for how to get help.
+ - List available models/likelihoods/etc with inla.list.models()
+ - Use inla.doc(<NAME>) to access documentation
+ - Consider upgrading R-INLA to testing[26.08.22] or stable[26.08.07] (require R-4.6)
+This is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Linking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE
+Loading required package: spData
+To access larger datasets in this package, install the spDataLarge
+package with: `install.packages('spDataLarge',
+repos='https://nowosad.github.io/drat/', type='source')`
+Error in inla.check.location(location[[r]], term = gp$random.spec[[r]]$term,  : 
+  Locations are too close for f(ID_time_cyclic, model="rw1", ...):  min(diff(sort(x)))/diff(range(x)) = 8.074e-17 < 1e-06
+  You can fix this by some kind of binning, see ?inla.group
+  If you want/need to bypass this check at your own risk, do
+	> invisible(inla.models())
+	> m = get("inla.models", inla.get.inlaEnv())
+	> m$latent$rw1$min.diff = NULL
+	> assign("inla.models", m, inla.get.inlaEnv())
+Calls: predict_chap -> inla -> inla.core -> inla.check.location
+Execution halted
+
++ [20:16:26] rc=1
++ [20:16:26] docker logs ewars-reference
++ [20:16:26] docker rm -f ewars-reference

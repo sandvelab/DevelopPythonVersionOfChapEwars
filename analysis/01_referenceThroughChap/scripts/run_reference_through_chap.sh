@@ -8,7 +8,7 @@
 #   out_dir   results of this run (metrics, .nc files, service info, timings)
 #   work_dir  scratch: the chap-core clone and its venv, chap's run directories
 set -euo pipefail
-PS4='+ [$(date -u +%H:%M:%S)] '
+PS4='+ '  # plain: a command substitution here makes macOS bash 3.2 exit under set -e (CH-09)
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"

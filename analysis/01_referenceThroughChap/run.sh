@@ -20,3 +20,5 @@ RUN=run1
 rm -rf "work/$RUN"
 mkdir -p "results/$RUN"
 "${FRESH[@]}" scripts/run_reference_through_chap.sh "results/$RUN" "work/$RUN" 2>&1 | tee "results/$RUN/run.log"
+# CH-07: diagnose the monthly failure, with the chap-core environment run1 installed.
+"${FRESH[@]}" scripts/diagnose_monthly_failure.sh results/diagnose_monthly "work/$RUN/chap-core/.venv" 2>&1 | tee results/diagnose_monthly.log
