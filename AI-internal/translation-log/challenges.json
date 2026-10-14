@@ -52,5 +52,68 @@
     "solution": "To settle in batch 2: observe exactly what chap passes to the service for weekly data",
     "status": "open",
     "details": "predict.R:158-162 derives `week` from `sub('.*W','',time_period)` when neither `week` nor `month` is present."
+  },
+  {
+    "date": "2026-10-14",
+    "batch": 2,
+    "id": "CH-07",
+    "challenge": "The R original fails inside INLA on its own monthly example data when chap backtests it",
+    "solution": "Diagnosed from the failed job's workspace: chap forecasts the file's pre-derived `month` column as a covariate, R uses it as-is, INLA rejects the near-duplicate cyclic positions. Inputs reduced to the data contract (JC-05)",
+    "status": "solved",
+    "details": "INLA error: `Locations are too close for f(ID_time_cyclic, model=\"rw1\", ...): min(diff(sort(x)))/diff(range(x)) = 8.074e-17 < 1e-06`, on the first predict of the first split. The workspace chapkit kept (`results/diagnose_monthly/failed_predict_workspace/`) shows historic.csv with integer months and future.csv with `month` = 10.00000000000001, 10.999999999999986, 12.000000000000018: chap's default `climatology` provider regresses every non-target column on month of year for the forecast window. predict.R only derives `month` from time_period when no `month` column exists. The same file reduced to the six contract columns runs (`outcomes.txt`). The weekly Nicaragua file carries only contract columns and ran unchanged. Not an anchor failure: the model runs through chap on data shaped as its README specifies."
+  },
+  {
+    "date": "2026-10-14",
+    "batch": 2,
+    "id": "CH-08",
+    "challenge": "A chap model-configuration YAML that omits `additional_continuous_covariates` runs EWARS with no climate covariates",
+    "solution": "The covariates are always listed in the YAML (JC-06); the tutorial says why",
+    "status": "solved",
+    "details": "ModelConfiguration.additional_continuous_covariates defaults to [], and `_chapkit_config_payload` always sends it; the service treats [] as 'no covariates', not as its default list. Nothing warns. Found by reading chap_core/models/external_chapkit_model.py before the first run, so no run was affected; it matters for the batch-4 config variants and for any reader of the tutorial."
+  },
+  {
+    "date": "2026-10-14",
+    "batch": 2,
+    "id": "CH-09",
+    "challenge": "The first reference run stopped after the first failed evaluation instead of continuing",
+    "solution": "PS4 without a command substitution; the aborted attempt's outputs kept in results/run1_attempt1_aborted/",
+    "status": "solved",
+    "details": "The scripts run under macOS /bin/bash 3.2 (the fresh shell). With `set -e`, a PS4 containing `$(date ...)` made the shell exit right after `cmd || rc=$?` recorded a failure; reproduced in isolation. Timings come from timings.tsv instead."
+  },
+  {
+    "date": "2026-10-14",
+    "batch": 2,
+    "id": "CH-10",
+    "challenge": "The R reference cannot be seeded through chap: predict.R sets no seed and chap passes none",
+    "solution": "Accepted: chap-level R runs are not reproducible exactly; the L5 noise floor (batch 4) is measured from repeated unseeded runs, and seeds are set in the R instrumentation scripts for L3–L4",
+    "status": "open",
+    "details": "grep finds no set.seed or INLA `seed` argument in scripts/*.R; the config schema has no seed field. rnbinom and inla.posterior.sample therefore draw from R's time-seeded RNG. Plan §4 (Project seed) anticipated recording 'whatever seeding chap and the image allow': here that is none. The tutorial check prints the EWARS CRPS of two independent runs as a first look."
+  },
+  {
+    "date": "2026-10-14",
+    "batch": 2,
+    "id": "CH-11",
+    "challenge": "Resolution of CH-02 (Docker not running)",
+    "solution": "Docker Desktop running (server 27.4.0, linux/aarch64); the amd64 image runs under emulation; per-evaluation times in results/run1/timings.tsv",
+    "status": "solved",
+    "details": "CH-02 stays as raised; this entry records its resolution, since the ledger is append-only."
+  },
+  {
+    "date": "2026-10-14",
+    "batch": 2,
+    "id": "CH-12",
+    "challenge": "Resolution of CH-06 (weekly period format)",
+    "solution": "chap passes weekly periods to the service as ISO-like `YYYY-Wnn` (e.g. `2004-W01`); predict.R takes the year from characters 1–4 and the week from after the `W`, so the weekly path is read as intended",
+    "status": "solved",
+    "details": "Observed in results/run1/weekly_workspace/inspection.txt: the last training workspace of the weekly reference run, downloaded through chapkit's artifact API by scripts/fetch_last_workspace.py. data.csv, historic.csv and future.csv all carry `time_period` as `2004-W01` … `2017-W52`; the date ranges of the source CSV (`2003-12-29/2004-01-04`) are not what the model sees. CH-06 stays as raised; this entry records its resolution."
+  },
+  {
+    "id": "CH-13",
+    "date": "2026-10-14",
+    "batch": 2,
+    "challenge": "Two behaviours of predict.R/lib.R on weekly data that the Python port must reproduce: it predicts every row with missing cases, and it folds ISO week 53 into the 52-week cycle",
+    "solution": "To read in full and decide in batch 3 (translation inventory); recorded here because the reference run is where they were first observed",
+    "status": "open",
+    "details": "In the weekly workspace (results/run1/weekly_workspace/workspace/), predictions.csv has 60 rows: the 30 future rows (2017-W50..W52) plus 30 for the three historic periods with missing disease_cases (2008-W52, 2014-W52, 2016-W08). chap keeps only the future periods (external_chapkit_model.py, the start_timestamp mask in predict), so the scores are unaffected, but the Python service must return the same row set or chap's filtering must be relied on knowingly. historic.csv contains 30 rows of ISO week 53; lib.R's offset_years_and_weeks computes ((week + diff - 1) %% 52) + 1, which puts week 53 on the same cyclic index as another week."
   }
 ]

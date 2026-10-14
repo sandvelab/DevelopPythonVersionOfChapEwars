@@ -1,0 +1,6 @@
+PASS  tutorial ran to the end  (exit code 0)
+PASS  monthly input identical to run1  (da7deebee077 vs da7deebee077)
+PASS  seasonal_median scores equal run1  (differing metrics: none)
+PASS  EWARS evaluation produced scores  (1 row(s))
+INFO  EWARS crps: tutorial run np.float64(1125.7127980207038), run1 np.float64(1129.113278252588)
+VERDICT PASS

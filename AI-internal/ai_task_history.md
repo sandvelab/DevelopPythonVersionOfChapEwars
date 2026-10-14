@@ -18,3 +18,8 @@ reader who was not present can follow, and keep them honest about what did not w
   chapkit_ewars_model and dlnmpy into `Archive/`; partitioned the data and sealed the holdout;
   started the judgment-call and challenge ledgers and their renderer; filled in
   `readme-at-start.md`. Blocked for batch 2 on Docker not running (CH-02).
+- T4 (2026-10-14): Ran batch 2: the R original scored through chap-core on both development
+  datasets with chap's three built-in baselines, from a fresh shell; tutorial written and
+  verified by a clean-shell run of its own commands. The R original's monthly example failed
+  inside INLA through chap (CH-07); diagnosed from the failed job's workspace and resolved by
+  reducing inputs to the data contract (JC-05).

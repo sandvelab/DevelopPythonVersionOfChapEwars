@@ -199,6 +199,18 @@ Append-only, oldest first.
 | `.claude/settings.json` placeholders filled in; the excludes also cover `~/ai/CLAUDE.md` | setup-guide §2; that grandparent `CLAUDE.md` was observed to load into this project's sessions, which would silently change the method | agent-autonomous |
 | `Archive/chap-core/src/` is gitignored (65 MB, CH-04) | plan §4 storage rule | agent-autonomous |
 
+### 2026-10-14 — batch 2: the R reference through chap
+
+| Decision | Basis | Agency |
+|---|---|---|
+| Backtest settings for every chap evaluation: `n_periods 3`, `n_splits 7`, `stride 1`, `future_weather_provider climatology`, in `analysis/01_referenceThroughChap/scripts/backtest_settings.env` (JC-02, JC-04) | chap eval's defaults; n_periods = EWARS's default `prediction_periods`; climatology is chap's default and forecasts the covariates of each window rather than passing the observations | agent-autonomous; information: agent-retrieved |
+| **Primary metric is chap's `crps`** (from `chap export-metrics`); chap also reports crps_log1p, crps_norm, mae, rmse, coverage_10_90/25_75, winkler scores and others | `results/run1/metrics/*.csv` | agent-autonomous |
+| **Baselines are chap-core's three built-in role-baseline models**: `builtin:global_median`, `builtin:seasonal_median`, `builtin:persistence` (JC-07) | `chap_core/models/builtin/` | agent-autonomous; information: agent-retrieved |
+| R reference image pinned: `ghcr.io/chap-models/chapkit_ewars_model@sha256:959fb4f0f1b9d257a9697925f4500fd8ec4ffa9e1bb3ed7fc36e4f5c57c6ff88` (tag `sha-964eea8`; reports git_revision 964eea8b); no local build needed (JC-08) | publish workflow's sha tags; `/api/v1/info` | agent-autonomous |
+| chap-core installed from the pinned commit with `uv sync --frozen`, not `uv tool install` (JC-03) | the docs' route installs the latest release with unpinned dependencies | agent-autonomous |
+| **Model inputs are the development files reduced to the six-column chap data contract** (JC-05) | the monthly example file as shipped makes the R original fail through chap (CH-07); the contract is the README's | agent-autonomous; information: agent-retrieved |
+| Seeding: none possible at chap level for the R model (CH-10); the L5 noise floor comes from repeated unseeded chap runs | no `set.seed` in the R scripts, no seed field in the config | agent-autonomous |
+
 ## 5. How this plan is used
 
 `/do` runs the next open batch of §6 and stops. Sketched phases become concrete batches as
@@ -212,7 +224,7 @@ it makes a call or meets an obstacle, and re-renders the two documents at its en
 |---|---|---|---|
 | 0 | — (outside the plan) | Repoint the git remote and create the public GitHub repository (§4b). | done |
 | 1 | A — Orient & set up | Read `readme-at-start.md`, `AGENTS.md`, `MOTIVATION.md`. Archive this plan to `Archive/plan-as-delivered/`. **Clone chap-core, chapkit_ewars_model, chapkit and dlnmpy** with a fetch script in `AI-internal/data-acquisition/`; record each commit, and archive them under `Archive/` with `provenance.md` (`IS_SHADOW`) and checksums. If a clone fails, that is the batch's finding (`CH-01`…). Archive the chap documentation pages needed (evaluating a chapkit model, the CLI) as source material. Archive the development data; select and seal the holdout (§4). Create the two translation ledgers and the renderer. Fill in `readme-at-start.md` from this plan, and write the root `analysis/claim.md`. Re-verify the §4 facts about the R code against the pinned clone. No modelling. | done |
-| 2 | B — Reference through chap + tutorial | Find from the archived docs how chap-core evaluates a chapkit service. Script it from a *fresh shell* (no inherited env): install chap-core per its docs (uv), start the original EWARS service (pinned image), run chap's evaluation on the development data with the backtest settings fixed here and written to file, and capture every command and its output. Produce the R reference's first file-grounded chap scores, plus the chap baselines through the same pipeline. Write the **tutorial** from the script and its log. A second clean-shell run of the tutorial's commands, diffed, confirms they are complete. | open |
+| 2 | B — Reference through chap + tutorial | Find from the archived docs how chap-core evaluates a chapkit service. Script it from a *fresh shell* (no inherited env): install chap-core per its docs (uv), start the original EWARS service (pinned image), run chap's evaluation on the development data with the backtest settings fixed here and written to file, and capture every command and its output. Produce the R reference's first file-grounded chap scores, plus the chap baselines through the same pipeline. Write the **tutorial** from the script and its log. A second clean-shell run of the tutorial's commands, diffed, confirms they are complete. | done |
 | 3 | B — Translation inventory | Read `predict.R`, `lib.R`, `train.R` and `main.py` in full. Produce a file mapping **every R call** to its Python counterpart or a gap (dplyr→pandas; `crossbasis`/`equalknots`→dlnmpy; `inla`, `f(...)`, `inla.posterior.sample`, `rnbinom`→?). Retrieve INLA's default hyperpriors and parametrisations from the INLA documentation and source inside the reference image, and archive them. Search for existing Python INLA implementations and assess any that exist. Archive the R sources needing parallel ports. Seed the JC and CH ledgers with what this inventory reveals. | open |
 | 4 | B — Reference harness | An R instrumentation node, run inside the reference image, that emits for each development dataset × config variant (defaults; `region_seasonal=true`; `n_lags=[3,6]`; covariates `[]`): the L1 derived frame, the L2 cross-basis matrices, the L3 INLA posterior summaries, and the L4 predictive samples, each **for at least 5 seeds**, to measure the R noise floor at L3–L5. Also run 2+ chap evaluations of the R model with different seeds for the L5 noise floor. | open |
 | 5 | B — Fidelity metrics | Scripts computing L1–L5 comparisons from files. Verify them on R-vs-R (they must report "within noise floor"). **Write and commit the tolerance file before any Python prediction exists.** | open |
@@ -231,3 +243,4 @@ it makes a call or meets an obstacle, and re-renders the two documents at its en
 *(One link per completed batch, added by `/do`. Never overwritten.)*
 
 - Batch 1 — [[26-10-14_b01_orientAndSetUp]]
+- Batch 2 — [[26-10-14_b02_referenceThroughChap]]

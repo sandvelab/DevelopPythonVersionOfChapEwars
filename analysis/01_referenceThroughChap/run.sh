@@ -31,3 +31,6 @@ rm -rf results/diagnose_monthly
 rm -rf work/tutorial_check results/tutorial_check
 "${FRESH[@]}" scripts/verify_tutorial.sh "$REPO_ROOT/AI-generated/26-10-14_tutorialRunOriginalEwarsThroughChap.md" \
   results/tutorial_check work/tutorial_check "results/$RUN" 2>&1 | tee results/tutorial_check.log
+
+# 4. One table of the reference scores and times, from chap's metric files.
+"work/$RUN/chap-core/.venv/bin/python" scripts/summarise_reference.py "results/$RUN"

@@ -43,3 +43,7 @@ AI-internal/useful-scripts/*.log
 
 # Archived clones over ~50 MB: re-obtainable by commit from their provenance.md (plan §4, storage)
 Archive/chap-core/src/
+
+# The fitted INLA object inside a downloaded chapkit workspace (~37 MB): regenerable by
+# re-running the node, and not read by anything downstream.
+analysis/**/workspace/model.rds

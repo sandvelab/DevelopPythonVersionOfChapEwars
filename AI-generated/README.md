@@ -24,3 +24,4 @@ meantime. If a derived document is wrong, its source is wrong.
 
 - `translation-record/` — the judgment-call list and challenges overview (rendered).
 - `batch-reports/` — one report per executed batch.
+- `26-10-14_tutorialRunOriginalEwarsThroughChap.md` — the tutorial: the original EWARS through chap from a fresh terminal (plan §4, Deliverables). Its commands are run verbatim by `analysis/01_referenceThroughChap/scripts/verify_tutorial.sh`.

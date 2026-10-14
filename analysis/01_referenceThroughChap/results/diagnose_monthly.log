@@ -1,0 +1,40 @@
++ docker rm -f ewars-diagnose
++ docker run -d --platform linux/amd64 --name ewars-diagnose -p 8000:8000 ghcr.io/chap-models/chapkit_ewars_model@sha256:959fb4f0f1b9d257a9697925f4500fd8ec4ffa9e1bb3ed7fc36e4f5c57c6ff88
+cf6ac053d7062c1ea90f244b2620750d29388e535f3b375bc3163589b101943d
++ trap 'docker logs "$CONTAINER" > "$OUT_DIR/service_container.log" 2>&1 || true; docker rm -f "$CONTAINER" > /dev/null 2>&1 || true' EXIT
+++ seq 1 90
++ for i in '$(seq 1 90)'
++ curl -fsS http://localhost:8000/health
++ grep -q healthy
+curl: (52) Empty reply from server
++ sleep 2
++ for i in '$(seq 1 90)'
++ curl -fsS http://localhost:8000/health
++ grep -q healthy
++ break
++ cd '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/diagnose_monthly'
++ :
++ one_split as_archived '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/dev-data/monthly_ewars/historic_data.csv'
++ local rc=0
++ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name http://localhost:8000 --run-config.is-chapkit-model --model-configuration-yaml '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml' --dataset-csv '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/dev-data/monthly_ewars/historic_data.csv' --output-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/diagnose_monthly/as_archived.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 1 --backtest-params.stride 1
++ rc=1
++ echo 'as_archived exit_code=1'
+++ grep -o 'diagnostic artifact [0-9A-Z]*' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/diagnose_monthly/as_archived.chap.log'
+++ head -1
+++ awk '{print $3}'
++ artifact=01M4Y24YA7V6WM87J6GVKM84SR
++ '[' -n 01M4Y24YA7V6WM87J6GVKM84SR ']'
++ curl -fsS -o '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/diagnose_monthly/failed_predict_workspace.zip' 'http://localhost:8000/api/v1/artifacts/01M4Y24YA7V6WM87J6GVKM84SR/$download'
++ rm -rf '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/diagnose_monthly/failed_predict_workspace'
++ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/python' -m zipfile -e '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/diagnose_monthly/failed_predict_workspace.zip' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/diagnose_monthly/failed_predict_workspace'
++ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/python' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/inspect_workspace.py' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/diagnose_monthly/failed_predict_workspace'
++ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/python' -c 'import pandas as pd, sys; pd.read_csv(sys.argv[1], index_col=0)[['\''time_period'\'','\''rainfall'\'','\''mean_temperature'\'','\''disease_cases'\'','\''population'\'','\''location'\'']].to_csv(sys.argv[2], index=False)' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/dev-data/monthly_ewars/historic_data.csv' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/diagnose_monthly/monthly_canonical_columns.csv'
++ one_split canonical_columns '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/diagnose_monthly/monthly_canonical_columns.csv'
++ local rc=0
++ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name http://localhost:8000 --run-config.is-chapkit-model --model-configuration-yaml '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml' --dataset-csv '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/diagnose_monthly/monthly_canonical_columns.csv' --output-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/diagnose_monthly/canonical_columns.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 1 --backtest-params.stride 1
++ echo 'canonical_columns exit_code=0'
++ cat '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/diagnose_monthly/outcomes.txt'
+as_archived exit_code=1
+canonical_columns exit_code=0
++ docker logs ewars-diagnose
++ docker rm -f ewars-diagnose

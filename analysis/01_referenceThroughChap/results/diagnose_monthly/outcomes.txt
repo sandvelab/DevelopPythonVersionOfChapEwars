@@ -1,0 +1,2 @@
+as_archived exit_code=1
+canonical_columns exit_code=0

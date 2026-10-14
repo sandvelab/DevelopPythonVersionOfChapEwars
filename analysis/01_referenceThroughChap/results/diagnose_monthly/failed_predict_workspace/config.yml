@@ -1,0 +1,8 @@
+additional_continuous_covariates:
+- rainfall
+- mean_temperature
+n_lags:
+- 3
+precision: 0.01
+prediction_periods: 3
+region_seasonal: false

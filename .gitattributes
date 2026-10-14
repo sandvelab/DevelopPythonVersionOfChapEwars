@@ -1,0 +1,3 @@
+# Files downloaded from a chapkit workspace are evidence of exactly what a model was given:
+# kept byte for byte, with their CRLF line endings.
+analysis/**/*workspace/** -text

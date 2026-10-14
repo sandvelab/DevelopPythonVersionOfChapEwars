@@ -1,0 +1,692 @@
+[
+  {
+    "id": "01M4Y1P5B0RQ05YA1JY5DAQ7CE",
+    "created_at": "2026-10-14T20:29:31",
+    "updated_at": "2026-10-14T20:29:31",
+    "tags": [],
+    "data": {
+      "type": "ml_training_workspace",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1NNPY61JZYW15AMFMC67E",
+        "started_at": "2026-10-14T20:29:30.345812+00:00",
+        "completed_at": "2026-10-14T20:29:30.985431+00:00",
+        "duration_seconds": 0.64,
+        "exit_code": 0,
+        "stdout": "Reading training data from: data.csv \nTraining data shape: 4209 rows x 7 columns\nColumns: time_period, rainfall, mean_temperature, disease_cases, population, parent, location \nModel placeholder saved to model.rds\n",
+        "stderr": ""
+      },
+      "content_type": "application/zip",
+      "content_size": 121424
+    },
+    "parent_id": null,
+    "level": 0
+  },
+  {
+    "id": "01M4Y1P7CTKBG1FX06R4PTWVQE",
+    "created_at": "2026-10-14T20:29:50",
+    "updated_at": "2026-10-14T20:29:50",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1NNPY61JZYW15AMFMC67E",
+        "started_at": "2026-10-14T20:29:32.456599+00:00",
+        "completed_at": "2026-10-14T20:29:50.306446+00:00",
+        "duration_seconds": 17.85,
+        "exit_code": null,
+        "stdout": null,
+        "stderr": null
+      },
+      "content_type": "application/vnd.chapkit.dataframe+json",
+      "content_size": null
+    },
+    "parent_id": "01M4Y1P5B0RQ05YA1JY5DAQ7CE",
+    "level": 1
+  },
+  {
+    "id": "01M4Y1PSF2V3R1Q3Z16VJRNZMY",
+    "created_at": "2026-10-14T20:29:50",
+    "updated_at": "2026-10-14T20:29:50",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction_workspace",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1NNPY61JZYW15AMFMC67E",
+        "started_at": "2026-10-14T20:29:32.456599+00:00",
+        "completed_at": "2026-10-14T20:29:50.306446+00:00",
+        "duration_seconds": 17.85,
+        "exit_code": 0,
+        "stdout": "Running predictions...\nHistoric: historic.csv \nFuture: future.csv \nOutput: predictions.csv \nConfig: n_lags= 3  precision= 0.01  region_seasonal= FALSE \nCovariates: rainfall, mean_temperature \n[1] \"basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3\"\n [1] \"time_period\"      \"rainfall\"         \"mean_temperature\" \"disease_cases\"   \n [5] \"population\"       \"parent\"           \"location\"         \"Cases\"           \n [9] \"E\"                \"ID_spat\"          \"ID_year\"          \"month\"           \n[13] \"ID_time_cyclic\"   \"ID_time_cyclic2\" \n [1] \"time_period\"                  \"rainfall\"                    \n [3] \"mean_temperature\"             \"disease_cases\"               \n [5] \"population\"                   \"parent\"                      \n [7] \"location\"                     \"Cases\"                       \n [9] \"E\"                            \"ID_spat\"                     \n[11] \"ID_year\"                      \"month\"                       \n[13] \"ID_time_cyclic\"               \"ID_time_cyclic2\"             \n[15] \"basis_rainfall.v1.l1\"         \"basis_rainfall.v1.l2\"        \n[17] \"basis_rainfall.v1.l3\"         \"basis_rainfall.v2.l1\"        \n[19] \"basis_rainfall.v2.l2\"         \"basis_rainfall.v2.l3\"        \n[21] \"basis_rainfall.v3.l1\"         \"basis_rainfall.v3.l2\"        \n[23] \"basis_rainfall.v3.l3\"         \"basis_mean_temperature.v1.l1\"\n[25] \"basis_mean_temperature.v1.l2\" \"basis_mean_temperature.v1.l3\"\n[27] \"basis_mean_temperature.v2.l1\" \"basis_mean_temperature.v2.l2\"\n[29] \"basis_mean_temperature.v2.l3\" \"basis_mean_temperature.v3.l1\"\n[31] \"basis_mean_temperature.v3.l2\" \"basis_mean_temperature.v3.l3\"\nPredictions written to predictions.csv \n",
+        "stderr": "Loading required package: Matrix\nThis is INLA_25.10.19 built 2025-10-19 19:10:20 UTC.\n - See www.r-inla.org/contact-us for how to get help.\n - List available models/likelihoods/etc with inla.list.models()\n - Use inla.doc(<NAME>) to access documentation\n - Consider upgrading R-INLA to testing[26.08.22] or stable[26.08.07] (require R-4.6)\nThis is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').\n\nAttaching package: \u2018dplyr\u2019\n\nThe following objects are masked from \u2018package:stats\u2019:\n\n    filter, lag\n\nThe following objects are masked from \u2018package:base\u2019:\n\n    intersect, setdiff, setequal, union\n\nLinking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE\nLoading required package: spData\nTo access larger datasets in this package, install the spDataLarge\npackage with: `install.packages('spDataLarge',\nrepos='https://nowosad.github.io/drat/', type='source')`\n *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=12\n *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=12\n *** WARNING *** GMRFLib_2order_approx: reset counter for 722 NAN/INF values in logl\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\n"
+      },
+      "content_type": "application/zip",
+      "content_size": 24254412
+    },
+    "parent_id": "01M4Y1P7CTKBG1FX06R4PTWVQE",
+    "level": 2
+  },
+  {
+    "id": "01M4Y1PVWD9FB5FHEPTSTHDN16",
+    "created_at": "2026-10-14T20:30:11",
+    "updated_at": "2026-10-14T20:30:11",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1NNPY61JZYW15AMFMC67E",
+        "started_at": "2026-10-14T20:29:53.439561+00:00",
+        "completed_at": "2026-10-14T20:30:11.363281+00:00",
+        "duration_seconds": 17.92,
+        "exit_code": null,
+        "stdout": null,
+        "stderr": null
+      },
+      "content_type": "application/vnd.chapkit.dataframe+json",
+      "content_size": null
+    },
+    "parent_id": "01M4Y1P5B0RQ05YA1JY5DAQ7CE",
+    "level": 1
+  },
+  {
+    "id": "01M4Y1QE13Z7VGRWS42QS743X4",
+    "created_at": "2026-10-14T20:30:12",
+    "updated_at": "2026-10-14T20:30:12",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction_workspace",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1NNPY61JZYW15AMFMC67E",
+        "started_at": "2026-10-14T20:29:53.439561+00:00",
+        "completed_at": "2026-10-14T20:30:11.363281+00:00",
+        "duration_seconds": 17.92,
+        "exit_code": 0,
+        "stdout": "Running predictions...\nHistoric: historic.csv \nFuture: future.csv \nOutput: predictions.csv \nConfig: n_lags= 3  precision= 0.01  region_seasonal= FALSE \nCovariates: rainfall, mean_temperature \n[1] \"basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3\"\n [1] \"time_period\"      \"rainfall\"         \"mean_temperature\" \"disease_cases\"   \n [5] \"population\"       \"parent\"           \"location\"         \"Cases\"           \n [9] \"E\"                \"ID_spat\"          \"ID_year\"          \"month\"           \n[13] \"ID_time_cyclic\"   \"ID_time_cyclic2\" \n [1] \"time_period\"                  \"rainfall\"                    \n [3] \"mean_temperature\"             \"disease_cases\"               \n [5] \"population\"                   \"parent\"                      \n [7] \"location\"                     \"Cases\"                       \n [9] \"E\"                            \"ID_spat\"                     \n[11] \"ID_year\"                      \"month\"                       \n[13] \"ID_time_cyclic\"               \"ID_time_cyclic2\"             \n[15] \"basis_rainfall.v1.l1\"         \"basis_rainfall.v1.l2\"        \n[17] \"basis_rainfall.v1.l3\"         \"basis_rainfall.v2.l1\"        \n[19] \"basis_rainfall.v2.l2\"         \"basis_rainfall.v2.l3\"        \n[21] \"basis_rainfall.v3.l1\"         \"basis_rainfall.v3.l2\"        \n[23] \"basis_rainfall.v3.l3\"         \"basis_mean_temperature.v1.l1\"\n[25] \"basis_mean_temperature.v1.l2\" \"basis_mean_temperature.v1.l3\"\n[27] \"basis_mean_temperature.v2.l1\" \"basis_mean_temperature.v2.l2\"\n[29] \"basis_mean_temperature.v2.l3\" \"basis_mean_temperature.v3.l1\"\n[31] \"basis_mean_temperature.v3.l2\" \"basis_mean_temperature.v3.l3\"\nPredictions written to predictions.csv \n",
+        "stderr": "Loading required package: Matrix\nThis is INLA_25.10.19 built 2025-10-19 19:10:20 UTC.\n - See www.r-inla.org/contact-us for how to get help.\n - List available models/likelihoods/etc with inla.list.models()\n - Use inla.doc(<NAME>) to access documentation\n - Consider upgrading R-INLA to testing[26.08.22] or stable[26.08.07] (require R-4.6)\nThis is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').\n\nAttaching package: \u2018dplyr\u2019\n\nThe following objects are masked from \u2018package:stats\u2019:\n\n    filter, lag\n\nThe following objects are masked from \u2018package:base\u2019:\n\n    intersect, setdiff, setequal, union\n\nLinking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE\nLoading required package: spData\nTo access larger datasets in this package, install the spDataLarge\npackage with: `install.packages('spDataLarge',\nrepos='https://nowosad.github.io/drat/', type='source')`\n *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=222\n *** WARNING *** GMRFLib_2order_approx: reset counter for 22 NAN/INF values in logl\n *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=1533\n *** WARNING *** GMRFLib_2order_approx: reset counter for 10 NAN/INF values in logl\n *** WARNING *** GMRFLib_2order_approx: reset counter for 10 NAN/INF values in logl\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\n"
+      },
+      "content_type": "application/zip",
+      "content_size": 24373171
+    },
+    "parent_id": "01M4Y1PVWD9FB5FHEPTSTHDN16",
+    "level": 2
+  },
+  {
+    "id": "01M4Y1QGDA6K2V000WS6AJ1NEN",
+    "created_at": "2026-10-14T20:30:37",
+    "updated_at": "2026-10-14T20:30:37",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1NNPY61JZYW15AMFMC67E",
+        "started_at": "2026-10-14T20:30:14.457911+00:00",
+        "completed_at": "2026-10-14T20:30:36.343291+00:00",
+        "duration_seconds": 21.89,
+        "exit_code": null,
+        "stdout": null,
+        "stderr": null
+      },
+      "content_type": "application/vnd.chapkit.dataframe+json",
+      "content_size": null
+    },
+    "parent_id": "01M4Y1P5B0RQ05YA1JY5DAQ7CE",
+    "level": 1
+  },
+  {
+    "id": "01M4Y1R6F3N6DMH3G2KK0ADADQ",
+    "created_at": "2026-10-14T20:30:37",
+    "updated_at": "2026-10-14T20:30:37",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction_workspace",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1NNPY61JZYW15AMFMC67E",
+        "started_at": "2026-10-14T20:30:14.457911+00:00",
+        "completed_at": "2026-10-14T20:30:36.343291+00:00",
+        "duration_seconds": 21.89,
+        "exit_code": 0,
+        "stdout": "Running predictions...\nHistoric: historic.csv \nFuture: future.csv \nOutput: predictions.csv \nConfig: n_lags= 3  precision= 0.01  region_seasonal= FALSE \nCovariates: rainfall, mean_temperature \n[1] \"basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3\"\n [1] \"time_period\"      \"rainfall\"         \"mean_temperature\" \"disease_cases\"   \n [5] \"population\"       \"parent\"           \"location\"         \"Cases\"           \n [9] \"E\"                \"ID_spat\"          \"ID_year\"          \"month\"           \n[13] \"ID_time_cyclic\"   \"ID_time_cyclic2\" \n [1] \"time_period\"                  \"rainfall\"                    \n [3] \"mean_temperature\"             \"disease_cases\"               \n [5] \"population\"                   \"parent\"                      \n [7] \"location\"                     \"Cases\"                       \n [9] \"E\"                            \"ID_spat\"                     \n[11] \"ID_year\"                      \"month\"                       \n[13] \"ID_time_cyclic\"               \"ID_time_cyclic2\"             \n[15] \"basis_rainfall.v1.l1\"         \"basis_rainfall.v1.l2\"        \n[17] \"basis_rainfall.v1.l3\"         \"basis_rainfall.v2.l1\"        \n[19] \"basis_rainfall.v2.l2\"         \"basis_rainfall.v2.l3\"        \n[21] \"basis_rainfall.v3.l1\"         \"basis_rainfall.v3.l2\"        \n[23] \"basis_rainfall.v3.l3\"         \"basis_mean_temperature.v1.l1\"\n[25] \"basis_mean_temperature.v1.l2\" \"basis_mean_temperature.v1.l3\"\n[27] \"basis_mean_temperature.v2.l1\" \"basis_mean_temperature.v2.l2\"\n[29] \"basis_mean_temperature.v2.l3\" \"basis_mean_temperature.v3.l1\"\n[31] \"basis_mean_temperature.v3.l2\" \"basis_mean_temperature.v3.l3\"\nPredictions written to predictions.csv \n",
+        "stderr": "Loading required package: Matrix\nThis is INLA_25.10.19 built 2025-10-19 19:10:20 UTC.\n - See www.r-inla.org/contact-us for how to get help.\n - List available models/likelihoods/etc with inla.list.models()\n - Use inla.doc(<NAME>) to access documentation\n - Consider upgrading R-INLA to testing[26.08.22] or stable[26.08.07] (require R-4.6)\nThis is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').\n\nAttaching package: \u2018dplyr\u2019\n\nThe following objects are masked from \u2018package:stats\u2019:\n\n    filter, lag\n\nThe following objects are masked from \u2018package:base\u2019:\n\n    intersect, setdiff, setequal, union\n\nLinking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE\nLoading required package: spData\nTo access larger datasets in this package, install the spDataLarge\npackage with: `install.packages('spDataLarge',\nrepos='https://nowosad.github.io/drat/', type='source')`\n *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=1627\n *** WARNING *** GMRFLib_2order_approx: reset counter for 7 NAN/INF values in logl\n *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=1627\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\n"
+      },
+      "content_type": "application/zip",
+      "content_size": 24456985
+    },
+    "parent_id": "01M4Y1QGDA6K2V000WS6AJ1NEN",
+    "level": 2
+  },
+  {
+    "id": "01M4Y1R8QB8Y82VKDR7WSCQKNF",
+    "created_at": "2026-10-14T20:30:57",
+    "updated_at": "2026-10-14T20:30:57",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1NNPY61JZYW15AMFMC67E",
+        "started_at": "2026-10-14T20:30:39.366025+00:00",
+        "completed_at": "2026-10-14T20:30:56.991574+00:00",
+        "duration_seconds": 17.63,
+        "exit_code": null,
+        "stdout": null,
+        "stderr": null
+      },
+      "content_type": "application/vnd.chapkit.dataframe+json",
+      "content_size": null
+    },
+    "parent_id": "01M4Y1P5B0RQ05YA1JY5DAQ7CE",
+    "level": 1
+  },
+  {
+    "id": "01M4Y1RTMECFP6SXWACGB7F63E",
+    "created_at": "2026-10-14T20:30:57",
+    "updated_at": "2026-10-14T20:30:57",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction_workspace",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1NNPY61JZYW15AMFMC67E",
+        "started_at": "2026-10-14T20:30:39.366025+00:00",
+        "completed_at": "2026-10-14T20:30:56.991574+00:00",
+        "duration_seconds": 17.63,
+        "exit_code": 0,
+        "stdout": "Running predictions...\nHistoric: historic.csv \nFuture: future.csv \nOutput: predictions.csv \nConfig: n_lags= 3  precision= 0.01  region_seasonal= FALSE \nCovariates: rainfall, mean_temperature \n[1] \"basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3\"\n [1] \"time_period\"      \"rainfall\"         \"mean_temperature\" \"disease_cases\"   \n [5] \"population\"       \"parent\"           \"location\"         \"Cases\"           \n [9] \"E\"                \"ID_spat\"          \"ID_year\"          \"month\"           \n[13] \"ID_time_cyclic\"   \"ID_time_cyclic2\" \n [1] \"time_period\"                  \"rainfall\"                    \n [3] \"mean_temperature\"             \"disease_cases\"               \n [5] \"population\"                   \"parent\"                      \n [7] \"location\"                     \"Cases\"                       \n [9] \"E\"                            \"ID_spat\"                     \n[11] \"ID_year\"                      \"month\"                       \n[13] \"ID_time_cyclic\"               \"ID_time_cyclic2\"             \n[15] \"basis_rainfall.v1.l1\"         \"basis_rainfall.v1.l2\"        \n[17] \"basis_rainfall.v1.l3\"         \"basis_rainfall.v2.l1\"        \n[19] \"basis_rainfall.v2.l2\"         \"basis_rainfall.v2.l3\"        \n[21] \"basis_rainfall.v3.l1\"         \"basis_rainfall.v3.l2\"        \n[23] \"basis_rainfall.v3.l3\"         \"basis_mean_temperature.v1.l1\"\n[25] \"basis_mean_temperature.v1.l2\" \"basis_mean_temperature.v1.l3\"\n[27] \"basis_mean_temperature.v2.l1\" \"basis_mean_temperature.v2.l2\"\n[29] \"basis_mean_temperature.v2.l3\" \"basis_mean_temperature.v3.l1\"\n[31] \"basis_mean_temperature.v3.l2\" \"basis_mean_temperature.v3.l3\"\nPredictions written to predictions.csv \n",
+        "stderr": "Loading required package: Matrix\nThis is INLA_25.10.19 built 2025-10-19 19:10:20 UTC.\n - See www.r-inla.org/contact-us for how to get help.\n - List available models/likelihoods/etc with inla.list.models()\n - Use inla.doc(<NAME>) to access documentation\n - Consider upgrading R-INLA to testing[26.08.22] or stable[26.08.07] (require R-4.6)\nThis is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').\n\nAttaching package: \u2018dplyr\u2019\n\nThe following objects are masked from \u2018package:stats\u2019:\n\n    filter, lag\n\nThe following objects are masked from \u2018package:base\u2019:\n\n    intersect, setdiff, setequal, union\n\nLinking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE\nLoading required package: spData\nTo access larger datasets in this package, install the spDataLarge\npackage with: `install.packages('spDataLarge',\nrepos='https://nowosad.github.io/drat/', type='source')`\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\n"
+      },
+      "content_type": "application/zip",
+      "content_size": 24563126
+    },
+    "parent_id": "01M4Y1R8QB8Y82VKDR7WSCQKNF",
+    "level": 2
+  },
+  {
+    "id": "01M4Y1RX1HJX3AHE7WCWZT6V7N",
+    "created_at": "2026-10-14T20:31:18",
+    "updated_at": "2026-10-14T20:31:18",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1NNPY61JZYW15AMFMC67E",
+        "started_at": "2026-10-14T20:31:00.172678+00:00",
+        "completed_at": "2026-10-14T20:31:18.209258+00:00",
+        "duration_seconds": 18.04,
+        "exit_code": null,
+        "stdout": null,
+        "stderr": null
+      },
+      "content_type": "application/vnd.chapkit.dataframe+json",
+      "content_size": null
+    },
+    "parent_id": "01M4Y1P5B0RQ05YA1JY5DAQ7CE",
+    "level": 1
+  },
+  {
+    "id": "01M4Y1SFBE3EWNQR1YC2E3D1R3",
+    "created_at": "2026-10-14T20:31:18",
+    "updated_at": "2026-10-14T20:31:18",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction_workspace",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1NNPY61JZYW15AMFMC67E",
+        "started_at": "2026-10-14T20:31:00.172678+00:00",
+        "completed_at": "2026-10-14T20:31:18.209258+00:00",
+        "duration_seconds": 18.04,
+        "exit_code": 0,
+        "stdout": "Running predictions...\nHistoric: historic.csv \nFuture: future.csv \nOutput: predictions.csv \nConfig: n_lags= 3  precision= 0.01  region_seasonal= FALSE \nCovariates: rainfall, mean_temperature \n[1] \"basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3\"\n [1] \"time_period\"      \"rainfall\"         \"mean_temperature\" \"disease_cases\"   \n [5] \"population\"       \"parent\"           \"location\"         \"Cases\"           \n [9] \"E\"                \"ID_spat\"          \"ID_year\"          \"month\"           \n[13] \"ID_time_cyclic\"   \"ID_time_cyclic2\" \n [1] \"time_period\"                  \"rainfall\"                    \n [3] \"mean_temperature\"             \"disease_cases\"               \n [5] \"population\"                   \"parent\"                      \n [7] \"location\"                     \"Cases\"                       \n [9] \"E\"                            \"ID_spat\"                     \n[11] \"ID_year\"                      \"month\"                       \n[13] \"ID_time_cyclic\"               \"ID_time_cyclic2\"             \n[15] \"basis_rainfall.v1.l1\"         \"basis_rainfall.v1.l2\"        \n[17] \"basis_rainfall.v1.l3\"         \"basis_rainfall.v2.l1\"        \n[19] \"basis_rainfall.v2.l2\"         \"basis_rainfall.v2.l3\"        \n[21] \"basis_rainfall.v3.l1\"         \"basis_rainfall.v3.l2\"        \n[23] \"basis_rainfall.v3.l3\"         \"basis_mean_temperature.v1.l1\"\n[25] \"basis_mean_temperature.v1.l2\" \"basis_mean_temperature.v1.l3\"\n[27] \"basis_mean_temperature.v2.l1\" \"basis_mean_temperature.v2.l2\"\n[29] \"basis_mean_temperature.v2.l3\" \"basis_mean_temperature.v3.l1\"\n[31] \"basis_mean_temperature.v3.l2\" \"basis_mean_temperature.v3.l3\"\nPredictions written to predictions.csv \n",
+        "stderr": "Loading required package: Matrix\nThis is INLA_25.10.19 built 2025-10-19 19:10:20 UTC.\n - See www.r-inla.org/contact-us for how to get help.\n - List available models/likelihoods/etc with inla.list.models()\n - Use inla.doc(<NAME>) to access documentation\n - Consider upgrading R-INLA to testing[26.08.22] or stable[26.08.07] (require R-4.6)\nThis is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').\n\nAttaching package: \u2018dplyr\u2019\n\nThe following objects are masked from \u2018package:stats\u2019:\n\n    filter, lag\n\nThe following objects are masked from \u2018package:base\u2019:\n\n    intersect, setdiff, setequal, union\n\nLinking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE\nLoading required package: spData\nTo access larger datasets in this package, install the spDataLarge\npackage with: `install.packages('spDataLarge',\nrepos='https://nowosad.github.io/drat/', type='source')`\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\n"
+      },
+      "content_type": "application/zip",
+      "content_size": 24669439
+    },
+    "parent_id": "01M4Y1RX1HJX3AHE7WCWZT6V7N",
+    "level": 2
+  },
+  {
+    "id": "01M4Y1SHKNW25V8SSV6XJE0K0Q",
+    "created_at": "2026-10-14T20:31:43",
+    "updated_at": "2026-10-14T20:31:43",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1NNPY61JZYW15AMFMC67E",
+        "started_at": "2026-10-14T20:31:21.233845+00:00",
+        "completed_at": "2026-10-14T20:31:42.498053+00:00",
+        "duration_seconds": 21.26,
+        "exit_code": null,
+        "stdout": null,
+        "stderr": null
+      },
+      "content_type": "application/vnd.chapkit.dataframe+json",
+      "content_size": null
+    },
+    "parent_id": "01M4Y1P5B0RQ05YA1JY5DAQ7CE",
+    "level": 1
+  },
+  {
+    "id": "01M4Y1T72ZN59VMCX5SXMJN28C",
+    "created_at": "2026-10-14T20:31:43",
+    "updated_at": "2026-10-14T20:31:43",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction_workspace",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1NNPY61JZYW15AMFMC67E",
+        "started_at": "2026-10-14T20:31:21.233845+00:00",
+        "completed_at": "2026-10-14T20:31:42.498053+00:00",
+        "duration_seconds": 21.26,
+        "exit_code": 0,
+        "stdout": "Running predictions...\nHistoric: historic.csv \nFuture: future.csv \nOutput: predictions.csv \nConfig: n_lags= 3  precision= 0.01  region_seasonal= FALSE \nCovariates: rainfall, mean_temperature \n[1] \"basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3\"\n [1] \"time_period\"      \"rainfall\"         \"mean_temperature\" \"disease_cases\"   \n [5] \"population\"       \"parent\"           \"location\"         \"Cases\"           \n [9] \"E\"                \"ID_spat\"          \"ID_year\"          \"month\"           \n[13] \"ID_time_cyclic\"   \"ID_time_cyclic2\" \n [1] \"time_period\"                  \"rainfall\"                    \n [3] \"mean_temperature\"             \"disease_cases\"               \n [5] \"population\"                   \"parent\"                      \n [7] \"location\"                     \"Cases\"                       \n [9] \"E\"                            \"ID_spat\"                     \n[11] \"ID_year\"                      \"month\"                       \n[13] \"ID_time_cyclic\"               \"ID_time_cyclic2\"             \n[15] \"basis_rainfall.v1.l1\"         \"basis_rainfall.v1.l2\"        \n[17] \"basis_rainfall.v1.l3\"         \"basis_rainfall.v2.l1\"        \n[19] \"basis_rainfall.v2.l2\"         \"basis_rainfall.v2.l3\"        \n[21] \"basis_rainfall.v3.l1\"         \"basis_rainfall.v3.l2\"        \n[23] \"basis_rainfall.v3.l3\"         \"basis_mean_temperature.v1.l1\"\n[25] \"basis_mean_temperature.v1.l2\" \"basis_mean_temperature.v1.l3\"\n[27] \"basis_mean_temperature.v2.l1\" \"basis_mean_temperature.v2.l2\"\n[29] \"basis_mean_temperature.v2.l3\" \"basis_mean_temperature.v3.l1\"\n[31] \"basis_mean_temperature.v3.l2\" \"basis_mean_temperature.v3.l3\"\nPredictions written to predictions.csv \n",
+        "stderr": "Loading required package: Matrix\nThis is INLA_25.10.19 built 2025-10-19 19:10:20 UTC.\n - See www.r-inla.org/contact-us for how to get help.\n - List available models/likelihoods/etc with inla.list.models()\n - Use inla.doc(<NAME>) to access documentation\n - Consider upgrading R-INLA to testing[26.08.22] or stable[26.08.07] (require R-4.6)\nThis is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').\n\nAttaching package: \u2018dplyr\u2019\n\nThe following objects are masked from \u2018package:stats\u2019:\n\n    filter, lag\n\nThe following objects are masked from \u2018package:base\u2019:\n\n    intersect, setdiff, setequal, union\n\nLinking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE\nLoading required package: spData\nTo access larger datasets in this package, install the spDataLarge\npackage with: `install.packages('spDataLarge',\nrepos='https://nowosad.github.io/drat/', type='source')`\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\n"
+      },
+      "content_type": "application/zip",
+      "content_size": 24792418
+    },
+    "parent_id": "01M4Y1SHKNW25V8SSV6XJE0K0Q",
+    "level": 2
+  },
+  {
+    "id": "01M4Y1T7SFCS67FSXQF3RS98FB",
+    "created_at": "2026-10-14T20:32:08",
+    "updated_at": "2026-10-14T20:32:08",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1NNPY61JZYW15AMFMC67E",
+        "started_at": "2026-10-14T20:31:43.955808+00:00",
+        "completed_at": "2026-10-14T20:32:07.383704+00:00",
+        "duration_seconds": 23.43,
+        "exit_code": null,
+        "stdout": null,
+        "stderr": null
+      },
+      "content_type": "application/vnd.chapkit.dataframe+json",
+      "content_size": null
+    },
+    "parent_id": "01M4Y1P5B0RQ05YA1JY5DAQ7CE",
+    "level": 1
+  },
+  {
+    "id": "01M4Y1TZDP0VCEW9XG8HFFAJXB",
+    "created_at": "2026-10-14T20:32:08",
+    "updated_at": "2026-10-14T20:32:08",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction_workspace",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1NNPY61JZYW15AMFMC67E",
+        "started_at": "2026-10-14T20:31:43.955808+00:00",
+        "completed_at": "2026-10-14T20:32:07.383704+00:00",
+        "duration_seconds": 23.43,
+        "exit_code": 0,
+        "stdout": "Running predictions...\nHistoric: historic.csv \nFuture: future.csv \nOutput: predictions.csv \nConfig: n_lags= 3  precision= 0.01  region_seasonal= FALSE \nCovariates: rainfall, mean_temperature \n[1] \"basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3\"\n [1] \"time_period\"      \"rainfall\"         \"mean_temperature\" \"disease_cases\"   \n [5] \"population\"       \"parent\"           \"location\"         \"Cases\"           \n [9] \"E\"                \"ID_spat\"          \"ID_year\"          \"month\"           \n[13] \"ID_time_cyclic\"   \"ID_time_cyclic2\" \n [1] \"time_period\"                  \"rainfall\"                    \n [3] \"mean_temperature\"             \"disease_cases\"               \n [5] \"population\"                   \"parent\"                      \n [7] \"location\"                     \"Cases\"                       \n [9] \"E\"                            \"ID_spat\"                     \n[11] \"ID_year\"                      \"month\"                       \n[13] \"ID_time_cyclic\"               \"ID_time_cyclic2\"             \n[15] \"basis_rainfall.v1.l1\"         \"basis_rainfall.v1.l2\"        \n[17] \"basis_rainfall.v1.l3\"         \"basis_rainfall.v2.l1\"        \n[19] \"basis_rainfall.v2.l2\"         \"basis_rainfall.v2.l3\"        \n[21] \"basis_rainfall.v3.l1\"         \"basis_rainfall.v3.l2\"        \n[23] \"basis_rainfall.v3.l3\"         \"basis_mean_temperature.v1.l1\"\n[25] \"basis_mean_temperature.v1.l2\" \"basis_mean_temperature.v1.l3\"\n[27] \"basis_mean_temperature.v2.l1\" \"basis_mean_temperature.v2.l2\"\n[29] \"basis_mean_temperature.v2.l3\" \"basis_mean_temperature.v3.l1\"\n[31] \"basis_mean_temperature.v3.l2\" \"basis_mean_temperature.v3.l3\"\nPredictions written to predictions.csv \n",
+        "stderr": "Loading required package: Matrix\nThis is INLA_25.10.19 built 2025-10-19 19:10:20 UTC.\n - See www.r-inla.org/contact-us for how to get help.\n - List available models/likelihoods/etc with inla.list.models()\n - Use inla.doc(<NAME>) to access documentation\n - Consider upgrading R-INLA to testing[26.08.22] or stable[26.08.07] (require R-4.6)\nThis is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').\n\nAttaching package: \u2018dplyr\u2019\n\nThe following objects are masked from \u2018package:stats\u2019:\n\n    filter, lag\n\nThe following objects are masked from \u2018package:base\u2019:\n\n    intersect, setdiff, setequal, union\n\nLinking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE\nLoading required package: spData\nTo access larger datasets in this package, install the spDataLarge\npackage with: `install.packages('spDataLarge',\nrepos='https://nowosad.github.io/drat/', type='source')`\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\n"
+      },
+      "content_type": "application/zip",
+      "content_size": 24920940
+    },
+    "parent_id": "01M4Y1T7SFCS67FSXQF3RS98FB",
+    "level": 2
+  },
+  {
+    "id": "01M4Y1VRKHMXYVPPMG7CYZVB2C",
+    "created_at": "2026-10-14T20:32:34",
+    "updated_at": "2026-10-14T20:32:34",
+    "tags": [],
+    "data": {
+      "type": "ml_training_workspace",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1VQBNJRQB4GEXKYPXTRHT",
+        "started_at": "2026-10-14T20:32:33.912111+00:00",
+        "completed_at": "2026-10-14T20:32:34.447056+00:00",
+        "duration_seconds": 0.53,
+        "exit_code": 0,
+        "stdout": "Reading training data from: data.csv \nTraining data shape: 7220 rows x 7 columns\nColumns: time_period, rainfall, mean_temperature, disease_cases, population, parent, location \nModel placeholder saved to model.rds\n",
+        "stderr": ""
+      },
+      "content_type": "application/zip",
+      "content_size": 246373
+    },
+    "parent_id": null,
+    "level": 0
+  },
+  {
+    "id": "01M4Y1VTS9EZT8H6YT7JD7894N",
+    "created_at": "2026-10-14T20:33:06",
+    "updated_at": "2026-10-14T20:33:06",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1VQBNJRQB4GEXKYPXTRHT",
+        "started_at": "2026-10-14T20:32:36.151203+00:00",
+        "completed_at": "2026-10-14T20:33:05.208035+00:00",
+        "duration_seconds": 29.06,
+        "exit_code": null,
+        "stdout": null,
+        "stderr": null
+      },
+      "content_type": "application/vnd.chapkit.dataframe+json",
+      "content_size": null
+    },
+    "parent_id": "01M4Y1VRKHMXYVPPMG7CYZVB2C",
+    "level": 1
+  },
+  {
+    "id": "01M4Y1WR26HFYN7PNWQNRMRSXH",
+    "created_at": "2026-10-14T20:33:06",
+    "updated_at": "2026-10-14T20:33:06",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction_workspace",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1VQBNJRQB4GEXKYPXTRHT",
+        "started_at": "2026-10-14T20:32:36.151203+00:00",
+        "completed_at": "2026-10-14T20:33:05.208035+00:00",
+        "duration_seconds": 29.06,
+        "exit_code": 0,
+        "stdout": "Running predictions...\nHistoric: historic.csv \nFuture: future.csv \nOutput: predictions.csv \nConfig: n_lags= 3  precision= 0.01  region_seasonal= FALSE \nCovariates: rainfall, mean_temperature \n[1] \"basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3\"\n [1] \"time_period\"      \"rainfall\"         \"mean_temperature\" \"disease_cases\"   \n [5] \"population\"       \"parent\"           \"location\"         \"Cases\"           \n [9] \"E\"                \"ID_spat\"          \"ID_year\"          \"week\"            \n[13] \"ID_time_cyclic\"   \"ID_time_cyclic2\" \n [1] \"time_period\"                  \"rainfall\"                    \n [3] \"mean_temperature\"             \"disease_cases\"               \n [5] \"population\"                   \"parent\"                      \n [7] \"location\"                     \"Cases\"                       \n [9] \"E\"                            \"ID_spat\"                     \n[11] \"ID_year\"                      \"week\"                        \n[13] \"ID_time_cyclic\"               \"ID_time_cyclic2\"             \n[15] \"basis_rainfall.v1.l1\"         \"basis_rainfall.v1.l2\"        \n[17] \"basis_rainfall.v1.l3\"         \"basis_rainfall.v2.l1\"        \n[19] \"basis_rainfall.v2.l2\"         \"basis_rainfall.v2.l3\"        \n[21] \"basis_rainfall.v3.l1\"         \"basis_rainfall.v3.l2\"        \n[23] \"basis_rainfall.v3.l3\"         \"basis_mean_temperature.v1.l1\"\n[25] \"basis_mean_temperature.v1.l2\" \"basis_mean_temperature.v1.l3\"\n[27] \"basis_mean_temperature.v2.l1\" \"basis_mean_temperature.v2.l2\"\n[29] \"basis_mean_temperature.v2.l3\" \"basis_mean_temperature.v3.l1\"\n[31] \"basis_mean_temperature.v3.l2\" \"basis_mean_temperature.v3.l3\"\nPredictions written to predictions.csv \n",
+        "stderr": "Loading required package: Matrix\nThis is INLA_25.10.19 built 2025-10-19 19:10:20 UTC.\n - See www.r-inla.org/contact-us for how to get help.\n - List available models/likelihoods/etc with inla.list.models()\n - Use inla.doc(<NAME>) to access documentation\n - Consider upgrading R-INLA to testing[26.08.22] or stable[26.08.07] (require R-4.6)\nThis is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').\n\nAttaching package: \u2018dplyr\u2019\n\nThe following objects are masked from \u2018package:stats\u2019:\n\n    filter, lag\n\nThe following objects are masked from \u2018package:base\u2019:\n\n    intersect, setdiff, setequal, union\n\nLinking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE\nLoading required package: spData\nTo access larger datasets in this package, install the spDataLarge\npackage with: `install.packages('spDataLarge',\nrepos='https://nowosad.github.io/drat/', type='source')`\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\n"
+      },
+      "content_type": "application/zip",
+      "content_size": 37461228
+    },
+    "parent_id": "01M4Y1VTS9EZT8H6YT7JD7894N",
+    "level": 2
+  },
+  {
+    "id": "01M4Y1WTT6SH9BTFY7VP63GSHA",
+    "created_at": "2026-10-14T20:33:51",
+    "updated_at": "2026-10-14T20:33:51",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1VQBNJRQB4GEXKYPXTRHT",
+        "started_at": "2026-10-14T20:33:08.951301+00:00",
+        "completed_at": "2026-10-14T20:33:50.113517+00:00",
+        "duration_seconds": 41.16,
+        "exit_code": null,
+        "stdout": null,
+        "stderr": null
+      },
+      "content_type": "application/vnd.chapkit.dataframe+json",
+      "content_size": null
+    },
+    "parent_id": "01M4Y1VRKHMXYVPPMG7CYZVB2C",
+    "level": 1
+  },
+  {
+    "id": "01M4Y1Y3ZZ4DV1JYXA7J5B1SKX",
+    "created_at": "2026-10-14T20:33:51",
+    "updated_at": "2026-10-14T20:33:51",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction_workspace",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1VQBNJRQB4GEXKYPXTRHT",
+        "started_at": "2026-10-14T20:33:08.951301+00:00",
+        "completed_at": "2026-10-14T20:33:50.113517+00:00",
+        "duration_seconds": 41.16,
+        "exit_code": 0,
+        "stdout": "Running predictions...\nHistoric: historic.csv \nFuture: future.csv \nOutput: predictions.csv \nConfig: n_lags= 3  precision= 0.01  region_seasonal= FALSE \nCovariates: rainfall, mean_temperature \n[1] \"basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3\"\n [1] \"time_period\"      \"rainfall\"         \"mean_temperature\" \"disease_cases\"   \n [5] \"population\"       \"parent\"           \"location\"         \"Cases\"           \n [9] \"E\"                \"ID_spat\"          \"ID_year\"          \"week\"            \n[13] \"ID_time_cyclic\"   \"ID_time_cyclic2\" \n [1] \"time_period\"                  \"rainfall\"                    \n [3] \"mean_temperature\"             \"disease_cases\"               \n [5] \"population\"                   \"parent\"                      \n [7] \"location\"                     \"Cases\"                       \n [9] \"E\"                            \"ID_spat\"                     \n[11] \"ID_year\"                      \"week\"                        \n[13] \"ID_time_cyclic\"               \"ID_time_cyclic2\"             \n[15] \"basis_rainfall.v1.l1\"         \"basis_rainfall.v1.l2\"        \n[17] \"basis_rainfall.v1.l3\"         \"basis_rainfall.v2.l1\"        \n[19] \"basis_rainfall.v2.l2\"         \"basis_rainfall.v2.l3\"        \n[21] \"basis_rainfall.v3.l1\"         \"basis_rainfall.v3.l2\"        \n[23] \"basis_rainfall.v3.l3\"         \"basis_mean_temperature.v1.l1\"\n[25] \"basis_mean_temperature.v1.l2\" \"basis_mean_temperature.v1.l3\"\n[27] \"basis_mean_temperature.v2.l1\" \"basis_mean_temperature.v2.l2\"\n[29] \"basis_mean_temperature.v2.l3\" \"basis_mean_temperature.v3.l1\"\n[31] \"basis_mean_temperature.v3.l2\" \"basis_mean_temperature.v3.l3\"\nPredictions written to predictions.csv \n",
+        "stderr": "Loading required package: Matrix\nThis is INLA_25.10.19 built 2025-10-19 19:10:20 UTC.\n - See www.r-inla.org/contact-us for how to get help.\n - List available models/likelihoods/etc with inla.list.models()\n - Use inla.doc(<NAME>) to access documentation\n - Consider upgrading R-INLA to testing[26.08.22] or stable[26.08.07] (require R-4.6)\nThis is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').\n\nAttaching package: \u2018dplyr\u2019\n\nThe following objects are masked from \u2018package:stats\u2019:\n\n    filter, lag\n\nThe following objects are masked from \u2018package:base\u2019:\n\n    intersect, setdiff, setequal, union\n\nLinking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE\nLoading required package: spData\nTo access larger datasets in this package, install the spDataLarge\npackage with: `install.packages('spDataLarge',\nrepos='https://nowosad.github.io/drat/', type='source')`\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\n"
+      },
+      "content_type": "application/zip",
+      "content_size": 37531813
+    },
+    "parent_id": "01M4Y1WTT6SH9BTFY7VP63GSHA",
+    "level": 2
+  },
+  {
+    "id": "01M4Y1Y4SRVER759WJFFQ0GA0V",
+    "created_at": "2026-10-14T20:34:33",
+    "updated_at": "2026-10-14T20:34:33",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1VQBNJRQB4GEXKYPXTRHT",
+        "started_at": "2026-10-14T20:33:51.944665+00:00",
+        "completed_at": "2026-10-14T20:34:31.873558+00:00",
+        "duration_seconds": 39.93,
+        "exit_code": null,
+        "stdout": null,
+        "stderr": null
+      },
+      "content_type": "application/vnd.chapkit.dataframe+json",
+      "content_size": null
+    },
+    "parent_id": "01M4Y1VRKHMXYVPPMG7CYZVB2C",
+    "level": 1
+  },
+  {
+    "id": "01M4Y1ZD3ARTS2SC9J6ZH7QMG2",
+    "created_at": "2026-10-14T20:34:33",
+    "updated_at": "2026-10-14T20:34:33",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction_workspace",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1VQBNJRQB4GEXKYPXTRHT",
+        "started_at": "2026-10-14T20:33:51.944665+00:00",
+        "completed_at": "2026-10-14T20:34:31.873558+00:00",
+        "duration_seconds": 39.93,
+        "exit_code": 0,
+        "stdout": "Running predictions...\nHistoric: historic.csv \nFuture: future.csv \nOutput: predictions.csv \nConfig: n_lags= 3  precision= 0.01  region_seasonal= FALSE \nCovariates: rainfall, mean_temperature \n[1] \"basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3\"\n [1] \"time_period\"      \"rainfall\"         \"mean_temperature\" \"disease_cases\"   \n [5] \"population\"       \"parent\"           \"location\"         \"Cases\"           \n [9] \"E\"                \"ID_spat\"          \"ID_year\"          \"week\"            \n[13] \"ID_time_cyclic\"   \"ID_time_cyclic2\" \n [1] \"time_period\"                  \"rainfall\"                    \n [3] \"mean_temperature\"             \"disease_cases\"               \n [5] \"population\"                   \"parent\"                      \n [7] \"location\"                     \"Cases\"                       \n [9] \"E\"                            \"ID_spat\"                     \n[11] \"ID_year\"                      \"week\"                        \n[13] \"ID_time_cyclic\"               \"ID_time_cyclic2\"             \n[15] \"basis_rainfall.v1.l1\"         \"basis_rainfall.v1.l2\"        \n[17] \"basis_rainfall.v1.l3\"         \"basis_rainfall.v2.l1\"        \n[19] \"basis_rainfall.v2.l2\"         \"basis_rainfall.v2.l3\"        \n[21] \"basis_rainfall.v3.l1\"         \"basis_rainfall.v3.l2\"        \n[23] \"basis_rainfall.v3.l3\"         \"basis_mean_temperature.v1.l1\"\n[25] \"basis_mean_temperature.v1.l2\" \"basis_mean_temperature.v1.l3\"\n[27] \"basis_mean_temperature.v2.l1\" \"basis_mean_temperature.v2.l2\"\n[29] \"basis_mean_temperature.v2.l3\" \"basis_mean_temperature.v3.l1\"\n[31] \"basis_mean_temperature.v3.l2\" \"basis_mean_temperature.v3.l3\"\nPredictions written to predictions.csv \n",
+        "stderr": "Loading required package: Matrix\nThis is INLA_25.10.19 built 2025-10-19 19:10:20 UTC.\n - See www.r-inla.org/contact-us for how to get help.\n - List available models/likelihoods/etc with inla.list.models()\n - Use inla.doc(<NAME>) to access documentation\n - Consider upgrading R-INLA to testing[26.08.22] or stable[26.08.07] (require R-4.6)\nThis is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').\n\nAttaching package: \u2018dplyr\u2019\n\nThe following objects are masked from \u2018package:stats\u2019:\n\n    filter, lag\n\nThe following objects are masked from \u2018package:base\u2019:\n\n    intersect, setdiff, setequal, union\n\nLinking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE\nLoading required package: spData\nTo access larger datasets in this package, install the spDataLarge\npackage with: `install.packages('spDataLarge',\nrepos='https://nowosad.github.io/drat/', type='source')`\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\n"
+      },
+      "content_type": "application/zip",
+      "content_size": 37566134
+    },
+    "parent_id": "01M4Y1Y4SRVER759WJFFQ0GA0V",
+    "level": 2
+  },
+  {
+    "id": "01M4Y1ZFGBS4WBAAXY8VSRJF3P",
+    "created_at": "2026-10-14T20:35:10",
+    "updated_at": "2026-10-14T20:35:10",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1VQBNJRQB4GEXKYPXTRHT",
+        "started_at": "2026-10-14T20:34:35.683900+00:00",
+        "completed_at": "2026-10-14T20:35:09.967370+00:00",
+        "duration_seconds": 34.28,
+        "exit_code": null,
+        "stdout": null,
+        "stderr": null
+      },
+      "content_type": "application/vnd.chapkit.dataframe+json",
+      "content_size": null
+    },
+    "parent_id": "01M4Y1VRKHMXYVPPMG7CYZVB2C",
+    "level": 1
+  },
+  {
+    "id": "01M4Y20HY3BWJ669NNR7HHKNVA",
+    "created_at": "2026-10-14T20:35:10",
+    "updated_at": "2026-10-14T20:35:10",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction_workspace",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1VQBNJRQB4GEXKYPXTRHT",
+        "started_at": "2026-10-14T20:34:35.683900+00:00",
+        "completed_at": "2026-10-14T20:35:09.967370+00:00",
+        "duration_seconds": 34.28,
+        "exit_code": 0,
+        "stdout": "Running predictions...\nHistoric: historic.csv \nFuture: future.csv \nOutput: predictions.csv \nConfig: n_lags= 3  precision= 0.01  region_seasonal= FALSE \nCovariates: rainfall, mean_temperature \n[1] \"basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3\"\n [1] \"time_period\"      \"rainfall\"         \"mean_temperature\" \"disease_cases\"   \n [5] \"population\"       \"parent\"           \"location\"         \"Cases\"           \n [9] \"E\"                \"ID_spat\"          \"ID_year\"          \"week\"            \n[13] \"ID_time_cyclic\"   \"ID_time_cyclic2\" \n [1] \"time_period\"                  \"rainfall\"                    \n [3] \"mean_temperature\"             \"disease_cases\"               \n [5] \"population\"                   \"parent\"                      \n [7] \"location\"                     \"Cases\"                       \n [9] \"E\"                            \"ID_spat\"                     \n[11] \"ID_year\"                      \"week\"                        \n[13] \"ID_time_cyclic\"               \"ID_time_cyclic2\"             \n[15] \"basis_rainfall.v1.l1\"         \"basis_rainfall.v1.l2\"        \n[17] \"basis_rainfall.v1.l3\"         \"basis_rainfall.v2.l1\"        \n[19] \"basis_rainfall.v2.l2\"         \"basis_rainfall.v2.l3\"        \n[21] \"basis_rainfall.v3.l1\"         \"basis_rainfall.v3.l2\"        \n[23] \"basis_rainfall.v3.l3\"         \"basis_mean_temperature.v1.l1\"\n[25] \"basis_mean_temperature.v1.l2\" \"basis_mean_temperature.v1.l3\"\n[27] \"basis_mean_temperature.v2.l1\" \"basis_mean_temperature.v2.l2\"\n[29] \"basis_mean_temperature.v2.l3\" \"basis_mean_temperature.v3.l1\"\n[31] \"basis_mean_temperature.v3.l2\" \"basis_mean_temperature.v3.l3\"\nPredictions written to predictions.csv \n",
+        "stderr": "Loading required package: Matrix\nThis is INLA_25.10.19 built 2025-10-19 19:10:20 UTC.\n - See www.r-inla.org/contact-us for how to get help.\n - List available models/likelihoods/etc with inla.list.models()\n - Use inla.doc(<NAME>) to access documentation\n - Consider upgrading R-INLA to testing[26.08.22] or stable[26.08.07] (require R-4.6)\nThis is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').\n\nAttaching package: \u2018dplyr\u2019\n\nThe following objects are masked from \u2018package:stats\u2019:\n\n    filter, lag\n\nThe following objects are masked from \u2018package:base\u2019:\n\n    intersect, setdiff, setequal, union\n\nLinking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE\nLoading required package: spData\nTo access larger datasets in this package, install the spDataLarge\npackage with: `install.packages('spDataLarge',\nrepos='https://nowosad.github.io/drat/', type='source')`\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\n"
+      },
+      "content_type": "application/zip",
+      "content_size": 37602852
+    },
+    "parent_id": "01M4Y1ZFGBS4WBAAXY8VSRJF3P",
+    "level": 2
+  },
+  {
+    "id": "01M4Y20MDNPB50SX3NRSYM9F0P",
+    "created_at": "2026-10-14T20:35:44",
+    "updated_at": "2026-10-14T20:35:44",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1VQBNJRQB4GEXKYPXTRHT",
+        "started_at": "2026-10-14T20:35:13.475953+00:00",
+        "completed_at": "2026-10-14T20:35:43.884110+00:00",
+        "duration_seconds": 30.41,
+        "exit_code": null,
+        "stdout": null,
+        "stderr": null
+      },
+      "content_type": "application/vnd.chapkit.dataframe+json",
+      "content_size": null
+    },
+    "parent_id": "01M4Y1VRKHMXYVPPMG7CYZVB2C",
+    "level": 1
+  },
+  {
+    "id": "01M4Y21K0DQ21Q0TCC5GKDM42N",
+    "created_at": "2026-10-14T20:35:44",
+    "updated_at": "2026-10-14T20:35:44",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction_workspace",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1VQBNJRQB4GEXKYPXTRHT",
+        "started_at": "2026-10-14T20:35:13.475953+00:00",
+        "completed_at": "2026-10-14T20:35:43.884110+00:00",
+        "duration_seconds": 30.41,
+        "exit_code": 0,
+        "stdout": "Running predictions...\nHistoric: historic.csv \nFuture: future.csv \nOutput: predictions.csv \nConfig: n_lags= 3  precision= 0.01  region_seasonal= FALSE \nCovariates: rainfall, mean_temperature \n[1] \"basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3\"\n [1] \"time_period\"      \"rainfall\"         \"mean_temperature\" \"disease_cases\"   \n [5] \"population\"       \"parent\"           \"location\"         \"Cases\"           \n [9] \"E\"                \"ID_spat\"          \"ID_year\"          \"week\"            \n[13] \"ID_time_cyclic\"   \"ID_time_cyclic2\" \n [1] \"time_period\"                  \"rainfall\"                    \n [3] \"mean_temperature\"             \"disease_cases\"               \n [5] \"population\"                   \"parent\"                      \n [7] \"location\"                     \"Cases\"                       \n [9] \"E\"                            \"ID_spat\"                     \n[11] \"ID_year\"                      \"week\"                        \n[13] \"ID_time_cyclic\"               \"ID_time_cyclic2\"             \n[15] \"basis_rainfall.v1.l1\"         \"basis_rainfall.v1.l2\"        \n[17] \"basis_rainfall.v1.l3\"         \"basis_rainfall.v2.l1\"        \n[19] \"basis_rainfall.v2.l2\"         \"basis_rainfall.v2.l3\"        \n[21] \"basis_rainfall.v3.l1\"         \"basis_rainfall.v3.l2\"        \n[23] \"basis_rainfall.v3.l3\"         \"basis_mean_temperature.v1.l1\"\n[25] \"basis_mean_temperature.v1.l2\" \"basis_mean_temperature.v1.l3\"\n[27] \"basis_mean_temperature.v2.l1\" \"basis_mean_temperature.v2.l2\"\n[29] \"basis_mean_temperature.v2.l3\" \"basis_mean_temperature.v3.l1\"\n[31] \"basis_mean_temperature.v3.l2\" \"basis_mean_temperature.v3.l3\"\nPredictions written to predictions.csv \n",
+        "stderr": "Loading required package: Matrix\nThis is INLA_25.10.19 built 2025-10-19 19:10:20 UTC.\n - See www.r-inla.org/contact-us for how to get help.\n - List available models/likelihoods/etc with inla.list.models()\n - Use inla.doc(<NAME>) to access documentation\n - Consider upgrading R-INLA to testing[26.08.22] or stable[26.08.07] (require R-4.6)\nThis is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').\n\nAttaching package: \u2018dplyr\u2019\n\nThe following objects are masked from \u2018package:stats\u2019:\n\n    filter, lag\n\nThe following objects are masked from \u2018package:base\u2019:\n\n    intersect, setdiff, setequal, union\n\nLinking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE\nLoading required package: spData\nTo access larger datasets in this package, install the spDataLarge\npackage with: `install.packages('spDataLarge',\nrepos='https://nowosad.github.io/drat/', type='source')`\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\n"
+      },
+      "content_type": "application/zip",
+      "content_size": 37635183
+    },
+    "parent_id": "01M4Y20MDNPB50SX3NRSYM9F0P",
+    "level": 2
+  },
+  {
+    "id": "01M4Y21NC346HN6NSNH5WR384J",
+    "created_at": "2026-10-14T20:36:20",
+    "updated_at": "2026-10-14T20:36:20",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1VQBNJRQB4GEXKYPXTRHT",
+        "started_at": "2026-10-14T20:35:47.222154+00:00",
+        "completed_at": "2026-10-14T20:36:19.361191+00:00",
+        "duration_seconds": 32.14,
+        "exit_code": null,
+        "stdout": null,
+        "stderr": null
+      },
+      "content_type": "application/vnd.chapkit.dataframe+json",
+      "content_size": null
+    },
+    "parent_id": "01M4Y1VRKHMXYVPPMG7CYZVB2C",
+    "level": 1
+  },
+  {
+    "id": "01M4Y22NRE27S2MXZSKJEB6T3N",
+    "created_at": "2026-10-14T20:36:20",
+    "updated_at": "2026-10-14T20:36:20",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction_workspace",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1VQBNJRQB4GEXKYPXTRHT",
+        "started_at": "2026-10-14T20:35:47.222154+00:00",
+        "completed_at": "2026-10-14T20:36:19.361191+00:00",
+        "duration_seconds": 32.14,
+        "exit_code": 0,
+        "stdout": "Running predictions...\nHistoric: historic.csv \nFuture: future.csv \nOutput: predictions.csv \nConfig: n_lags= 3  precision= 0.01  region_seasonal= FALSE \nCovariates: rainfall, mean_temperature \n[1] \"basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3\"\n [1] \"time_period\"      \"rainfall\"         \"mean_temperature\" \"disease_cases\"   \n [5] \"population\"       \"parent\"           \"location\"         \"Cases\"           \n [9] \"E\"                \"ID_spat\"          \"ID_year\"          \"week\"            \n[13] \"ID_time_cyclic\"   \"ID_time_cyclic2\" \n [1] \"time_period\"                  \"rainfall\"                    \n [3] \"mean_temperature\"             \"disease_cases\"               \n [5] \"population\"                   \"parent\"                      \n [7] \"location\"                     \"Cases\"                       \n [9] \"E\"                            \"ID_spat\"                     \n[11] \"ID_year\"                      \"week\"                        \n[13] \"ID_time_cyclic\"               \"ID_time_cyclic2\"             \n[15] \"basis_rainfall.v1.l1\"         \"basis_rainfall.v1.l2\"        \n[17] \"basis_rainfall.v1.l3\"         \"basis_rainfall.v2.l1\"        \n[19] \"basis_rainfall.v2.l2\"         \"basis_rainfall.v2.l3\"        \n[21] \"basis_rainfall.v3.l1\"         \"basis_rainfall.v3.l2\"        \n[23] \"basis_rainfall.v3.l3\"         \"basis_mean_temperature.v1.l1\"\n[25] \"basis_mean_temperature.v1.l2\" \"basis_mean_temperature.v1.l3\"\n[27] \"basis_mean_temperature.v2.l1\" \"basis_mean_temperature.v2.l2\"\n[29] \"basis_mean_temperature.v2.l3\" \"basis_mean_temperature.v3.l1\"\n[31] \"basis_mean_temperature.v3.l2\" \"basis_mean_temperature.v3.l3\"\nPredictions written to predictions.csv \n",
+        "stderr": "Loading required package: Matrix\nThis is INLA_25.10.19 built 2025-10-19 19:10:20 UTC.\n - See www.r-inla.org/contact-us for how to get help.\n - List available models/likelihoods/etc with inla.list.models()\n - Use inla.doc(<NAME>) to access documentation\n - Consider upgrading R-INLA to testing[26.08.22] or stable[26.08.07] (require R-4.6)\nThis is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').\n\nAttaching package: \u2018dplyr\u2019\n\nThe following objects are masked from \u2018package:stats\u2019:\n\n    filter, lag\n\nThe following objects are masked from \u2018package:base\u2019:\n\n    intersect, setdiff, setequal, union\n\nLinking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE\nLoading required package: spData\nTo access larger datasets in this package, install the spDataLarge\npackage with: `install.packages('spDataLarge',\nrepos='https://nowosad.github.io/drat/', type='source')`\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\n"
+      },
+      "content_type": "application/zip",
+      "content_size": 37688301
+    },
+    "parent_id": "01M4Y21NC346HN6NSNH5WR384J",
+    "level": 2
+  },
+  {
+    "id": "01M4Y22R15MJW01Z31T4ZNE8EN",
+    "created_at": "2026-10-14T20:36:56",
+    "updated_at": "2026-10-14T20:36:56",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1VQBNJRQB4GEXKYPXTRHT",
+        "started_at": "2026-10-14T20:36:22.716545+00:00",
+        "completed_at": "2026-10-14T20:36:55.753003+00:00",
+        "duration_seconds": 33.04,
+        "exit_code": null,
+        "stdout": null,
+        "stderr": null
+      },
+      "content_type": "application/vnd.chapkit.dataframe+json",
+      "content_size": null
+    },
+    "parent_id": "01M4Y1VRKHMXYVPPMG7CYZVB2C",
+    "level": 1
+  },
+  {
+    "id": "01M4Y23S9ZC5TK9R8C855GXNP8",
+    "created_at": "2026-10-14T20:36:56",
+    "updated_at": "2026-10-14T20:36:56",
+    "tags": [],
+    "data": {
+      "type": "ml_prediction_workspace",
+      "metadata": {
+        "status": "success",
+        "config_id": "01M4Y1VQBNJRQB4GEXKYPXTRHT",
+        "started_at": "2026-10-14T20:36:22.716545+00:00",
+        "completed_at": "2026-10-14T20:36:55.753003+00:00",
+        "duration_seconds": 33.04,
+        "exit_code": 0,
+        "stdout": "Running predictions...\nHistoric: historic.csv \nFuture: future.csv \nOutput: predictions.csv \nConfig: n_lags= 3  precision= 0.01  region_seasonal= FALSE \nCovariates: rainfall, mean_temperature \n[1] \"basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3\"\n [1] \"time_period\"      \"rainfall\"         \"mean_temperature\" \"disease_cases\"   \n [5] \"population\"       \"parent\"           \"location\"         \"Cases\"           \n [9] \"E\"                \"ID_spat\"          \"ID_year\"          \"week\"            \n[13] \"ID_time_cyclic\"   \"ID_time_cyclic2\" \n [1] \"time_period\"                  \"rainfall\"                    \n [3] \"mean_temperature\"             \"disease_cases\"               \n [5] \"population\"                   \"parent\"                      \n [7] \"location\"                     \"Cases\"                       \n [9] \"E\"                            \"ID_spat\"                     \n[11] \"ID_year\"                      \"week\"                        \n[13] \"ID_time_cyclic\"               \"ID_time_cyclic2\"             \n[15] \"basis_rainfall.v1.l1\"         \"basis_rainfall.v1.l2\"        \n[17] \"basis_rainfall.v1.l3\"         \"basis_rainfall.v2.l1\"        \n[19] \"basis_rainfall.v2.l2\"         \"basis_rainfall.v2.l3\"        \n[21] \"basis_rainfall.v3.l1\"         \"basis_rainfall.v3.l2\"        \n[23] \"basis_rainfall.v3.l3\"         \"basis_mean_temperature.v1.l1\"\n[25] \"basis_mean_temperature.v1.l2\" \"basis_mean_temperature.v1.l3\"\n[27] \"basis_mean_temperature.v2.l1\" \"basis_mean_temperature.v2.l2\"\n[29] \"basis_mean_temperature.v2.l3\" \"basis_mean_temperature.v3.l1\"\n[31] \"basis_mean_temperature.v3.l2\" \"basis_mean_temperature.v3.l3\"\nPredictions written to predictions.csv \n",
+        "stderr": "Loading required package: Matrix\nThis is INLA_25.10.19 built 2025-10-19 19:10:20 UTC.\n - See www.r-inla.org/contact-us for how to get help.\n - List available models/likelihoods/etc with inla.list.models()\n - Use inla.doc(<NAME>) to access documentation\n - Consider upgrading R-INLA to testing[26.08.22] or stable[26.08.07] (require R-4.6)\nThis is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').\n\nAttaching package: \u2018dplyr\u2019\n\nThe following objects are masked from \u2018package:stats\u2019:\n\n    filter, lag\n\nThe following objects are masked from \u2018package:base\u2019:\n\n    intersect, setdiff, setequal, union\n\nLinking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE\nLoading required package: spData\nTo access larger datasets in this package, install the spDataLarge\npackage with: `install.packages('spDataLarge',\nrepos='https://nowosad.github.io/drat/', type='source')`\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\nmbind: Function not implemented\n"
+      },
+      "content_type": "application/zip",
+      "content_size": 37754739
+    },
+    "parent_id": "01M4Y22R15MJW01Z31T4ZNE8EN",
+    "level": 2
+  }
+]

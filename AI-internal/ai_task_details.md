@@ -71,3 +71,20 @@ grandparent `CLAUDE.md` added to the settings excludes. `partition_data.py` was 
 `/usr/bin/python3` rather than `.venv/bin/python`; it is stdlib-only, so the output does not
 depend on which, but later runs should use `.venv`. Docker was not running, so nothing from
 the reference image (R package versions, image digest) was obtained yet.
+
+## T4 (2026-10-14) — batch 2
+
+See `AI-generated/batch-reports/26-10-14_b02_referenceThroughChap.md`. Three attempts, all
+kept under `analysis/01_referenceThroughChap/results/`:
+
+- **Attempt 1** stopped after the first failed evaluation. A `$(date)` in `PS4` makes
+  macOS bash 3.2 exit under `set -e` (CH-09).
+- **Attempt 2** ran everything. Monthly EWARS failed; the diagnosis downloaded the failed
+  workspace and found chap's climatology weather provider forecasting the file's `month`
+  column as non-integers (CH-07).
+- **The final run** used contract-only inputs and an explicit weather provider.
+
+The input reduction is an autonomous call that the human may want to revisit. It is flagged
+in the report. `run.sh` step 4 (`summarise_reference.py`) was appended while the final run
+was in progress. Bash picked the new line up and ran it at the end. The provenance record
+says so, and the script was committed after the run, not before.

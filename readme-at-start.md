@@ -21,10 +21,10 @@ non-negotiables: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForCha
 | Anchor | This project |
 |---|---|
 | Evaluation platform or harness | chap-core @ `b8c8f788` with chapkit @ `b8ccd072`, at `Archive/chap-core/`, `Archive/chapkit/` |
-| Metric | chap-core's CRPS (or its default probabilistic metric; confirmed in batch 2); secondary: fidelity layers L1–L4 (plan §2) |
-| Backtest or split scheme | chap-core's backtest from its evaluate command, identical settings for R and Python; recorded as a file in batch 2 |
-| Required baselines | chap-core's standard naive baselines (identified in batch 2) |
-| Reference model | the R original, chapkit_ewars_model @ `964eea8b`, run as its Docker image (pinned by digest in batch 2) |
+| Metric | chap-core's `crps` from `chap export-metrics` (confirmed in batch 2); secondary: fidelity layers L1–L4 (plan §2) |
+| Backtest or split scheme | `chap eval` rolling-origin backtest: 7 splits, 3-period horizon, stride 1, `climatology` future weather; `analysis/01_referenceThroughChap/scripts/backtest_settings.env` |
+| Required baselines | chap-core's built-in `global_median`, `seasonal_median`, `persistence` |
+| Reference model | the R original, chapkit_ewars_model @ `964eea8b`, run as `ghcr.io/chap-models/chapkit_ewars_model@sha256:959fb4f0…c6ff88` (linux/amd64); given the development files reduced to the six-column data contract (JC-05) |
 | Modelling resources to start from | dlnmpy @ `8c5edd79` at `Archive/dlnmpy/`; the R `dlnm` and R-INLA sources from inside the reference image (archived in batch 3) |
 | Data | EWARS repo and chap-core example data, at `Archive/dev-data/` and `Archive/holdout/` with `sha256sums.txt`; licence: that of the shipping repositories (CH-03) |
 | Target | `disease_cases` per location per period (week or month), as 1000 predictive samples per row |
@@ -34,8 +34,9 @@ non-negotiables: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForCha
 ## The article
 
 - **Target venue**: not yet decided.
-- **Status**: batch 1 done: anchors cloned and pinned, data partitioned and holdout sealed,
-  translation ledgers started. Next: batch 2, the R reference through chap and the tutorial.
+- **Status**: batches 1–2 done: anchors pinned, holdout sealed, the R reference scored
+  through chap on both development datasets, tutorial written and verified in a clean shell.
+  Next: batch 3, the translation inventory.
 - **Manuscript**: `Human-AI-collaboration/manuscript/` (empty).
 - **The plan being executed**: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForChap.md`.
   It carries the batch ledger (§6); `/do` runs the next open batch and stops.
