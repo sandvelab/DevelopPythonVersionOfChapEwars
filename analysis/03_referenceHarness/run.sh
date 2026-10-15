@@ -22,11 +22,15 @@ rm -rf results/inputs
 # 3. The instrumented R reference, inside the reference image (env/README.md):
 #    2 datasets x 4 config variants x 5 seeded replicates, plus a seeded repeat.
 rm -rf results/fits
-bash scripts/run_fits.sh results/inputs results/seeds.tsv results/fits 2>&1 | tee results/run_fits.log
+caffeinate -i bash scripts/run_fits.sh results/inputs results/seeds.tsv results/fits 2>&1 | tee results/run_fits.log
 # 4. The L5 noise floor: the R original through chap, 4 unseeded repeats per dataset.
 FRESH=(env -i HOME="$HOME" PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/.local/bin" bash --noprofile --norc)
 rm -rf work/chap_repeats results/chap_repeats
 mkdir -p results/chap_repeats
-"${FRESH[@]}" scripts/run_chap_repeats.sh 4 results/chap_repeats work/chap_repeats 2>&1 | tee results/chap_repeats/run.log
-# 5. Tables of what the runs recorded.
+caffeinate -i "${FRESH[@]}" scripts/run_chap_repeats.sh 4 results/chap_repeats work/chap_repeats 2>&1 | tee results/chap_repeats/run.log
+# 5. CH-20 diagnostic: the default config fitted 3 times per dataset with INLA single-threaded
+#    (not the reference as it runs: tests whether threading causes the refit differences).
+rm -rf results/thread_diagnostic
+caffeinate -i bash scripts/run_thread_diagnostic.sh results/inputs results/seeds.tsv results/thread_diagnostic 2>&1 | tee results/thread_diagnostic.log
+# 6. Tables of what the runs recorded.
 "$PYTHON" scripts/summarise_harness.py results

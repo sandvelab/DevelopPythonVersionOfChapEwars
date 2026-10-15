@@ -8,10 +8,12 @@ Writes to <results_dir>:
                          output between replicate 1 and replicates 2-5 (seeded refits: the
                          fit takes no seed, so any difference is the engine's own), and
                          whether the L4 draws differ (they must, the seeds differ)
+  thread_diagnostic.tsv  CH-20: the single-threaded fits (thread_diagnostic/) compared, file
+                         by file; fit_summary.tsv also carries their rows (run_set)
   seeded_repeat.tsv      replicate 1 against its repeat with the same seeds, file by file:
                          identical content or the largest absolute difference
   chap_repeats.tsv       chap's metrics for every repeated chap evaluation, with its time
-  fits_manifest.sha256   sha256 of every file under fits/ (some are not in git; see claim.md)
+  fits_manifest.sha256   sha256 of every file under fits/ and thread_diagnostic/ (some are not in git; see claim.md)
 
 Usage: summarise_harness.py <results_dir>
 """
@@ -49,18 +51,25 @@ def max_abs_diff(a: Path, b: Path) -> float:
     return float(np.nanmax(d)) if d.size else 0.0
 
 
-# 1. fit_summary.tsv
+# 1. fit_summary.tsv (the sweep, then the single-thread diagnostic if it ran)
+diag = res / "thread_diagnostic"
+runs = [(fits, t) for _, t in timings.iterrows()]
+if (diag / "timings.tsv").exists():
+    runs += [(diag, t) for _, t in pd.read_csv(diag / "timings.tsv", sep="\t").iterrows()]
 rows = []
-for _, t in timings.iterrows():
-    d = fits / t["dataset"] / t["variant"] / t["replicate"]
-    row = dict(t)
+for base_dir, t in runs:
+    d = base_dir / t["dataset"] / t["variant"] / t["replicate"]
+    row = {"run_set": base_dir.name, **dict(t)}
     fi = d / "fit_info.json"
     if fi.exists():
         info = json.loads(fi.read_text())
         off = pd.read_csv(d / "offset_check.csv.gz")
         pred = pd.read_csv(d / "predictions.csv.gz", usecols=[0, 1])
         fixed = pd.read_csv(d / "fixed.csv")
+        log = (d / "run.log").read_text(errors="replace")
         row.update(
+            vb_correction_aborted=log.count("'vb.correction' is aborted"),
+            **{f"theta_mode_{i + 1}": th for i, th in enumerate(info["theta_mode"])},
             nconfig=info["nconfig"], n_theta=len(info["theta_mode"]), mode_status=info["mode_status"],
             num_threads_fit=info["num_threads_fit"], inla_mode=info["inla_mode"],
             int_strategy=info["int_strategy"], fit_seconds=round(info["fit_elapsed_seconds"], 1),
@@ -102,6 +111,22 @@ for ds_dir in sorted(p for p in fits.iterdir() if p.is_dir()):
         rows.append({"dataset": ds_dir.name, "file": f, "identical_content": same, "max_abs_diff": diff})
 pd.DataFrame(rows).to_csv(res / "seeded_repeat.tsv", sep="\t", index=False)
 
+# 3b. thread_diagnostic.tsv: single-threaded runs 2 and 3 against run 1, file by file
+rows = []
+if diag.exists():
+    for ds_dir in sorted(p for p in diag.iterdir() if p.is_dir()):
+        a = ds_dir / "default" / "single_thread_run1"
+        for k in (2, 3):
+            b = ds_dir / "default" / f"single_thread_run{k}"
+            if not ((a / "fit_info.json").exists() and (b / "fit_info.json").exists()):
+                continue
+            for f in sorted(p.name for p in a.iterdir() if p.name not in ("run.log", "fit_info.json")):
+                same = read_bytes(a / f) == read_bytes(b / f)
+                diff = 0.0 if same else (max_abs_diff(a / f, b / f) if ".csv" in f else None)
+                rows.append({"dataset": ds_dir.name, "compared": f"run1 vs run{k}", "file": f,
+                             "identical_content": same, "max_abs_diff": diff})
+    pd.DataFrame(rows).to_csv(res / "thread_diagnostic.tsv", sep="\t", index=False)
+
 # 4. chap_repeats.tsv
 cr = res / "chap_repeats"
 if (cr / "timings.tsv").exists():
@@ -121,7 +146,7 @@ if (cr / "timings.tsv").exists():
 
 # 5. fits_manifest.sha256
 with open(res / "fits_manifest.sha256", "w") as out:
-    for p in sorted(fits.rglob("*")):
+    for p in sorted(list(fits.rglob("*")) + (list(diag.rglob("*")) if diag.exists() else [])):
         if p.is_file():
             out.write(f"{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.relative_to(res)}\n")
 

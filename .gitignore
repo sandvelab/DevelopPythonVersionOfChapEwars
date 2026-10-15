@@ -56,3 +56,4 @@ analysis/03_referenceHarness/results/fits/*/*/rep[2-9]/*.csv.gz
 !analysis/03_referenceHarness/results/fits/*/*/rep[2-9]/predictions.csv.gz
 analysis/03_referenceHarness/results/fits/*/*/rep1_repeat/*.csv.gz
 analysis/03_referenceHarness/results/fits/*/*/*/offset_check.csv.gz
+analysis/03_referenceHarness/results/thread_diagnostic/*/*/single_thread_run[2-9]/*.csv.gz
