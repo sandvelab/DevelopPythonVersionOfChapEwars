@@ -1,3 +1,5 @@
 # Files downloaded from a chapkit workspace are evidence of exactly what a model was given:
 # kept byte for byte, with their CRLF line endings.
 analysis/**/*workspace/** -text
+# Archived imports are kept byte for byte, so their sha256sums.txt manifests hold on checkout.
+Archive/** -text
