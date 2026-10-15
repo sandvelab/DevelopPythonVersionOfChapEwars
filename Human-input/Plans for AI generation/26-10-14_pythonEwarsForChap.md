@@ -222,6 +222,18 @@ Append-only, oldest first.
 | **Every candidate reproduces the model exactly** (likelihood, the installed INLA's default priors, constraints, NA-as-0); INLA's engine settings are candidate-specific and recorded per candidate (JC-13) | `results/inla_defaults.tsv` | agent-autonomous |
 | R-INLA and dlnm sources archived from the versions in the image: r-inla tag `Version_25.10.19` (commit acb55f37), dlnm 2.4.10 from CRAN, and the image's installed code and defaults | `Archive/r-sources/` | agent-autonomous; information: agent-retrieved |
 
+### 2026-10-15 — batch 4: R reference harness
+
+| Decision | Basis | Agency |
+|---|---|---|
+| The harness fits one window per development dataset: the final 3 periods, with observed covariates, in the file shape chap hands the model (JC-14) | the weekly history equals chap's own workspace file value for value | agent-autonomous; information: agent-retrieved |
+| predict.R is instrumented by inserting taps into its parsed body, not by a copy-out; the only changed statement seeds the sampler (JC-15, JC-16) | `instrumentation.txt` in every run directory | agent-autonomous |
+| Seed derivation rule: 1 + sha256("20261014/<component>")[:4] mod (2^31 − 2) (JC-17) | `derive_seeds.py`; stated in readme-at-start.md | agent-autonomous |
+| Per-row files of replicates 2–5 are gitignored, with a sha256 manifest (JC-18) | 168 MB of results | agent-autonomous |
+| L5 noise floor: 4 unseeded chap repeats per dataset, EWARS only (JC-19) | CH-10 | agent-autonomous |
+| **A single-threaded diagnostic was added to the batch** (3 fits per dataset) after refits of identical inputs disagreed | tests the obvious cause of CH-20; it did not explain it | agent-autonomous |
+| **Batch 5 waits for the human** (plan §3, stop and report): the R reference's INLA fit is not reproducible and occasionally degenerates or crashes (CH-20), so how R-vs-R tolerances treat a degenerate R fit is a decision, not a default | `analysis/03_referenceHarness/claim.md` answers 3–5 | agent-autonomous (to stop); the decision itself is the human's |
+
 ## 5. How this plan is used
 
 `/do` runs the next open batch of §6 and stops. Sketched phases become concrete batches as
@@ -237,7 +249,7 @@ it makes a call or meets an obstacle, and re-renders the two documents at its en
 | 1 | A — Orient & set up | Read `readme-at-start.md`, `AGENTS.md`, `MOTIVATION.md`. Archive this plan to `Archive/plan-as-delivered/`. **Clone chap-core, chapkit_ewars_model, chapkit and dlnmpy** with a fetch script in `AI-internal/data-acquisition/`; record each commit, and archive them under `Archive/` with `provenance.md` (`IS_SHADOW`) and checksums. If a clone fails, that is the batch's finding (`CH-01`…). Archive the chap documentation pages needed (evaluating a chapkit model, the CLI) as source material. Archive the development data; select and seal the holdout (§4). Create the two translation ledgers and the renderer. Fill in `readme-at-start.md` from this plan, and write the root `analysis/claim.md`. Re-verify the §4 facts about the R code against the pinned clone. No modelling. | done |
 | 2 | B — Reference through chap + tutorial | Find from the archived docs how chap-core evaluates a chapkit service. Script it from a *fresh shell* (no inherited env): install chap-core per its docs (uv), start the original EWARS service (pinned image), run chap's evaluation on the development data with the backtest settings fixed here and written to file, and capture every command and its output. Produce the R reference's first file-grounded chap scores, plus the chap baselines through the same pipeline. Write the **tutorial** from the script and its log. A second clean-shell run of the tutorial's commands, diffed, confirms they are complete. | done |
 | 3 | B — Translation inventory | Read `predict.R`, `lib.R`, `train.R` and `main.py` in full. Produce a file mapping **every R call** to its Python counterpart or a gap (dplyr→pandas; `crossbasis`/`equalknots`→dlnmpy; `inla`, `f(...)`, `inla.posterior.sample`, `rnbinom`→?). Retrieve INLA's default hyperpriors and parametrisations from the INLA documentation and source inside the reference image, and archive them. Search for existing Python INLA implementations and assess any that exist. Archive the R sources needing parallel ports. Seed the JC and CH ledgers with what this inventory reveals. | done |
-| 4 | B — Reference harness | An R instrumentation node, run inside the reference image, that emits for each development dataset × config variant (defaults; `region_seasonal=true`; `n_lags=[3,6]`; covariates `[]`): the L1 derived frame, the L2 cross-basis matrices, the L3 INLA posterior summaries, and the L4 predictive samples, each **for at least 5 seeds**, to measure the R noise floor at L3–L5. Also run 2+ chap evaluations of the R model with different seeds for the L5 noise floor. | open |
+| 4 | B — Reference harness | An R instrumentation node, run inside the reference image, that emits for each development dataset × config variant (defaults; `region_seasonal=true`; `n_lags=[3,6]`; covariates `[]`): the L1 derived frame, the L2 cross-basis matrices, the L3 INLA posterior summaries, and the L4 predictive samples, each **for at least 5 seeds**, to measure the R noise floor at L3–L5. Also run 2+ chap evaluations of the R model with different seeds for the L5 noise floor. | done — **stopped for the human: CH-20** |
 | 5 | B — Fidelity metrics | Scripts computing L1–L5 comparisons from files. Verify them on R-vs-R (they must report "within noise floor"). **Write and commit the tolerance file before any Python prediction exists.** | open |
 | 6 | C — Data layer + cross-basis | A Python port of the adapters and `lib.R` offsets (L1 exact), and the cross-basis via `dlnmpy` (L2 ≤1e-8) on every variant. Any `dlnmpy` gap is ported in parallel from the archived R `dlnm` source and tested against R, and logged as a CH entry. | open |
 | 7 | C — Model primitives | Python ports of the INLA pieces common to all candidates: the cyclic RW1 structure matrix and `inla.scale.model` scaling, the constraints, iid with replicate, the NB likelihood in INLA's parametrisation, and the default priors. Each is checked against the archived R/INLA values. | open |
@@ -256,3 +268,4 @@ it makes a call or meets an obstacle, and re-renders the two documents at its en
 - Batch 1 — [[26-10-14_b01_orientAndSetUp]]
 - Batch 2 — [[26-10-14_b02_referenceThroughChap]]
 - Batch 3 — [[26-10-14_b03_translationInventory]]
+- Batch 4 — [[26-10-15_b04_referenceHarness]]

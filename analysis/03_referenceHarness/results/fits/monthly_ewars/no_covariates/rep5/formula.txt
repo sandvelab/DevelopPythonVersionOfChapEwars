@@ -1,0 +1,1 @@
+Cases ~ 1 + f(ID_spat, model = "iid", replicate = ID_year) + f(ID_time_cyclic, model = "rw1", cyclic = TRUE, scale.model = TRUE)

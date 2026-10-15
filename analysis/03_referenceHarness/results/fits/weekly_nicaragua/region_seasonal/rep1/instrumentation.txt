@@ -1,0 +1,6 @@
+predict_chap body: 37 statements; instrumented: 42
+inserted after statement 23: .tap_frame(df, lagged_formula)
+inserted before statement 24: .t0 <- proc.time()[["elapsed"]]
+inserted after statement 24: .tap_fit(model, proc.time()[["elapsed"]] - .t0)
+replaced statement 30 [xx <- inla.posterior.sample(s, model)] by: set.seed(.r_seed); xx <- inla.posterior.sample(s, model, seed = .inla_seed)
+inserted after statement 31: .tap_samples(xx, xx.s, df, idx.pred, model)

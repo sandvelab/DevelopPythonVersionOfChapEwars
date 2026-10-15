@@ -28,15 +28,17 @@ non-negotiables: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForCha
 | Modelling resources to start from | dlnmpy @ `8c5edd79` at `Archive/dlnmpy/`; R-INLA 25.10.19 (tag commit `acb55f37`) and dlnm 2.4.10 sources, plus the reference image's installed code and defaults, at `Archive/r-sources/` |
 | Data | EWARS repo and chap-core example data, at `Archive/dev-data/` and `Archive/holdout/` with `sha256sums.txt`; licence: that of the shipping repositories (CH-03) |
 | Target | `disease_cases` per location per period (week or month), as 1000 predictive samples per row |
-| Development data | `Archive/dev-data/`: EWARS monthly example (23 locations, 2001-01..2017-06); Nicaragua weekly, periods before 2018-01-01 |
+| Development data | `Archive/dev-data/`: EWARS monthly example (23 locations, cases 2001-01..2016-12, plus a covariate-only future file to 2017-06); Nicaragua weekly, periods before 2018-01-01 |
 | Held-out data | `Archive/holdout/`, sealed: Laos monthly subset (3 locations); Nicaragua weekly targets from 2018-01-01 |
 
 ## The article
 
 - **Target venue**: not yet decided.
-- **Status**: batches 1–3 done: anchors pinned, holdout sealed, the R reference scored
-  through chap on both development datasets, tutorial verified, every R call mapped to Python
-  and the main environment pinned. Next: batch 4, the R reference harness (noise floor).
+- **Status**: batches 1–4 done: anchors pinned, holdout sealed, the R reference scored
+  through chap on both development datasets, tutorial verified, every R call mapped to Python,
+  main environment pinned, and the R reference instrumented at L1–L4 with its run-to-run
+  spread measured. **Halted before batch 5 for a human decision**: the R reference's INLA fit
+  is not reproducible on identical inputs and occasionally degenerates or crashes (CH-20).
 - **Manuscript**: `Human-AI-collaboration/manuscript/` (empty).
 - **The plan being executed**: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForChap.md`.
   It carries the batch ledger (§6); `/do` runs the next open batch and stops.
@@ -45,7 +47,7 @@ non-negotiables: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForCha
 
 | Setting | Value |
 |---|---|
-| Project random seed | `20261014`. Every component seed derives from it (`AI-internal/skill-references/provenance-record.md`). |
+| Project random seed | `20261014`. Component seed = 1 + (first 4 bytes of sha256(`"20261014/<component>"`), big-endian) mod (2³¹ − 2), so it is valid for R, INLA and numpy (JC-17; first used in `analysis/03_referenceHarness/scripts/derive_seeds.py`). |
 | Main environment | Python 3.13.0 with numpy, scipy, pandas, pyyaml and dlnmpy @ `8c5edd79`, pinned in batch 3; the inference libraries are added when batches 8–10 build the candidates. Installed from `environment/lock.txt` by `environment/install-env.sh`. Invoked as `environment/env/bin/python`. Docker image: yes — the R reference is one, and the Python model ships one so chap drives both identically. |
 | Repository machinery interpreter | `.venv`, per `setup-guide.md` §3. |
 | Tracking level | standard (`AGENTS.md` §6). |

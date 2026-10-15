@@ -1,0 +1,78 @@
+This is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Linking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE
+Loading required package: spData
+To access larger datasets in this package, install the spDataLarge
+package with: `install.packages('spDataLarge',
+repos='https://nowosad.github.io/drat/', type='source')`
+Config: n_lags= 3  precision= 0.01  region_seasonal= FALSE 
+Covariates: rainfall, mean_temperature 
+[1] "basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3"
+ [1] "time_period"      "rainfall"         "mean_temperature" "disease_cases"   
+ [5] "population"       "parent"           "location"         "Cases"           
+ [9] "E"                "ID_spat"          "ID_year"          "month"           
+[13] "ID_time_cyclic"   "ID_time_cyclic2" 
+ [1] "time_period"                  "rainfall"                    
+ [3] "mean_temperature"             "disease_cases"               
+ [5] "population"                   "parent"                      
+ [7] "location"                     "Cases"                       
+ [9] "E"                            "ID_spat"                     
+[11] "ID_year"                      "month"                       
+[13] "ID_time_cyclic"               "ID_time_cyclic2"             
+[15] "basis_rainfall.v1.l1"         "basis_rainfall.v1.l2"        
+[17] "basis_rainfall.v1.l3"         "basis_rainfall.v2.l1"        
+[19] "basis_rainfall.v2.l2"         "basis_rainfall.v2.l3"        
+[21] "basis_rainfall.v3.l1"         "basis_rainfall.v3.l2"        
+[23] "basis_rainfall.v3.l3"         "basis_mean_temperature.v1.l1"
+[25] "basis_mean_temperature.v1.l2" "basis_mean_temperature.v1.l3"
+[27] "basis_mean_temperature.v2.l1" "basis_mean_temperature.v2.l2"
+[29] "basis_mean_temperature.v2.l3" "basis_mean_temperature.v3.l1"
+[31] "basis_mean_temperature.v3.l2" "basis_mean_temperature.v3.l3"
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=66
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 881 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=560
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 9 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=2943
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 2 NAN/INF values in logl
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+Predictions written to /out/predictions.csv 
+done: /out 

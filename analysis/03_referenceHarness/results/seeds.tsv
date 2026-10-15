@@ -1,0 +1,6 @@
+replicate	r_component	r_seed	inla_component	inla_seed
+rep1	referenceHarness/rep1/R	824815638	referenceHarness/rep1/INLA	736591142
+rep2	referenceHarness/rep2/R	1556955760	referenceHarness/rep2/INLA	1382804434
+rep3	referenceHarness/rep3/R	319175567	referenceHarness/rep3/INLA	2107892836
+rep4	referenceHarness/rep4/R	743015727	referenceHarness/rep4/INLA	1377112577
+rep5	referenceHarness/rep5/R	1254647171	referenceHarness/rep5/INLA	2008979042

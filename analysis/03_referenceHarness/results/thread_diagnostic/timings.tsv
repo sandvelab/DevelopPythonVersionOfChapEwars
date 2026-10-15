@@ -1,0 +1,7 @@
+dataset	variant	replicate	seconds	exit_code
+monthly_ewars	default	single_thread_run1	53	0
+monthly_ewars	default	single_thread_run2	50	0
+monthly_ewars	default	single_thread_run3	56	0
+weekly_nicaragua	default	single_thread_run1	48	1
+weekly_nicaragua	default	single_thread_run2	64	0
+weekly_nicaragua	default	single_thread_run3	66	0

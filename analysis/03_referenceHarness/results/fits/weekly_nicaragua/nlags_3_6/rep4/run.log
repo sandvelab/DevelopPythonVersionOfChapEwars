@@ -1,0 +1,160 @@
+Loading required package: Matrix
+This is INLA_25.10.19 built 2025-10-19 19:10:20 UTC.
+ - See www.r-inla.org/contact-us for how to get help.
+ - List available models/likelihoods/etc with inla.list.models()
+ - Use inla.doc(<NAME>) to access documentation
+ - Consider upgrading R-INLA to testing[26.08.22] or stable[26.08.07] (require R-4.6)
+This is dlnm 2.4.10. For details: help(dlnm) and vignette('dlnmOverview').
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Linking to GEOS 3.13.1, GDAL 3.10.3, PROJ 9.6.0; sf_use_s2() is TRUE
+Loading required package: spData
+To access larger datasets in this package, install the spDataLarge
+package with: `install.packages('spDataLarge',
+repos='https://nowosad.github.io/drat/', type='source')`
+Config: n_lags= 3,6  precision= 0.01  region_seasonal= FALSE 
+Covariates: rainfall, mean_temperature 
+[1] "basis_rainfall.v1.l1 + basis_rainfall.v1.l2 + basis_rainfall.v1.l3 + basis_rainfall.v2.l1 + basis_rainfall.v2.l2 + basis_rainfall.v2.l3 + basis_rainfall.v3.l1 + basis_rainfall.v3.l2 + basis_rainfall.v3.l3 + basis_mean_temperature.v1.l1 + basis_mean_temperature.v1.l2 + basis_mean_temperature.v1.l3 + basis_mean_temperature.v1.l4 + basis_mean_temperature.v1.l5 + basis_mean_temperature.v2.l1 + basis_mean_temperature.v2.l2 + basis_mean_temperature.v2.l3 + basis_mean_temperature.v2.l4 + basis_mean_temperature.v2.l5 + basis_mean_temperature.v3.l1 + basis_mean_temperature.v3.l2 + basis_mean_temperature.v3.l3 + basis_mean_temperature.v3.l4 + basis_mean_temperature.v3.l5"
+ [1] "time_period"      "rainfall"         "mean_temperature" "disease_cases"   
+ [5] "population"       "parent"           "location"         "Cases"           
+ [9] "E"                "ID_spat"          "ID_year"          "week"            
+[13] "ID_time_cyclic"   "ID_time_cyclic2" 
+ [1] "time_period"                  "rainfall"                    
+ [3] "mean_temperature"             "disease_cases"               
+ [5] "population"                   "parent"                      
+ [7] "location"                     "Cases"                       
+ [9] "E"                            "ID_spat"                     
+[11] "ID_year"                      "week"                        
+[13] "ID_time_cyclic"               "ID_time_cyclic2"             
+[15] "basis_rainfall.v1.l1"         "basis_rainfall.v1.l2"        
+[17] "basis_rainfall.v1.l3"         "basis_rainfall.v2.l1"        
+[19] "basis_rainfall.v2.l2"         "basis_rainfall.v2.l3"        
+[21] "basis_rainfall.v3.l1"         "basis_rainfall.v3.l2"        
+[23] "basis_rainfall.v3.l3"         "basis_mean_temperature.v1.l1"
+[25] "basis_mean_temperature.v1.l2" "basis_mean_temperature.v1.l3"
+[27] "basis_mean_temperature.v1.l4" "basis_mean_temperature.v1.l5"
+[29] "basis_mean_temperature.v2.l1" "basis_mean_temperature.v2.l2"
+[31] "basis_mean_temperature.v2.l3" "basis_mean_temperature.v2.l4"
+[33] "basis_mean_temperature.v2.l5" "basis_mean_temperature.v3.l1"
+[35] "basis_mean_temperature.v3.l2" "basis_mean_temperature.v3.l3"
+[37] "basis_mean_temperature.v3.l4" "basis_mean_temperature.v3.l5"
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=14
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 300 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=1257
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 583 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=3754
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 2574 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=4242
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 1215 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=7210
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 7 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=7235
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 178 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=4162
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 278 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=7086
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 209 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=7034
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 15 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=14
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 976 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=3930
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 85 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=4135
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 2907 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=2714
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 3617 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=5619
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 2525 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=5425
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 1287 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=15
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 892 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=2893
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 648 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=4315
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 1550 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=4216
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 1292 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=9
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 1523 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=2573
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 2530 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=6629
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 2105 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=1590
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 2506 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=1749
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 1416 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=2562
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=4291
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=989
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 8650 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=16
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 656 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=18
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 57 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=2096
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 279 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=2396
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 4861 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=4344
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 743 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=5232
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 1247 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=6
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 1951 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=2239
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 2164 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=4938
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 2038 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=16
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 2552 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=4421
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 1423 NAN/INF values in logl
+ *** WARNING *** GMRFLib_2order_approx: rescue NAN/INF values in logl for idx=6312
+ *** WARNING *** GMRFLib_2order_approx: reset counter for 741 NAN/INF values in logl
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+mbind: Function not implemented
+Predictions written to /out/predictions.csv 
+Warning message:
+In inla.posterior.sample(n, rfake, intern = intern, use.improved.mean = use.improved.mean,  :
+  Since 'seed!=0', parallel model is disabled and serial model is selected, num.threads='1:1'
+done: /out 

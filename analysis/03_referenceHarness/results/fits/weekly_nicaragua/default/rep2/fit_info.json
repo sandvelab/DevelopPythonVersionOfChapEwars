@@ -1,0 +1,35 @@
+{
+  "inla_version": "25.10.19",
+  "dlnm_version": "2.4.10",
+  "r_version": "R version 4.5.0 (2025-04-11)",
+  "inla_mode": "compact",
+  "strategy": "adaptive",
+  "int_strategy": "auto",
+  "vb_enable": "auto",
+  "num_threads_option": "8:1",
+  "num_threads_fit": "8:1",
+  "nconfig": 15,
+  "theta_tags": [
+    "log size for the nbinomial observations (1/overdispersion)",
+    "Log precision for ID_spat",
+    "Log precision for ID_time_cyclic"
+  ],
+  "theta_mode": [
+    0.681010395272369,
+    -0.306025786630508,
+    2.75381041101234
+  ],
+  "mode_status": 0,
+  "dic": 57855.5870497538,
+  "cpu_used": {
+    "Pre": 3.98818874359131,
+    "Running": 24.1906354427338,
+    "Post": 0.264968872070312,
+    "Total": 28.4437930583954
+  },
+  "fit_elapsed_seconds": 28.731,
+  "n_rows": 7310,
+  "r_seed": 1556955760,
+  "inla_seed": 1382804434,
+  "total_elapsed_seconds": 61.381
+}

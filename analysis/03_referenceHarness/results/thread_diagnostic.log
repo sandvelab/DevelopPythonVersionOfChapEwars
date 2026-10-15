@@ -1,0 +1,6 @@
+monthly_ewars single_thread_run1 rc=0 53s
+monthly_ewars single_thread_run2 rc=0 50s
+monthly_ewars single_thread_run3 rc=0 56s
+weekly_nicaragua single_thread_run1 rc=1 48s
+weekly_nicaragua single_thread_run2 rc=0 64s
+weekly_nicaragua single_thread_run3 rc=0 66s

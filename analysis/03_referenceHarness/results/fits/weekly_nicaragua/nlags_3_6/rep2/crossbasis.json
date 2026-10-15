@@ -1,0 +1,40 @@
+[
+  {
+    "df": [3, 3],
+    "range": [2.87095711352473e-07, 0.076875008639267],
+    "lag": [1, 3],
+    "argvar": {
+      "fun": "ns",
+      "knots": [0.0256251942768966, 0.0512501014580817],
+      "intercept": false,
+      "Boundary.knots": [2.87095711352473e-07, 0.076875008639267]
+    },
+    "arglag": {
+      "fun": "ns",
+      "knots": 2,
+      "intercept": true,
+      "Boundary.knots": [1, 3]
+    },
+    "group": 10,
+    "class": ["crossbasis", "matrix"]
+  },
+  {
+    "df": [3, 5],
+    "range": [290.747904109002, 304.979991740659],
+    "lag": [1, 6],
+    "argvar": {
+      "fun": "ns",
+      "knots": [295.491933319554, 300.235962530107],
+      "intercept": false,
+      "Boundary.knots": [290.747904109002, 304.979991740659]
+    },
+    "arglag": {
+      "fun": "ns",
+      "knots": [2.25, 3.5, 4.75],
+      "intercept": true,
+      "Boundary.knots": [1, 6]
+    },
+    "group": 10,
+    "class": ["crossbasis", "matrix"]
+  }
+]
