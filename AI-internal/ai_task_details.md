@@ -105,3 +105,26 @@ See `AI-generated/batch-reports/26-10-14_b03_translationInventory.md`.
   `.gitattributes`, plus re-adding the two folders, fixed it. A fresh clone now verifies
   the manifests of all seven archive folders (batch 1's included, which were unaffected).
   The batch-2 workspace CSVs under `analysis/**/*workspace/` already had the same rule.
+
+## T6 (2026-10-15) — batch 4
+
+See `AI-generated/batch-reports/26-10-15_b04_referenceHarness.md` and
+`analysis/03_referenceHarness/claim.md`.
+- **What did not go to plan.** The seeded repeat was meant to show that a seeded run
+  reproduces bit for bit. Its INLA fit differed instead: in the monthly case it reached a
+  degenerate mode, while INLA reported success. A single-thread diagnostic was added to test
+  threading as the cause. It did not explain the differences: single-threaded weekly fits
+  crashed or degenerated too. One monthly chap repeat crashed in INLA. The sampler's own
+  seeded reproducibility therefore remains untested in isolation (JC-15). A follow-up would
+  draw twice from one saved fit.
+- **Files written after the "before" commit.** `run_thread_diagnostic.sh`,
+  `instrument_single_thread.R` and the summariser extension were written while the sweep ran,
+  and committed at the contents they ran with (eb47134). Each provenance record says so.
+- **Host sleep.** The Mac slept during the sweep, so wall-clock timings are upper bounds
+  (CH-21). `run.sh` now uses `caffeinate -i`; the sweep itself did not.
+- **Storage.** 168 MB of results. The per-row files of replicates 2–5 are gitignored, with a
+  sha256 manifest (JC-18). Because of CH-20, a re-run does not regenerate them bit for bit.
+- **Follow-ups.**
+  - The human chooses how degenerate R fits enter the noise floor before batch 5 (report,
+    "For the human").
+  - Optionally, test on native amd64 whether emulation causes CH-20.

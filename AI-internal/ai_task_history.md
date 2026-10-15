@@ -29,3 +29,12 @@ reader who was not present can follow, and keep them honest about what did not w
   pinned the main environment. Then made `Archive/` byte-exact in git (`.gitattributes`), after
   git had normalised CRLF line endings in the new imports; every archive manifest verified on
   a fresh clone.
+- T6 (2026-10-15): Batch 4, the R reference harness (`analysis/03_referenceHarness/`).
+  - The archived `predict_chap` is instrumented by inserting taps into its parsed body; the
+    only changed statement seeds the sampler.
+  - 42 fits: 2 datasets × 4 variants × 5 seeded replicates, plus a seeded repeat. Each writes
+    L1–L4 to file.
+  - 4 unseeded chap repeats per dataset (L5), and a single-thread diagnostic.
+  - Findings: L1/L2 are deterministic; INLA's Predictor includes log(E) (CH-19 resolved); the
+    INLA fit is not reproducible on identical inputs and sometimes degenerates or crashes,
+    single-threaded too (CH-20). Batch 5 is held for the human.
