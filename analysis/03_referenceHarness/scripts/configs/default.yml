@@ -1,0 +1,10 @@
+# The EwarsConfig defaults of the pinned main.py, in the flat form chapkit writes to the
+# workspace's config.yml (seen in ../../01_referenceThroughChap/results/run1/weekly_workspace/).
+additional_continuous_covariates:
+- rainfall
+- mean_temperature
+n_lags:
+- 3
+precision: 0.01
+prediction_periods: 3
+region_seasonal: false

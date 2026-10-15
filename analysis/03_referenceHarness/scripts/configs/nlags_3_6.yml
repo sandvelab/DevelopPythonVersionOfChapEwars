@@ -1,0 +1,10 @@
+# default.yml with per-covariate lags: rainfall 3, mean_temperature 6.
+additional_continuous_covariates:
+- rainfall
+- mean_temperature
+n_lags:
+- 3
+- 6
+precision: 0.01
+prediction_periods: 3
+region_seasonal: false

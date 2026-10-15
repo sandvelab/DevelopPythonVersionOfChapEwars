@@ -1,0 +1,7 @@
+# default.yml without covariates: predict.R takes generate_bacic_model (no cross-basis).
+additional_continuous_covariates: []
+n_lags:
+- 3
+precision: 0.01
+prediction_periods: 3
+region_seasonal: false

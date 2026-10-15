@@ -47,3 +47,12 @@ Archive/chap-core/src/
 # The fitted INLA object inside a downloaded chapkit workspace (~37 MB): regenerable by
 # re-running the node, and not read by anything downstream.
 analysis/**/workspace/model.rds
+
+# Reference harness (analysis/03_referenceHarness): the bulky per-row files of the seeded
+# replicates 2-5 and of the seeded repeat are regenerable by its run.sh and listed with their
+# sha256 in results/fits_manifest.sha256. Replicate 1 is kept in full, and every replicate's
+# predictions and summaries are kept. The offset check is reduced to fit_summary.tsv.
+analysis/03_referenceHarness/results/fits/*/*/rep[2-9]/*.csv.gz
+!analysis/03_referenceHarness/results/fits/*/*/rep[2-9]/predictions.csv.gz
+analysis/03_referenceHarness/results/fits/*/*/rep1_repeat/*.csv.gz
+analysis/03_referenceHarness/results/fits/*/*/*/offset_check.csv.gz

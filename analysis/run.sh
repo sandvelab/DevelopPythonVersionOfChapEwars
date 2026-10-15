@@ -13,3 +13,4 @@ PYTHON="$REPO_ROOT/environment/env/bin/python"
 # Sub-analyses: every child runs, in order.
 bash "01_referenceThroughChap/run.sh"
 bash "02_translationInventory/run.sh"
+bash "03_referenceHarness/run.sh"
