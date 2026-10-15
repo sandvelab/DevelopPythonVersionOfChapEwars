@@ -19,6 +19,8 @@ replaced by an updated import.
   and re-verified by the node that reads them. The `(IS_SHADOW)` line marker cannot be
   applied to a data file — inserting a line would edit it and break its checksum — so the
   folder's `README.md` and `provenance.md` carry the statement instead.
+- **Byte for byte in git.** `.gitattributes` sets `Archive/** -text`, so git never rewrites
+  line endings in an import and the manifests verify on any checkout.
 - **Pin by commit, not by branch.** A file fetched from another repository's current state
   depends on that repository; the commit is recorded so a later reader can tell whether the
   source has moved.

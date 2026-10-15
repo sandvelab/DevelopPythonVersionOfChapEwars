@@ -99,3 +99,9 @@ See `AI-generated/batch-reports/26-10-14_b03_translationInventory.md`.
   assessment uses PyPI's JSON API and pylgm's archived sdist instead.
 - **The mapping is a judgment.** The parser output is mechanical, but the Python column and
   notes of `call_mapping.tsv` are mine.
+- **Line endings in the archive (commit 83bad6b).** Git normalised CRLF line endings in
+  the newly archived dlnm, r-inla and pylgm files when batch 3 was committed (00e8d63).
+  A fresh checkout would then have failed their `sha256sums.txt`. `Archive/** -text` in
+  `.gitattributes`, plus re-adding the two folders, fixed it. A fresh clone now verifies
+  the manifests of all seven archive folders (batch 1's included, which were unaffected).
+  The batch-2 workspace CSVs under `analysis/**/*workspace/` already had the same rule.

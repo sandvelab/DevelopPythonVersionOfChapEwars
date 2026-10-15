@@ -26,4 +26,6 @@ reader who was not present can follow, and keep them honest about what did not w
 - T5 (2026-10-14): Ran batch 3: archived R-INLA 25.10.19 and dlnm 2.4.10 sources and the
   reference image's installed defaults; listed every R call with R's parser and mapped each
   to Python (none unmapped); assessed existing Python INLAs (none usable as candidate c);
-  pinned the main environment.
+  pinned the main environment. Then made `Archive/` byte-exact in git (`.gitattributes`), after
+  git had normalised CRLF line endings in the new imports; every archive manifest verified on
+  a fresh clone.
