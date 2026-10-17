@@ -38,3 +38,10 @@ reader who was not present can follow, and keep them honest about what did not w
   - Findings: L1/L2 are deterministic; INLA's Predictor includes log(E) (CH-19 resolved); the
     INLA fit is not reproducible on identical inputs and sometimes degenerates or crashes,
     single-threaded too (CH-20). Batch 5 is held for the human.
+- T7 (2026-10-17): Batches 5–8 (candidate a) and 11, after the human's answer to CH-20: no
+  pass/fail, a closeness report with the R reference counted as it runs, and a runnable model.
+  - Built the Python EWARS model as a chapkit service
+    (`analysis/05_pythonModel/scripts/chapkit_ewars_python/`, run guide in its README),
+    following INLA's compact-mode engine from its archived C source (`Archive/r-inla-gmrflib/`).
+  - Findings: L1 exact, L2 4.4e-16; L3–L4 inside the R refits' own spread; chap CRPS overlaps
+    the R runs' range on both datasets. Report: `analysis/06_closenessReport/results/closeness_report.md`.

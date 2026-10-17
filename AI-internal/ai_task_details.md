@@ -128,3 +128,25 @@ See `AI-generated/batch-reports/26-10-15_b04_referenceHarness.md` and
   - The human chooses how degenerate R fits enter the noise floor before batch 5 (report,
     "For the human").
   - Optionally, test on native amd64 whether emulation causes CH-20.
+
+## T7 (2026-10-17) — batches 5–8 (candidate a) and 11
+
+- **The human's decisions** (plan §4b, 2026-10-17): no tolerance file and no pass/fail; R's
+  degenerate fits and crashes counted, not excluded; a runnable chap-compatible Python model
+  with a short guide. Batches ran 5, 6, 7, 8 (candidate a only), 11; candidate (b) is open.
+- **Nodes.** `04_fidelityMetrics` (measures, R-vs-R), `05_pythonModel` (package; children
+  data layer, primitives, `03_inference/a_laplaceCcd`, `04_throughChap`), `06_closenessReport`.
+  Every node imports the one package, so the code tested is the code served (JC-20).
+- **The engine.** A subagent wrote a source-cited spec of INLA's compact mode
+  (`a_laplaceCcd/results/inla_spec.md`). Details that mattered: 1e-4 added to the RW1 diagonal,
+  the (N−r)/2·θ prior normalisation, configs sampled by density × CCD weight, and the
+  VB-corrected sampling mean; `strategy='adaptive'` and `skew.corr` do nothing in compact
+  mode. Departures are in JC-28.
+- **What went wrong and was fixed.** The first R-vs-R comparison matched replicated random
+  effects on ID and paired all years with each other (CH-24). pandas' default float parser
+  was off by up to 3.7e-9 (CH-25). Two claims were drafted too strongly and were corrected
+  before committing: monthly Python CRPS overlaps R's range, it is not inside it; and the
+  objective-match figure is 0.021, not 0.016 (JC-31).
+- **Follow-ups.** Candidate (b) (MCMC); phase D, whose budget can now use the measured costs;
+  the holdout. On monthly data EWARS (R and Python alike) scores worse than seasonal_median
+  and persistence, which is a finding about the model rather than the translation.
