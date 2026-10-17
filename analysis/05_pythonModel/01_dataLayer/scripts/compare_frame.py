@@ -22,14 +22,14 @@ from ewars_python.frame import build_frame, parse_config  # noqa: E402
 
 DATASETS = ["monthly_ewars", "weekly_nicaragua"]
 VARIANTS = ["default", "nlags_3_6", "no_covariates", "region_seasonal"]
-out.mkdir(parents=True, exist_ok=True)
+(out / "frames").mkdir(parents=True, exist_ok=True)
 rows, cols_detail = [], []
 for ds in DATASETS:
     for var in VARIANTS:
         cfg = parse_config(configs / f"{var}.yml")
         mf = build_frame(harness / "inputs" / ds / "historic.csv", harness / "inputs" / ds / "future.csv", cfg)
         py = mf.df
-        with gzip.open(out / f"frame_{ds}_{var}.csv.gz", "wt") as fh:
+        with gzip.open(out / "frames" / f"frame_{ds}_{var}.csv.gz", "wt") as fh:
             py.to_csv(fh, index=False)
         rdir = harness / "fits" / ds / var / "rep1"
         r = pd.read_csv(rdir / "model_frame.csv.gz", keep_default_na=False, na_values=["NA"], float_precision="round_trip")

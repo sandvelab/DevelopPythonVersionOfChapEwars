@@ -196,5 +196,50 @@
   "solution": "Confirmed numerically in every fit: Predictor minus the linear predictor rebuilt from one posterior draw's components equals log(E) to at most 1.2e-14 (47 fits, fit_summary.tsv)",
   "status": "solved",
   "details": "The same check confirms three things the Python port depends on: iid with replicate=ID_year indexes value j of replicate r at (r-1)*n + j; the region-specific cyclic RW1 with replicate=ID_spat indexes the same way; and missing basis values enter the linear predictor as 0 (CH-16)."
+ },
+ {
+  "date": "2026-10-17",
+  "batch": 5,
+  "id": "CH-23",
+  "challenge": "The human's answer to CH-20: no tolerance and no pass/fail; the R reference counts as it runs",
+  "solution": "Batch 5 describes closeness at every layer and labels every R fit's health; flagged fits and crashes are counted and shown, not excluded (plan §4b, 2026-10-17)",
+  "status": "solved",
+  "details": "Of the 42 sweep fits, 41 are clean and 1 flagged (monthly default, the seeded repeat). Of the 6 single-threaded diagnostic fits, 3 are clean (monthly), 2 flagged and 1 crashed (weekly). Of 5 monthly chap evaluations, 1 crashed (analysis/04_fidelityMetrics/results/r_fit_health_counts.tsv, l5_evaluations.tsv)."
+ },
+ {
+  "date": "2026-10-17",
+  "batch": 5,
+  "id": "CH-24",
+  "challenge": "A replicated random effect lists its IDs once per replicate, so matching two runs on ID pairs every replicate with every other",
+  "solution": "Random-effect values are matched on their position, INLA's internal index (r-1)n+j (CH-22), with the ID kept for reading",
+  "status": "solved",
+  "details": "Found on the first R-vs-R run: the iid term's shifts between clean refits came out at a median of 3 posterior sds; keyed by position they are 0.006 or less."
+ },
+ {
+  "date": "2026-10-17",
+  "batch": 6,
+  "id": "CH-25",
+  "challenge": "pandas' default CSV float parser is not round-trip exact",
+  "solution": "Every CSV is read with float_precision='round_trip', as R's read.csv parses; the frame then matches R's exactly",
+  "status": "solved",
+  "details": "With the default parser, population (and so E and the offset) differed from R's by up to 3.7e-9 on the monthly data."
+ },
+ {
+  "date": "2026-10-17",
+  "batch": 7,
+  "id": "CH-26",
+  "challenge": "Two INLA implementations of scale.model differ in the 8th digit",
+  "solution": "The port follows the C library (gmrflib/rw.c GMRFLib_rw_scale, which adds sqrt(DBL_EPSILON) to the diagonal before inverting); R's inla.scale.model is used only as a cross-check",
+  "status": "solved",
+  "details": "Scaling factors for 12, 52 and 53 nodes agree with R's inla.scale.model to 1.3e-8 relative (analysis/05_pythonModel/02_modelPrimitives/results/primitives_check.tsv)."
+ },
+ {
+  "date": "2026-10-17",
+  "batch": 5,
+  "id": "CH-27",
+  "challenge": "The Docker daemon was not running at the start of the session",
+  "solution": "Started by the agent (open -a Docker); needed for the INLA checks in the reference image and the Python service image",
+  "status": "solved",
+  "details": "-"
  }
 ]

@@ -1,0 +1,11 @@
+run_set	dataset	variant	clean	crashed	flagged
+fits	monthly_ewars	default	5	0	1
+fits	monthly_ewars	nlags_3_6	5	0	0
+fits	monthly_ewars	no_covariates	5	0	0
+fits	monthly_ewars	region_seasonal	5	0	0
+fits	weekly_nicaragua	default	6	0	0
+fits	weekly_nicaragua	nlags_3_6	5	0	0
+fits	weekly_nicaragua	no_covariates	5	0	0
+fits	weekly_nicaragua	region_seasonal	5	0	0
+thread_diagnostic	monthly_ewars	default	3	0	0
+thread_diagnostic	weekly_nicaragua	default	0	1	2

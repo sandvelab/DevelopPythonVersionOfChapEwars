@@ -1,0 +1,19 @@
+[project]
+name = "chapkit-ewars-model-python"
+version = "0.1.0"
+description = "Python translation of the chapkit CHAP-EWARS model (R-INLA + dlnm): dlnmpy for the cross-basis and an INLA-style Laplace approximation in Python, served with chapkit for chap-core."
+requires-python = ">=3.13"
+dependencies = [
+    "chapkit==2.2.0",
+    "dlnmpy",
+    "numpy==2.5.4",
+    "pandas==3.0.6",
+    "pyyaml==6.0.3",
+    "scipy==1.18.1",
+]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+dlnmpy = { git = "https://github.com/Logic06183/dlnmpy", rev = "8c5edd79ea989d22b457bfb93e03b0c5e125792c" }

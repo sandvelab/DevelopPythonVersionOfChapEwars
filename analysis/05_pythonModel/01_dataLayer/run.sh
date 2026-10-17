@@ -12,3 +12,8 @@ PYTHON="$REPO_ROOT/environment/env/bin/python"
 
 
 # Own scripts -- add calls here as scripts/ fills up.
+# 1. L1-L2: the package's data layer against the R reference's frame and cross-basis,
+#    every development dataset x config variant.
+rm -rf results/frames
+"$PYTHON" scripts/compare_frame.py ../../03_referenceHarness/results ../../03_referenceHarness/scripts/configs \
+  ../scripts/chapkit_ewars_python results

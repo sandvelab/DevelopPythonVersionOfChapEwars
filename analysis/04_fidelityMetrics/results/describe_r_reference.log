@@ -1,0 +1,59 @@
+health            run_set           dataset          variant  clean  crashed  flagged
+0                    fits     monthly_ewars          default      5        0        1
+1                    fits     monthly_ewars        nlags_3_6      5        0        0
+2                    fits     monthly_ewars    no_covariates      5        0        0
+3                    fits     monthly_ewars  region_seasonal      5        0        0
+4                    fits  weekly_nicaragua          default      6        0        0
+5                    fits  weekly_nicaragua        nlags_3_6      5        0        0
+6                    fits  weekly_nicaragua    no_covariates      5        0        0
+7                    fits  weekly_nicaragua  region_seasonal      5        0        0
+8       thread_diagnostic     monthly_ewars          default      3        0        0
+9       thread_diagnostic  weekly_nicaragua          default      0        1        2
+                                                                                           median_abs_z    max_abs_z
+run_set           dataset          variant         pair_health     group                                            
+fits              monthly_ewars    default         clean+clean     fixed                       0.005141     0.036300
+                                                                   hyperparameter              0.025887     0.527298
+                                                                   random:ID_spat              0.005733     0.018695
+                                                                   random:ID_time_cyclic       0.020479     0.031349
+                                                   clean+flagged   fixed                       2.331602    58.738578
+                                                                   hyperparameter             20.040028  1060.197042
+                                                                   random:ID_spat              4.290943    25.327460
+                                                                   random:ID_time_cyclic      22.178728    38.941111
+                                   nlags_3_6       clean+clean     fixed                       0.002100     0.011054
+                                                                   hyperparameter              0.012354     0.121433
+                                                                   random:ID_spat              0.002182     0.007160
+                                                                   random:ID_time_cyclic       0.010189     0.016169
+                                   no_covariates   clean+clean     fixed                       0.000423     0.000423
+                                                                   hyperparameter              0.009780     0.124627
+                                                                   random:ID_spat              0.000322     0.001786
+                                                                   random:ID_time_cyclic       0.005727     0.009212
+                                   region_seasonal clean+clean     fixed                       0.002215     0.021300
+                                                                   hyperparameter              0.019968     0.203903
+                                                                   random:ID_spat              0.005199     0.012397
+                                                                   random:ID_time_cyclic       0.043205     0.070346
+                                                                   random:ID_time_cyclic2      0.017207     0.040411
+                  weekly_nicaragua default         clean+clean     fixed                       0.000372     0.000869
+                                                                   hyperparameter              0.003187     0.007391
+                                                                   random:ID_spat              0.000081     0.000377
+                                                                   random:ID_time_cyclic       0.001439     0.007043
+                                   nlags_3_6       clean+clean     fixed                       0.001247     0.007496
+                                                                   hyperparameter              0.055664     0.088533
+                                                                   random:ID_spat              0.004042     0.007805
+                                                                   random:ID_time_cyclic       0.007586     0.032155
+                                   no_covariates   clean+clean     fixed                       0.000030     0.000030
+                                                                   hyperparameter              0.002958     0.004471
+                                                                   random:ID_spat              0.000074     0.000420
+                                                                   random:ID_time_cyclic       0.000503     0.003072
+                                   region_seasonal clean+clean     fixed                       0.001401     0.008562
+                                                                   hyperparameter              0.010716     0.033655
+                                                                   random:ID_spat              0.001811     0.004356
+                                                                   random:ID_time_cyclic       0.007152     0.020314
+                                                                   random:ID_time_cyclic2      0.004297     0.018137
+thread_diagnostic monthly_ewars    default         clean+clean     fixed                       0.000615     0.008972
+                                                                   hyperparameter              0.019034     0.025101
+                                                                   random:ID_spat              0.000600     0.006101
+                                                                   random:ID_time_cyclic       0.001384     0.002173
+                  weekly_nicaragua default         flagged+flagged fixed                      15.362950   887.019074
+                                                                   hyperparameter              2.879057  5621.986277
+                                                                   random:ID_spat              0.657357     3.364368
+                                                                   random:ID_time_cyclic       0.243573     0.705235

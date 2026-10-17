@@ -58,7 +58,10 @@ def read_posterior(run_dir: Path) -> pd.DataFrame:
     for f in sorted(run_dir.glob("random_*.csv")):
         term = f.stem[len("random_"):]
         rd = pd.read_csv(f)
-        parts.append(pd.DataFrame({"group": f"random:{term}", "name": rd["ID"].astype(str),
+        # a replicated term lists ID 1..n once per replicate, so the key is the position,
+        # INLA's internal index (r - 1) * n + j (CH-22), with the ID kept for reading
+        key = [f"{i + 1}:{v}" for i, v in enumerate(rd["ID"].astype(str))]
+        parts.append(pd.DataFrame({"group": f"random:{term}", "name": key,
                                    "mean": rd["mean"], "sd": rd["sd"]}))
     return pd.concat(parts, ignore_index=True)
 

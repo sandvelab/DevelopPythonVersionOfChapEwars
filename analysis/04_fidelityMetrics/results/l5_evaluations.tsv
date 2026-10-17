@@ -1,0 +1,17 @@
+dataset	model	run	status	n_rows	mean_crps
+monthly_ewars	ewars_r	rep2	completed	483	1123.8832475072466
+monthly_ewars	ewars_r	rep3	completed	483	1127.9847500393375
+monthly_ewars	ewars_r	rep4	completed	483	1138.035659730849
+monthly_ewars	ewars_r	run1	completed	483	1129.113278252588
+monthly_ewars	global_median	run1	completed	483	1129.6601533011271
+monthly_ewars	persistence	run1	completed	483	822.5261684078529
+monthly_ewars	seasonal_median	run1	completed	483	740.7231388543823
+weekly_nicaragua	ewars_r	rep1	completed	210	21.918568776190476
+weekly_nicaragua	ewars_r	rep2	completed	210	21.971799223809526
+weekly_nicaragua	ewars_r	rep3	completed	210	21.98022911904762
+weekly_nicaragua	ewars_r	rep4	completed	210	22.09701736666667
+weekly_nicaragua	ewars_r	run1	completed	210	22.095836004761907
+weekly_nicaragua	global_median	run1	completed	210	30.53654620971621
+weekly_nicaragua	persistence	run1	completed	210	11.21000231826108
+weekly_nicaragua	seasonal_median	run1	completed	210	31.652779927849924
+monthly_ewars	ewars_r	rep1	crashed	0	
