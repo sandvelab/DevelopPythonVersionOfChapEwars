@@ -1,0 +1,36 @@
+             dataset            model   run  n_rows    mean_crps
+0      monthly_ewars     ewars_python  run1     483  1132.078828
+1      monthly_ewars     ewars_python  run2     483  1125.783948
+2      monthly_ewars     ewars_python  run3     483  1115.657537
+6      monthly_ewars          ewars_r  rep2     483  1123.883248
+7      monthly_ewars          ewars_r  rep3     483  1127.984750
+8      monthly_ewars          ewars_r  rep4     483  1138.035660
+9      monthly_ewars          ewars_r  run1     483  1129.113278
+10     monthly_ewars    global_median  run1     483  1129.660153
+11     monthly_ewars      persistence  run1     483   822.526168
+12     monthly_ewars  seasonal_median  run1     483   740.723139
+3   weekly_nicaragua     ewars_python  run1     210    21.945626
+4   weekly_nicaragua     ewars_python  run2     210    21.956367
+5   weekly_nicaragua     ewars_python  run3     210    22.155452
+13  weekly_nicaragua          ewars_r  rep1     210    21.918569
+14  weekly_nicaragua          ewars_r  rep2     210    21.971799
+15  weekly_nicaragua          ewars_r  rep3     210    21.980229
+16  weekly_nicaragua          ewars_r  rep4     210    22.097017
+17  weekly_nicaragua          ewars_r  run1     210    22.095836
+18  weekly_nicaragua    global_median  run1     210    30.536546
+19  weekly_nicaragua      persistence  run1     210    11.210002
+20  weekly_nicaragua  seasonal_median  run1     210    31.652780
+                                            mean_diff  median_abs_diff  mean_abs_diff
+dataset          comparison                                                          
+monthly_ewars    python_vs_global_median        3.876          169.150       1020.657
+                 python_vs_persistence       -303.258          137.375        845.407
+                 python_vs_python             -10.126            6.361         44.066
+                 python_vs_r                   -4.643            7.004         51.842
+                 python_vs_seasonal_median   -385.061          113.188        942.149
+                 r_vs_r                         4.666            8.613         67.330
+weekly_nicaragua python_vs_global_median        8.580            8.592         18.048
+                 python_vs_persistence        -10.746            7.996         13.525
+                 python_vs_python               0.199            0.504          0.998
+                 python_vs_r                   -0.015            0.532          0.991
+                 python_vs_seasonal_median      9.696           10.049         18.205
+                 r_vs_r                         0.116            0.529          0.995

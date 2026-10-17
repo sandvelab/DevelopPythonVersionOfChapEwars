@@ -1,0 +1,7 @@
+dataset	run	ewars_seed	seconds	exit_code
+monthly_ewars	run1	derived	361	0
+weekly_nicaragua	run1	derived	116	0
+monthly_ewars	run2	1644915050	296	0
+weekly_nicaragua	run2	1644915050	118	0
+monthly_ewars	run3	1175527052	288	0
+weekly_nicaragua	run3	1175527052	114	0

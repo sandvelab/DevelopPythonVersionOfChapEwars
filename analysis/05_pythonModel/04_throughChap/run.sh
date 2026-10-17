@@ -24,3 +24,6 @@ for f in results/chap_runs/eval/*.nc; do
 done
 # 3. L5 against the R original's evaluations and chap's baselines.
 "$PYTHON" scripts/compare_l5.py results/l5_rows ../../04_fidelityMetrics/results/l5_rows ../../04_fidelityMetrics/scripts results > results/compare_l5.log
+# 4. The run guide (the service folder's README.md), run as written from a fresh shell.
+rm -rf results/guide_check
+bash scripts/verify_guide.sh ../scripts/chapkit_ewars_python/README.md results/guide_check

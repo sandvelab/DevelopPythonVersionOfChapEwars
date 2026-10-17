@@ -19,6 +19,8 @@ Measures, per pair of runs (a, b):
       Wasserstein-1 distance between the two sample sets, also in units of the pooled sd.
   L5  from chap's evaluation files: the difference in aggregate CRPS, and per
       (location, split, horizon) row the difference in sample CRPS.
+
+Draws no random numbers, so it takes no seed: every measure is computed from files.
 """
 
 from __future__ import annotations

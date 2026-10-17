@@ -1,0 +1,25 @@
+dataset	variant	quantities	R vs R, clean pairs	Python vs R, clean R	R vs R, a flagged fit	Python vs R, flagged R
+monthly_ewars	default	hyperparameters	0.009 – 0.594 (0.01 – 1.13)	0.002 – 0.596 (0.06 – 0.89)	13.6 – 20.1	20.0 – 20.1
+monthly_ewars	default	fixed effects	0.001 – 0.009 (0.01 – 0.10)	0.000 – 0.005 (0.00 – 0.09)	2.3 – 2.3	2.3
+monthly_ewars	default	random effects	0.001 – 0.057 (0.00 – 0.09)	0.000 – 0.038 (0.00 – 0.06)	4.3 – 22.3	4.3 – 22.2
+monthly_ewars	nlags_3_6	hyperparameters	0.007 – 0.055 (0.03 – 0.25)	0.004 – 0.064 (0.01 – 0.19)	–	–
+monthly_ewars	nlags_3_6	fixed effects	0.001 – 0.004 (0.01 – 0.02)	0.000 – 0.003 (0.00 – 0.02)	–	–
+monthly_ewars	nlags_3_6	random effects	0.001 – 0.025 (0.00 – 0.04)	0.000 – 0.019 (0.00 – 0.03)	–	–
+monthly_ewars	no_covariates	hyperparameters	0.003 – 0.016 (0.02 – 0.34)	0.002 – 0.020 (0.03 – 0.24)	–	–
+monthly_ewars	no_covariates	fixed effects	0.000 – 0.001 (0.00 – 0.00)	0.000 – 0.001 (0.00 – 0.00)	–	–
+monthly_ewars	no_covariates	random effects	0.000 – 0.012 (0.00 – 0.02)	0.000 – 0.010 (0.00 – 0.02)	–	–
+monthly_ewars	region_seasonal	hyperparameters	0.008 – 0.027 (0.07 – 0.32)	0.004 – 0.024 (0.05 – 0.33)	–	–
+monthly_ewars	region_seasonal	fixed effects	0.001 – 0.004 (0.01 – 0.04)	0.001 – 0.003 (0.01 – 0.03)	–	–
+monthly_ewars	region_seasonal	random effects	0.001 – 0.086 (0.01 – 0.14)	0.001 – 0.063 (0.00 – 0.10)	–	–
+weekly_nicaragua	default	hyperparameters	0.000 – 0.018 (0.00 – 0.02)	0.011 – 0.028 (0.02 – 0.05)	–	–
+weekly_nicaragua	default	fixed effects	0.000 – 0.001 (0.00 – 0.01)	0.000 – 0.001 (0.00 – 0.01)	–	–
+weekly_nicaragua	default	random effects	0.000 – 0.004 (0.00 – 0.02)	0.000 – 0.002 (0.00 – 0.01)	–	–
+weekly_nicaragua	nlags_3_6	hyperparameters	0.002 – 0.148 (0.01 – 0.89)	0.012 – 0.164 (0.02 – 0.89)	–	–
+weekly_nicaragua	nlags_3_6	fixed effects	0.000 – 0.002 (0.00 – 0.01)	0.000 – 0.001 (0.00 – 0.01)	–	–
+weekly_nicaragua	nlags_3_6	random effects	0.000 – 0.017 (0.00 – 0.07)	0.000 – 0.009 (0.00 – 0.04)	–	–
+weekly_nicaragua	no_covariates	hyperparameters	0.001 – 0.007 (0.00 – 0.01)	0.017 – 0.025 (0.02 – 0.03)	–	–
+weekly_nicaragua	no_covariates	fixed effects	0.000 – 0.000 (0.00 – 0.00)	0.000 – 0.000 (0.00 – 0.00)	–	–
+weekly_nicaragua	no_covariates	random effects	0.000 – 0.001 (0.00 – 0.01)	0.000 – 0.001 (0.00 – 0.00)	–	–
+weekly_nicaragua	region_seasonal	hyperparameters	0.003 – 0.025 (0.01 – 0.05)	0.005 – 0.018 (0.02 – 0.05)	–	–
+weekly_nicaragua	region_seasonal	fixed effects	0.000 – 0.003 (0.00 – 0.02)	0.000 – 0.002 (0.00 – 0.01)	–	–
+weekly_nicaragua	region_seasonal	random effects	0.001 – 0.015 (0.00 – 0.05)	0.000 – 0.010 (0.00 – 0.03)	–	–

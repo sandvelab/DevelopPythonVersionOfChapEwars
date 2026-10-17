@@ -12,3 +12,5 @@ PYTHON="$REPO_ROOT/environment/env/bin/python"
 
 
 # Own scripts -- add calls here as scripts/ fills up.
+# 1. The closeness report: every layer, Python beside the R reference's own run-to-run behaviour.
+"$PYTHON" scripts/build_closeness_report.py .. results > /dev/null

@@ -376,5 +376,61 @@
   "information": "-",
   "where": "analysis/04_fidelityMetrics/scripts/fidelity.py health_label",
   "matters": "how the R spread is read"
+ },
+ {
+  "id": "JC-28",
+  "date": "2026-10-17",
+  "batch": 8,
+  "area": "inference",
+  "call": "What of INLA's compact-mode engine candidate (a) reproduces, and where it departs",
+  "choice": "Reproduced from the source (spec: 03_inference/a_laplaceCcd/results/inla_spec.md): the Laplace objective with INLA's prior normalisation and the 1e-4 RW1 diagonal; INLA's initial values; a central-difference Hessian with step sqrt(0.005) and a move to any better point it finds; theta(z) = theta* + V Lambda^-1/2 z; the skewness factors from z = +-sqrt(2) e_k normalised to product 1; the CCD design at radius 1.1 sqrt(m) with INLA's weights and the 6.9-log-unit drop; per configuration the VB correction of the mean with INLA's node set, 15-point Gauss-Hermite, step cap, stopping and abort rules; config sampling with probability proportional to density times weight; latent draws from the Gaussian approximation centred at the VB mean, theta[1] = exp(theta_k[1]). Departures: scipy's BFGS (gtol 1e-5) finds the mode instead of GMRFLib's 'smart' BFGS with its tolerances; the Hessian is taken along the coordinate axes instead of INLA's BFGS direction basis; the draw is centred at the VB mean projected orthogonally onto the constraint subspace instead of kriged in the Q metric; the Newton inner loop uses its own line search and a 1e-10 step tolerance; the likelihood derivatives are analytic instead of a 5-point stencil. The hyperparameter summaries in hyperpar.csv come from Monte Carlo (200 000 draws) of the split-normal approximation INLA's design is built on, not INLA's interpolated marginals",
+  "alternatives": "Porting GMRFLib's BFGS (bfgs3.c, domin-interface.c). Not done: its path depends on GSL's line search, and INLA's own refits already move the mode by more than that path would explain (CH-20). Full MCMC: candidate (b), still open",
+  "basis": "objective_at_inla_configs.tsv: the objective matches INLA's to <=2e-4 (weekly) and <=0.016 (monthly) log units; L3-L4 Python-vs-R inside the R-vs-R spread (06_closenessReport)",
+  "agency": "agent-autonomous",
+  "information": "agent-retrieved (the spec was written by a subagent reading the archived C and R sources, with line citations)",
+  "where": "ewars_python/inla_approx.py, laplace.py",
+  "matters": "the mode search sets where the RW1 precision lands; see the theta-mode table"
+ },
+ {
+  "id": "JC-29",
+  "date": "2026-10-17",
+  "batch": 8,
+  "area": "evaluation",
+  "call": "Scoring candidate (a) on the R-built design matrix as well as the Python one (plan §6, batches 8-10)",
+  "choice": "Scored once, on the Python design matrix",
+  "alternatives": "A second run on the R frame. Not run: the Python frame and cross-basis equal R's to 4.4e-16 on every dataset and variant (L1-L2), so the two runs would fit the same numbers",
+  "basis": "05_pythonModel/01_dataLayer/results/l1_l2_comparison.tsv",
+  "agency": "agent-autonomous",
+  "information": "-",
+  "where": "analysis/05_pythonModel/03_inference/a_laplaceCcd",
+  "matters": "no"
+ },
+ {
+  "id": "JC-30",
+  "date": "2026-10-17",
+  "batch": 11,
+  "area": "packaging",
+  "call": "The Python service's image and runner",
+  "choice": "chapkit's ShellModelRunner, as the original, running `python scripts/predict.py`; the image is python 3.13 with uv (ghcr.io/astral-sh/uv:0.8.22-python3.13-bookworm-slim, pinned by digest), dependencies from the folder's uv.lock, no platform pin, so it runs natively on arm64 and amd64; id chapkit-ewars-model-python",
+  "alternatives": "chapkit's in-process Python runner. Rejected: the original's runner type keeps the workspace layout and config handling identical. An amd64 pin like the original's. Rejected: nothing in the Python model needs it",
+  "basis": "plan §6 batch 11: mirror the original main.py",
+  "agency": "agent-autonomous",
+  "information": "-",
+  "where": "analysis/05_pythonModel/scripts/chapkit_ewars_python/main.py, Dockerfile",
+  "matters": "no"
+ },
+ {
+  "id": "JC-31",
+  "date": "2026-10-17",
+  "batch": 8,
+  "area": "inference",
+  "call": "Correction to the basis quoted in JC-23 and JC-28",
+  "choice": "Over every clean R fit (not only replicate 1, which the earlier figure came from), the Python objective matches INLA's at INLA's integration points to at most 1e-4 log units (weekly) and 0.021 (monthly, no_covariates); JC-23 and JC-28 quoted 2e-4 and 0.016",
+  "alternatives": "-",
+  "basis": "analysis/05_pythonModel/03_inference/a_laplaceCcd/results/objective_at_inla_configs.tsv; 06_closenessReport",
+  "agency": "agent-autonomous",
+  "information": "-",
+  "where": "JC-23, JC-28",
+  "matters": "no"
  }
 ]

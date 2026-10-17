@@ -2,6 +2,7 @@
 
 Each is a port of the INLA 25.10.19 code the R reference runs (Archive/r-sources/,
 Archive/r-inla-gmrflib/); the source is named beside each function.
+Draws no random numbers, so it takes no seed.
 """
 
 from __future__ import annotations

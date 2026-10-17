@@ -1,0 +1,542 @@
++ set -euo pipefail
++ REPO='/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars'
++ cd '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/05_pythonModel/scripts/chapkit_ewars_python'
++ uv sync --frozen
+Using CPython 3.13.0
+Creating virtual environment at: .venv
+Prepared 12 packages in 1.53s
+Installed 79 packages in 174ms
+ + agent-detector==2.0.0
+ + aiosqlite==0.22.1
+ + alembic==1.20.0
+ + annotated-doc==0.0.5
+ + annotated-types==0.8.0
+ + anyio==4.15.1
+ + certifi==2026.7.22
+ + chapkit==2.2.0
+ + charset-normalizer==3.5.2
+ + click==8.5.0
+ + detect-installer==0.2.1
+ + dlnmpy==0.8.4 (from git+https://github.com/Logic06183/dlnmpy@8c5edd79ea989d22b457bfb93e03b0c5e125792c)
+ + dnspython==2.9.0
+ + email-validator==2.3.0
+ + fastapi==0.143.3
+ + fastapi-cli==0.0.32
+ + fastapi-cloud-cli==0.26.0
+ + fastar==0.12.0
+ + geojson-pydantic==2.2.0
+ + googleapis-common-protos==1.75.5
+ + greenlet==3.5.6
+ + gunicorn==26.2.0
+ + h11==0.16.0
+ + httpcore==1.0.9
+ + httptools==0.9.0
+ + httpx==0.28.1
+ + idna==3.20
+ + jinja2==3.1.6
+ + mako==1.4.3
+ + markdown-it-py==4.2.0
+ + markupsafe==3.0.4
+ + mdurl==0.1.2
+ + numpy==2.5.4
+ + opentelemetry-api==1.45.1
+ + opentelemetry-exporter-http-transport==0.66b1
+ + opentelemetry-exporter-otlp-common==0.66b1
+ + opentelemetry-exporter-otlp-proto-common==1.45.1
+ + opentelemetry-exporter-otlp-proto-http==1.45.1
+ + opentelemetry-exporter-prometheus==0.66b1
+ + opentelemetry-instrumentation==0.66b1
+ + opentelemetry-instrumentation-sqlalchemy==0.66b1
+ + opentelemetry-proto==1.45.1
+ + opentelemetry-sdk==1.45.1
+ + opentelemetry-semantic-conventions==0.66b1
+ + packaging==26.3
+ + pandas==3.0.6
+ + prometheus-client==0.26.0
+ + protobuf==7.36.2
+ + pydantic==2.14.1
+ + pydantic-core==2.50.1
+ + pydantic-extra-types==2.11.1
+ + pydantic-settings==2.16.0
+ + pygments==2.21.0
+ + python-dateutil==2.9.0.post0
+ + python-dotenv==1.2.4
+ + python-multipart==0.0.32
+ + python-ulid==4.0.1
+ + pyyaml==6.0.3
+ + requests==2.34.2
+ + rich==15.0.0
+ + rich-toolkit==0.20.6
+ + rignore==0.8.1
+ + scipy==1.18.1
+ + sentry-sdk==2.72.0
+ + servicekit==3.0.0
+ + shellingham==1.5.4
+ + six==1.17.0
+ + sqlalchemy==2.1.5
+ + starlette==1.8.0
+ + structlog==26.1.0
+ + typer==0.27.3
+ + typing-extensions==4.16.0
+ + typing-inspection==0.4.4
+ + urllib3==2.8.0
+ + uvicorn==0.54.0
+ + uvloop==0.23.0
+ + watchfiles==1.3.0
+ + websockets==17.2
+ + wrapt==2.5.1
++ mkdir -p example_run
++ cat
++ IN='/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/03_referenceHarness/results/inputs/weekly_nicaragua'
++ uv run python scripts/predict.py --historic '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/03_referenceHarness/results/inputs/weekly_nicaragua/historic.csv' --future '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/03_referenceHarness/results/inputs/weekly_nicaragua/future.csv' --output example_run/predictions.csv --config example_run/config.yml
+Running predictions...
+Historic: /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/03_referenceHarness/results/inputs/weekly_nicaragua/historic.csv
+Future: /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/03_referenceHarness/results/inputs/weekly_nicaragua/future.csv
+Output: example_run/predictions.csv
+Config: n_lags=3 precision=0.01 region_seasonal=False
+Covariates: rainfall, mean_temperature
+Predictions written to example_run/predictions.csv
++ head -c 300 example_run/predictions.csv
+time_period,location,sample_0,sample_1,sample_2,sample_3,sample_4,sample_5,sample_6,sample_7,sample_8,sample_9,sample_10,sample_11,sample_12,sample_13,sample_14,sample_15,sample_16,sample_17,sample_18,sample_19,sample_20,sample_21,sample_22,sample_23,sample_24,sample_25,sample_26,sample_27,sample_28+ echo
+
++ docker build -t chapkit-ewars-model-python .
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.34kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for ghcr.io/astral-sh/uv:0.8.22-python3.13-bookworm-slim@sha256:c4a67221d74ad160ddf4e114804bda0f8dd2d2e1aa5c16e0817cf8530ff8f5f6
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 85B done
+#3 DONE 0.0s
+
+#4 [ 1/10] FROM ghcr.io/astral-sh/uv:0.8.22-python3.13-bookworm-slim@sha256:c4a67221d74ad160ddf4e114804bda0f8dd2d2e1aa5c16e0817cf8530ff8f5f6
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 74.17kB done
+#5 DONE 0.0s
+
+#6 [ 5/10] COPY pyproject.toml uv.lock ./
+#6 CACHED
+
+#7 [ 2/10] RUN apt-get update && apt-get install -y --no-install-recommends git curl     && rm -rf /var/lib/apt/lists/*
+#7 CACHED
+
+#8 [ 4/10] WORKDIR /app
+#8 CACHED
+
+#9 [ 3/10] RUN groupadd --gid 1000 chapkit && useradd --uid 1000 --gid 1000 --no-create-home --shell /usr/sbin/nologin chapkit
+#9 CACHED
+
+#10 [ 6/10] RUN uv sync --frozen --no-dev --no-install-project
+#10 CACHED
+
+#11 [ 7/10] COPY main.py ./
+#11 CACHED
+
+#12 [ 8/10] COPY scripts/ ./scripts/
+#12 CACHED
+
+#13 [ 9/10] COPY ewars_python/ ./ewars_python/
+#13 DONE 0.0s
+
+#14 [10/10] RUN mkdir -p /app/data && chown -R chapkit:chapkit /app/data
+#14 DONE 0.1s
+
+#15 exporting to image
+#15 exporting layers 0.0s done
+#15 writing image sha256:1a7dc0983d24ae9c5d2275c2ea500a852c5ef398a2313e6073aa1d08ace80a2b done
+#15 naming to docker.io/library/chapkit-ewars-model-python done
+#15 DONE 0.0s
++ docker rm -f ewars-python
++ docker run -d --name ewars-python -p 8000:8000 chapkit-ewars-model-python
+0e6d96f369bdc8ba3cc8761e5d636476037088df7e2aaf5e04da5ac69c81898a
++ curl -fsS http://localhost:8000/health
++ grep -q healthy
+curl: (52) Empty reply from server
++ sleep 1
++ curl -fsS http://localhost:8000/health
++ grep -q healthy
++ curl -fsS http://localhost:8000/api/v1/info
++ head -c 200
+{"id":"chapkit-ewars-model-python","display_name":"CHAP-EWARS Model (chapkit, Python)","version":"0.1.0","description":"Python translation of the chapkit CHAP-EWARS model: the same Bayesian hierarchic+ echo
+
+++ mktemp -d
++ cd /var/folders/t3/0znh2hrx1jzblsb8tq15nzg80000gt/T/tmp.7uH8xJsh3g
++ git clone --quiet https://github.com/dhis2-chap/chap-core.git
++ git -C chap-core checkout --quiet b8c8f788fbc011f3d9d8a18ba9e993725023a6e4
++ cd chap-core
++ uv sync --frozen --no-dev --python 3.13
+Using CPython 3.13.0
+Creating virtual environment at: .venv
+Prepared 1 package in 564ms
+Installed 176 packages in 628ms
+ + aiosqlite==0.22.1
+ + alembic==1.19.1
+ + altair==6.3.0
+ + amqp==5.3.1
+ + annotated-doc==0.0.4
+ + annotated-types==0.7.0
+ + anyio==4.14.2
+ + attrs==26.1.0
+ + beautifulsoup4==4.15.0
+ + billiard==4.2.4
+ + bionumpy==1.0.14
+ + cachetools==7.1.4
+ + celery==5.6.3
+ + certifi==2026.5.20
+ + cffi==2.0.0
+ + cftime==1.6.5
+ + chap-core==2.5.0.dev0 (from file:///private/var/folders/t3/0znh2hrx1jzblsb8tq15nzg80000gt/T/tmp.7uH8xJsh3g/chap-core)
+ + chapkit==2.3.1
+ + charset-normalizer==3.4.7
+ + click==8.4.1
+ + click-didyoumean==0.3.1
+ + click-plugins==1.1.1.2
+ + click-repl==0.3.0
+ + cloudpickle==3.1.2
+ + colorlog==6.10.1
+ + contourpy==1.3.3
+ + croniter==6.2.4
+ + cryptography==50.0.1
+ + cycler==0.12.1
+ + cyclopts==5.0.0
+ + databricks-sdk==0.115.0
+ + detect-installer==0.1.0
+ + distlib==0.4.1
+ + dnspython==2.8.0
+ + docker==7.2.0
+ + docstring-parser==0.18.0
+ + email-validator==2.3.0
+ + fastapi==0.142.2
+ + fastapi-cli==0.0.32
+ + fastapi-cloud-cli==0.19.0
+ + fastar==0.11.0
+ + fastdtw==0.3.4
+ + filelock==3.29.1
+ + fonttools==4.63.0
+ + formulaic==1.2.2
+ + geographiclib==2.1
+ + geojson-pydantic==2.1.1
+ + geopandas==1.1.4
+ + geopy==2.5.0
+ + gitdb==4.0.12
+ + gitpython==3.1.62
+ + gluonts==0.17.0
+ + google-auth==2.53.0
+ + googleapis-common-protos==1.75.5
+ + greenlet==3.5.1
+ + gunicorn==26.2.0
+ + h11==0.16.0
+ + httpcore==1.0.9
+ + httptools==0.8.0
+ + httpx==0.28.1
+ + idna==3.18
+ + importlib-metadata==9.0.0
+ + interface-meta==2.0.1
+ + jinja2==3.1.6
+ + joblib==1.5.3
+ + jsonschema==4.26.0
+ + jsonschema-specifications==2025.9.1
+ + kiwisolver==1.5.0
+ + kombu==5.6.2
+ + libpysal==4.15.0
+ + llvmlite==0.49.0
+ + mako==1.4.2
+ + markdown-it-py==4.2.0
+ + markupsafe==3.0.3
+ + matplotlib==3.11.2
+ + mdurl==0.1.2
+ + mlflow-skinny==3.13.0
+ + mypy-extensions==1.1.0
+ + narwhals==2.22.1
+ + netcdf4==1.7.4
+ + npstructures==0.2.19
+ + numba==0.67.0
+ + numpy==2.5.3
+ + opentelemetry-api==1.45.1
+ + opentelemetry-exporter-http-transport==0.66b1
+ + opentelemetry-exporter-otlp-common==0.66b1
+ + opentelemetry-exporter-otlp-proto-common==1.45.1
+ + opentelemetry-exporter-otlp-proto-http==1.45.1
+ + opentelemetry-exporter-prometheus==0.66b1
+ + opentelemetry-instrumentation==0.66b1
+ + opentelemetry-instrumentation-sqlalchemy==0.66b1
+ + opentelemetry-proto==1.45.1
+ + opentelemetry-sdk==1.45.1
+ + opentelemetry-semantic-conventions==0.66b1
+ + optuna==5.0.0
+ + packaging==26.3
+ + pandas==2.3.3
+ + pandera==0.33.1
+ + patsy==1.0.3
+ + pillow==12.3.0
+ + platformdirs==4.10.0
+ + plotly==6.9.0
+ + pooch==1.9.0
+ + prometheus-client==0.25.0
+ + prompt-toolkit==3.0.52
+ + protobuf==6.33.6
+ + psycopg2-binary==2.9.13
+ + pyasn1==0.6.4
+ + pyasn1-modules==0.4.2
+ + pycountry==26.2.16
+ + pycparser==3.0
+ + pydantic==2.13.5
+ + pydantic-core==2.46.5
+ + pydantic-extra-types==2.11.1
+ + pydantic-settings==2.14.2
+ + pygments==2.20.0
+ + pyogrio==0.12.1
+ + pyparsing==3.3.2
+ + pyproj==3.7.2
+ + python-dateutil==2.9.0.post0
+ + python-discovery==1.6.0
+ + python-dotenv==1.2.3
+ + python-multipart==0.0.32
+ + python-ulid==3.1.0
+ + pyts==0.13.0
+ + pytz==2026.2
+ + pyyaml==6.0.3
+ + redis==8.0.0
+ + referencing==0.37.0
+ + requests==2.34.2
+ + rich==15.0.0
+ + rich-rst==2.0.1
+ + rich-toolkit==0.20.1
+ + rignore==0.7.6
+ + rpds-py==2026.5.1
+ + rq==2.12.0
+ + scikit-learn==1.9.1
+ + scipy==1.17.1
+ + sentry-sdk==2.61.1
+ + servicekit==3.0.0
+ + shapely==2.1.2
+ + shellingham==1.5.4
+ + six==1.17.0
+ + smmap==5.0.3
+ + soupsieve==2.9
+ + sqlalchemy==2.0.50
+ + sqlmodel==0.0.42
+ + sqlparse==0.6.0
+ + starlette==1.7.0
+ + statsmodels==0.15.0
+ + structlog==26.1.0
+ + stumpy==1.14.1
+ + threadpoolctl==3.6.0
+ + toolz==0.12.1
+ + topojson==1.10
+ + tqdm==4.68.1
+ + typeguard==4.5.2
+ + typer==0.26.7
+ + typing-extensions==4.15.0
+ + typing-inspect==0.9.0
+ + typing-inspection==0.4.2
+ + tzdata==2026.2
+ + tzlocal==5.3.1
+ + unidecode==1.4.0
+ + urllib3==2.8.0
+ + uvicorn==0.54.0
+ + uvloop==0.22.1
+ + vine==5.1.0
+ + virtualenv==21.7.13
+ + vl-convert-python==1.9.0.post1
+ + watchfiles==1.2.0
+ + wcwidth==0.8.1
+ + websockets==16.0
+ + wrapt==2.2.1
+ + xarray==2026.7.0
+ + zipp==4.1.0
++ CHAP=/var/folders/t3/0znh2hrx1jzblsb8tq15nzg80000gt/T/tmp.7uH8xJsh3g/chap-core/.venv/bin/chap
++ DATA='/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv'
++ CONFIG='/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml'
++ /var/folders/t3/0znh2hrx1jzblsb8tq15nzg80000gt/T/tmp.7uH8xJsh3g/chap-core/.venv/bin/chap eval --model-name http://localhost:8000 --run-config.is-chapkit-model --model-configuration-yaml '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml' --dataset-csv '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' --output-file ewars_python_weekly.nc --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology
+/private/var/folders/t3/0znh2hrx1jzblsb8tq15nzg80000gt/T/tmp.7uH8xJsh3g/chap-core/.venv/lib/python3.13/site-packages/bionumpy/io/vcf_header.py:38: SyntaxWarning: invalid escape sequence '\d'
+  regex = re.match('(\d)', x)
+/private/var/folders/t3/0znh2hrx1jzblsb8tq15nzg80000gt/T/tmp.7uH8xJsh3g/chap-core/.venv/lib/python3.13/site-packages/bionumpy/io/vcf_header.py:80: SyntaxWarning: invalid escape sequence '\S'
+  regex = re.search('^##(\S+?)=(.*)$', line)
+/private/var/folders/t3/0znh2hrx1jzblsb8tq15nzg80000gt/T/tmp.7uH8xJsh3g/chap-core/.venv/lib/python3.13/site-packages/bionumpy/io/vcf_header.py:86: SyntaxWarning: invalid escape sequence '\S'
+  f'^##(\S+?)=(.*)$, get {line}. Ignore this line.'))
+/private/var/folders/t3/0znh2hrx1jzblsb8tq15nzg80000gt/T/tmp.7uH8xJsh3g/chap-core/.venv/lib/python3.13/site-packages/bionumpy/sequence/string_matcher.py:136: SyntaxWarning: invalid escape sequence '\['
+  r = re.compile('\[[^\]]+\]')
+/private/var/folders/t3/0znh2hrx1jzblsb8tq15nzg80000gt/T/tmp.7uH8xJsh3g/chap-core/.venv/lib/python3.13/site-packages/bionumpy/sequence/string_matcher.py:149: SyntaxWarning: invalid escape sequence '\['
+  r = re.compile('(([A-Z]|\[[A-Z]+\])+)\.\{(\d*)\,(\d+)\}(.+)')
+2026-10-17T23:20:59 [INFO   ] Database URL not set [chap_core.database.database]
+2026-10-17T23:20:59 [INFO   ] Database url not set. Database operations will not work [chap_core.database.database]
+2026-10-17T23:20:59 [INFO   ] Evaluating model http://localhost:8000 with xarray/NetCDF output [chap_core.cli_endpoints.evaluate]
+2026-10-17T23:20:59 [INFO   ] Level set to INFO [root]
+2026-10-17T23:20:59 [INFO   ] Loading dataset from /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv [root]
+2026-10-17T23:21:00 [INFO   ] Remaining regions: ['boaco', 'chinandega', 'esteli', 'granada', 'jinotega', 'leon', 'managua', 'masaya', 'matagalpa', 'rivas'] with 10 entries [chap_core.rest_api.db_worker_functions]
+2026-10-17T23:21:00 [INFO   ] Loading model template from http://localhost:8000 [chap_core.cli_endpoints.evaluate]
+2026-10-17T23:21:00 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:00 [INFO   ] Loading model configuration from /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml [chap_core.cli_endpoints._common]
+2026-10-17T23:21:00 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:00 [INFO   ] Creating model configuration with name chapkit-ewars-model-python_config_1792272060138963 at http://localhost:8000. Data: {'name': 'chapkit-ewars-model-python_config_1792272060138963', 'data': {'n_lags': [3], 'precision': 0.01, 'region_seasonal': False, 'additional_continuous_covariates': ['rainfall', 'mean_temperature']}} [chap_core.models.external_chapkit_model]
+2026-10-17T23:21:00 [INFO   ] HTTP Request: POST http://localhost:8000/api/v1/configs "HTTP/1.1 201 Created" [httpx]
+2026-10-17T23:21:00 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/configs "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:00 [INFO   ] Created model configuration with id 01M55VTKQN532J5FWG3MS5WX1A at http://localhost:8000 [chap_core.models.external_chapkit_model]
+2026-10-17T23:21:00 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:00 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:00 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/configs/$schema "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:00 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:00 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/configs/$schema "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:18 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:18 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/configs/$schema "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:18 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:18 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/configs/$schema "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:18 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:18 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/configs/$schema "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:19 [INFO   ] Running backtest with 7 splits, 3 periods, stride 1 [chap_core.cli_endpoints.evaluate]
+2026-10-17T23:21:19 [INFO   ] HTTP Request: POST http://localhost:8000/api/v1/ml/$train "HTTP/1.1 202 Accepted" [httpx]
+2026-10-17T23:21:19 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VV6V2TJMN5N4WZWHMNMNX "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:19 [INFO   ] Job 01M55VV6V2TJMN5N4WZWHMNMNX status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:21 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VV6V2TJMN5N4WZWHMNMNX "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:21 [INFO   ] Job 01M55VV6V2TJMN5N4WZWHMNMNX status: completed [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:21 [INFO   ] HTTP Request: POST http://localhost:8000/api/v1/ml/$predict "HTTP/1.1 202 Accepted" [httpx]
+2026-10-17T23:21:21 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VV919W74W7N55QVWJ7D2W "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:21 [INFO   ] Job 01M55VV919W74W7N55QVWJ7D2W status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:23 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VV919W74W7N55QVWJ7D2W "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:23 [INFO   ] Job 01M55VV919W74W7N55QVWJ7D2W status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:25 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VV919W74W7N55QVWJ7D2W "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:25 [INFO   ] Job 01M55VV919W74W7N55QVWJ7D2W status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:28 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VV919W74W7N55QVWJ7D2W "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:28 [INFO   ] Job 01M55VV919W74W7N55QVWJ7D2W status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:30 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VV919W74W7N55QVWJ7D2W "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:30 [INFO   ] Job 01M55VV919W74W7N55QVWJ7D2W status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:32 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VV919W74W7N55QVWJ7D2W "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:32 [INFO   ] Job 01M55VV919W74W7N55QVWJ7D2W status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:34 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VV919W74W7N55QVWJ7D2W "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:34 [INFO   ] Job 01M55VV919W74W7N55QVWJ7D2W status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:36 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VV919W74W7N55QVWJ7D2W "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:36 [INFO   ] Job 01M55VV919W74W7N55QVWJ7D2W status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:38 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VV919W74W7N55QVWJ7D2W "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:38 [INFO   ] Job 01M55VV919W74W7N55QVWJ7D2W status: completed [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:38 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/artifacts/01M55VV919W74W7N55QVWJ7D2V "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:38 [INFO   ] HTTP Request: POST http://localhost:8000/api/v1/ml/$predict "HTTP/1.1 202 Accepted" [httpx]
+2026-10-17T23:21:38 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VVS7571QVM71K0209FWWE "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:38 [INFO   ] Job 01M55VVS7571QVM71K0209FWWE status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:40 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VVS7571QVM71K0209FWWE "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:40 [INFO   ] Job 01M55VVS7571QVM71K0209FWWE status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:42 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VVS7571QVM71K0209FWWE "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:42 [INFO   ] Job 01M55VVS7571QVM71K0209FWWE status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:44 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VVS7571QVM71K0209FWWE "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:44 [INFO   ] Job 01M55VVS7571QVM71K0209FWWE status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:46 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VVS7571QVM71K0209FWWE "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:46 [INFO   ] Job 01M55VVS7571QVM71K0209FWWE status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:48 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VVS7571QVM71K0209FWWE "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:48 [INFO   ] Job 01M55VVS7571QVM71K0209FWWE status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:50 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VVS7571QVM71K0209FWWE "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:50 [INFO   ] Job 01M55VVS7571QVM71K0209FWWE status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:52 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VVS7571QVM71K0209FWWE "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:52 [INFO   ] Job 01M55VVS7571QVM71K0209FWWE status: completed [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:52 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/artifacts/01M55VVS7571QVM71K0209FWWD "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:53 [INFO   ] HTTP Request: POST http://localhost:8000/api/v1/ml/$predict "HTTP/1.1 202 Accepted" [httpx]
+2026-10-17T23:21:53 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VW7EW07NSFRAVBGWGQ9EX "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:53 [INFO   ] Job 01M55VW7EW07NSFRAVBGWGQ9EX status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:55 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VW7EW07NSFRAVBGWGQ9EX "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:55 [INFO   ] Job 01M55VW7EW07NSFRAVBGWGQ9EX status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:57 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VW7EW07NSFRAVBGWGQ9EX "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:57 [INFO   ] Job 01M55VW7EW07NSFRAVBGWGQ9EX status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:21:59 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VW7EW07NSFRAVBGWGQ9EX "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:21:59 [INFO   ] Job 01M55VW7EW07NSFRAVBGWGQ9EX status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:01 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VW7EW07NSFRAVBGWGQ9EX "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:01 [INFO   ] Job 01M55VW7EW07NSFRAVBGWGQ9EX status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:03 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VW7EW07NSFRAVBGWGQ9EX "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:03 [INFO   ] Job 01M55VW7EW07NSFRAVBGWGQ9EX status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:05 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VW7EW07NSFRAVBGWGQ9EX "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:05 [INFO   ] Job 01M55VW7EW07NSFRAVBGWGQ9EX status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:07 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VW7EW07NSFRAVBGWGQ9EX "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:07 [INFO   ] Job 01M55VW7EW07NSFRAVBGWGQ9EX status: completed [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:07 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/artifacts/01M55VW7EW07NSFRAVBGWGQ9EW "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:07 [INFO   ] HTTP Request: POST http://localhost:8000/api/v1/ml/$predict "HTTP/1.1 202 Accepted" [httpx]
+2026-10-17T23:22:07 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VWNKVYM3H823MQW36ZTH5 "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:07 [INFO   ] Job 01M55VWNKVYM3H823MQW36ZTH5 status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:09 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VWNKVYM3H823MQW36ZTH5 "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:09 [INFO   ] Job 01M55VWNKVYM3H823MQW36ZTH5 status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:11 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VWNKVYM3H823MQW36ZTH5 "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:11 [INFO   ] Job 01M55VWNKVYM3H823MQW36ZTH5 status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:13 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VWNKVYM3H823MQW36ZTH5 "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:13 [INFO   ] Job 01M55VWNKVYM3H823MQW36ZTH5 status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:15 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VWNKVYM3H823MQW36ZTH5 "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:15 [INFO   ] Job 01M55VWNKVYM3H823MQW36ZTH5 status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:17 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VWNKVYM3H823MQW36ZTH5 "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:17 [INFO   ] Job 01M55VWNKVYM3H823MQW36ZTH5 status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:19 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VWNKVYM3H823MQW36ZTH5 "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:19 [INFO   ] Job 01M55VWNKVYM3H823MQW36ZTH5 status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:21 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VWNKVYM3H823MQW36ZTH5 "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:21 [INFO   ] Job 01M55VWNKVYM3H823MQW36ZTH5 status: completed [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:21 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/artifacts/01M55VWNKVYM3H823MQW36ZTH4 "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:22 [INFO   ] HTTP Request: POST http://localhost:8000/api/v1/ml/$predict "HTTP/1.1 202 Accepted" [httpx]
+2026-10-17T23:22:22 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VX44WG91TYH77VWCAC43N "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:22 [INFO   ] Job 01M55VX44WG91TYH77VWCAC43N status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:24 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VX44WG91TYH77VWCAC43N "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:24 [INFO   ] Job 01M55VX44WG91TYH77VWCAC43N status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:26 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VX44WG91TYH77VWCAC43N "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:26 [INFO   ] Job 01M55VX44WG91TYH77VWCAC43N status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:28 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VX44WG91TYH77VWCAC43N "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:28 [INFO   ] Job 01M55VX44WG91TYH77VWCAC43N status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:30 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VX44WG91TYH77VWCAC43N "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:30 [INFO   ] Job 01M55VX44WG91TYH77VWCAC43N status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:32 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VX44WG91TYH77VWCAC43N "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:32 [INFO   ] Job 01M55VX44WG91TYH77VWCAC43N status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:34 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VX44WG91TYH77VWCAC43N "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:34 [INFO   ] Job 01M55VX44WG91TYH77VWCAC43N status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:36 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VX44WG91TYH77VWCAC43N "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:36 [INFO   ] Job 01M55VX44WG91TYH77VWCAC43N status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:38 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VX44WG91TYH77VWCAC43N "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:38 [INFO   ] Job 01M55VX44WG91TYH77VWCAC43N status: completed [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:38 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/artifacts/01M55VX44WG91TYH77VWCAC43M "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:39 [INFO   ] HTTP Request: POST http://localhost:8000/api/v1/ml/$predict "HTTP/1.1 202 Accepted" [httpx]
+2026-10-17T23:22:39 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VXMC12KW808Z0A1BN72WS "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:39 [INFO   ] Job 01M55VXMC12KW808Z0A1BN72WS status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:41 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VXMC12KW808Z0A1BN72WS "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:41 [INFO   ] Job 01M55VXMC12KW808Z0A1BN72WS status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:43 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VXMC12KW808Z0A1BN72WS "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:43 [INFO   ] Job 01M55VXMC12KW808Z0A1BN72WS status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:45 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VXMC12KW808Z0A1BN72WS "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:45 [INFO   ] Job 01M55VXMC12KW808Z0A1BN72WS status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:47 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VXMC12KW808Z0A1BN72WS "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:47 [INFO   ] Job 01M55VXMC12KW808Z0A1BN72WS status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:49 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VXMC12KW808Z0A1BN72WS "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:49 [INFO   ] Job 01M55VXMC12KW808Z0A1BN72WS status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:51 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VXMC12KW808Z0A1BN72WS "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:51 [INFO   ] Job 01M55VXMC12KW808Z0A1BN72WS status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:53 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VXMC12KW808Z0A1BN72WS "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:53 [INFO   ] Job 01M55VXMC12KW808Z0A1BN72WS status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:55 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VXMC12KW808Z0A1BN72WS "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:55 [INFO   ] Job 01M55VXMC12KW808Z0A1BN72WS status: completed [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:55 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/artifacts/01M55VXMC12KW808Z0A1BN72WR "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:55 [INFO   ] HTTP Request: POST http://localhost:8000/api/v1/ml/$predict "HTTP/1.1 202 Accepted" [httpx]
+2026-10-17T23:22:55 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VY4PHEY0PZ06BGE1T2YNW "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:55 [INFO   ] Job 01M55VY4PHEY0PZ06BGE1T2YNW status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:57 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VY4PHEY0PZ06BGE1T2YNW "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:57 [INFO   ] Job 01M55VY4PHEY0PZ06BGE1T2YNW status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:22:59 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VY4PHEY0PZ06BGE1T2YNW "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:22:59 [INFO   ] Job 01M55VY4PHEY0PZ06BGE1T2YNW status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:23:01 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VY4PHEY0PZ06BGE1T2YNW "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:23:01 [INFO   ] Job 01M55VY4PHEY0PZ06BGE1T2YNW status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:23:03 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VY4PHEY0PZ06BGE1T2YNW "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:23:03 [INFO   ] Job 01M55VY4PHEY0PZ06BGE1T2YNW status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:23:05 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VY4PHEY0PZ06BGE1T2YNW "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:23:05 [INFO   ] Job 01M55VY4PHEY0PZ06BGE1T2YNW status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:23:08 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VY4PHEY0PZ06BGE1T2YNW "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:23:08 [INFO   ] Job 01M55VY4PHEY0PZ06BGE1T2YNW status: running [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:23:10 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M55VY4PHEY0PZ06BGE1T2YNW "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:23:10 [INFO   ] Job 01M55VY4PHEY0PZ06BGE1T2YNW status: completed [chap_core.models.chapkit_rest_api_wrapper]
+2026-10-17T23:23:10 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/artifacts/01M55VY4PHEY0PZ06BGE1T2YNV "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:23:10 [INFO   ] Exporting evaluation to ewars_python_weekly.nc [chap_core.cli_endpoints.evaluate]
+2026-10-17T23:23:10 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:23:10 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/configs/$schema "HTTP/1.1 200 OK" [httpx]
+2026-10-17T23:23:18 [INFO   ] Evaluation complete. Results saved to ewars_python_weekly.nc [chap_core.cli_endpoints.evaluate]
++ /var/folders/t3/0znh2hrx1jzblsb8tq15nzg80000gt/T/tmp.7uH8xJsh3g/chap-core/.venv/bin/chap export-metrics --input-files ewars_python_weekly.nc --output-file metrics.csv
+2026-10-17T23:23:20 [INFO   ] Processing ewars_python_weekly.nc [chap_core.cli_endpoints.utils]
+2026-10-17T23:23:21 [INFO   ] Metrics exported to metrics.csv [chap_core.cli_endpoints.utils]
++ cat metrics.csv
+filename,model_name,model_version,ratio_above_truth,crps,crps_log1p,crps_norm,mae,mape,sensitivity,specificity,outbreak_accuracy,coverage_10_90,coverage_25_75,rmse,winkler_score_10_90,winkler_score_25_75,winkler_score_10_90_log1p,winkler_score_25_75_log1p
+ewars_python_weekly.nc,http://localhost:8000,0.1.0,0.5627571428571428,21.9456264,0.3846420937383393,0.10653216699029128,30.41190476190476,85.85855296104117,0.0,0.9895833333333334,0.9047619047619048,0.8857142857142857,0.5761904761904761,42.806694514270724,142.09761904761905,98.04880952380952,2.2567840559667878,1.7190507094474723
++ docker rm -f ewars-python
+ewars-python

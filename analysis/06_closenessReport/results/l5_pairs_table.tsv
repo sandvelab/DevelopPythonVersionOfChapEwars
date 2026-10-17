@@ -1,0 +1,13 @@
+dataset	comparison	mean_diff	median_abs_diff	mean_abs_diff
+monthly_ewars	python_vs_python	-10.126	6.361	44.066
+monthly_ewars	python_vs_r	-4.643	7.004	51.842
+monthly_ewars	r_vs_r	4.666	8.613	67.330
+weekly_nicaragua	python_vs_python	0.199	0.504	0.998
+weekly_nicaragua	python_vs_r	-0.015	0.532	0.991
+weekly_nicaragua	r_vs_r	0.116	0.529	0.995
+monthly_ewars	python_vs_global_median	3.876	169.150	1020.657
+monthly_ewars	python_vs_persistence	-303.258	137.375	845.407
+monthly_ewars	python_vs_seasonal_median	-385.061	113.188	942.149
+weekly_nicaragua	python_vs_global_median	8.580	8.592	18.048
+weekly_nicaragua	python_vs_persistence	-10.746	7.996	13.525
+weekly_nicaragua	python_vs_seasonal_median	9.696	10.049	18.205

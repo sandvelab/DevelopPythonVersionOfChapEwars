@@ -1,0 +1,27 @@
+dataset	variant	theta	R clean fits (range)	Python	R flagged fits
+monthly_ewars	default	log size	0.649 – 0.664	0.650	0.29
+monthly_ewars	default	log prec iid	-0.501 – -0.448	-0.455	5.67
+monthly_ewars	default	log prec RW1	1.766 – 2.039	1.775	3.64
+monthly_ewars	nlags_3_6	log size	0.645 – 0.650	0.649	–
+monthly_ewars	nlags_3_6	log prec iid	-0.382 – -0.360	-0.378	–
+monthly_ewars	nlags_3_6	log prec RW1	1.515 – 1.897	1.807	–
+monthly_ewars	no_covariates	log size	0.595 – 0.597	0.595	–
+monthly_ewars	no_covariates	log prec iid	-0.598 – -0.587	-0.591	–
+monthly_ewars	no_covariates	log prec RW1	1.425 – 1.703	1.641	–
+monthly_ewars	region_seasonal	log size	1.069 – 1.071	1.071	–
+monthly_ewars	region_seasonal	log prec iid	-0.356 – -0.346	-0.350	–
+monthly_ewars	region_seasonal	log prec RW1	1.965 – 2.326	2.115	–
+monthly_ewars	region_seasonal	log prec RW1 by location	2.145 – 2.168	2.163	–
+weekly_nicaragua	default	log size	0.681 – 0.681	0.681	–
+weekly_nicaragua	default	log prec iid	-0.323 – -0.306	-0.322	–
+weekly_nicaragua	default	log prec RW1	2.754 – 2.784	2.771	–
+weekly_nicaragua	nlags_3_6	log size	0.682 – 0.684	0.683	–
+weekly_nicaragua	nlags_3_6	log prec iid	-0.343 – -0.287	-0.338	–
+weekly_nicaragua	nlags_3_6	log prec RW1	2.650 – 2.855	2.799	–
+weekly_nicaragua	no_covariates	log size	0.654 – 0.654	0.654	–
+weekly_nicaragua	no_covariates	log prec iid	-0.313 – -0.308	-0.312	–
+weekly_nicaragua	no_covariates	log prec RW1	2.535 – 2.548	2.544	–
+weekly_nicaragua	region_seasonal	log size	0.732 – 0.734	0.733	–
+weekly_nicaragua	region_seasonal	log prec iid	-0.351 – -0.331	-0.337	–
+weekly_nicaragua	region_seasonal	log prec RW1	2.780 – 2.860	2.809	–
+weekly_nicaragua	region_seasonal	log prec RW1 by location	3.474 – 3.516	3.507	–

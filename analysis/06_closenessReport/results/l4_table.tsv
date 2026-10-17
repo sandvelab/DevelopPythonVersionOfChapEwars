@@ -1,0 +1,9 @@
+dataset	variant	R vs R, clean	Python vs R, clean R	Python vs Python	pairs with a flagged R fit
+monthly_ewars	default	0.030 / 0.054 / 1.00	0.032 / 0.053 / 1.00	0.028 / 0.051 / 0.99	0.941 / 0.941 / 0.38
+monthly_ewars	nlags_3_6	0.026 / 0.051 / 1.00	0.031 / 0.052 / 1.00	0.031 / 0.055 / 1.00	–
+monthly_ewars	no_covariates	0.028 / 0.053 / 1.00	0.030 / 0.052 / 1.00	0.028 / 0.050 / 1.02	–
+monthly_ewars	region_seasonal	0.031 / 0.055 / 1.00	0.030 / 0.053 / 1.00	0.026 / 0.050 / 1.00	–
+weekly_nicaragua	default	0.027 / 0.052 / 1.00	0.028 / 0.052 / 1.00	0.032 / 0.052 / 1.00	–
+weekly_nicaragua	nlags_3_6	0.031 / 0.050 / 1.00	0.027 / 0.050 / 1.00	0.027 / 0.050 / 1.00	–
+weekly_nicaragua	no_covariates	0.034 / 0.057 / 1.01	0.028 / 0.050 / 1.00	0.023 / 0.049 / 1.00	–
+weekly_nicaragua	region_seasonal	0.029 / 0.051 / 1.00	0.036 / 0.055 / 1.00	0.034 / 0.056 / 1.00	–

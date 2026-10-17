@@ -136,3 +136,19 @@ docker rm -f ewars
 - To evaluate the model on another dataset, give `--dataset-csv` a CSV with the six columns
   of step 2. Weekly data works the same way: chap passes weekly periods to the model as
   `YYYY-Wnn`, and `predict.R` reads the week number from that.
+
+## The Python model, the same way
+
+The Python translation is a chapkit service like the R original, in
+`analysis/05_pythonModel/scripts/chapkit_ewars_python/`. Its `README.md` is the run guide: a
+prediction from two CSV files, the service in Docker, and the chap evaluation above with
+`--model-name` pointing at it. The guide's commands are run as written by
+`analysis/05_pythonModel/04_throughChap/scripts/verify_guide.sh`, with the log in that node's
+`results/guide_check/`. The differences from the steps above:
+
+- The image is built from the folder (`docker build`) rather than pulled by digest. It has no
+  amd64 pin, so it runs natively on Apple Silicon.
+- The service id is `chapkit-ewars-model-python`. The configuration file and the chap
+  command are the same as in steps 3 and 5.
+- Repeated runs give identical scores. The sampler's seed is derived from each split's
+  inputs; set `EWARS_SEED` on the container to change it.
