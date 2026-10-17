@@ -1,0 +1,62 @@
+{
+  "engine": "ewars_python.inla_approx (candidate a)",
+  "theta_mode": [
+    0.5950649957717731,
+    -0.5908443704552132,
+    1.6409276037936347
+  ],
+  "nconfig": 15,
+  "n_theta": 3,
+  "mode_status": 0,
+  "seed": 28996629,
+  "corr_pos": [
+    0.9130334706407103,
+    0.9843860080340231,
+    1.0052256122752807
+  ],
+  "corr_neg": [
+    1.0952500999752637,
+    1.0158616557311297,
+    0.9948015527942502
+  ],
+  "optimizer": "scipy BFGS",
+  "optimizer_message": "Desired error not necessarily achieved due to precision loss.",
+  "optimizer_evals": 435,
+  "hessian_moves": 0,
+  "hessian_step": 0.07071067811865475,
+  "vb_status": [
+    "converged",
+    "converged",
+    "converged",
+    "converged",
+    "converged",
+    "converged",
+    "converged",
+    "converged",
+    "converged",
+    "converged",
+    "converged",
+    "converged",
+    "converged",
+    "converged",
+    "converged"
+  ],
+  "vb_iter": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "newton_converged": true
+}

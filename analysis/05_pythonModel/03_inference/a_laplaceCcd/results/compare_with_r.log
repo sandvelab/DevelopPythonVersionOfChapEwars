@@ -1,0 +1,74 @@
+                                                                                   median_abs_z  max_abs_z
+dataset          variant         comparison       r_health group                                          
+monthly_ewars    default         python_vs_python -        fixed                          0.000      0.000
+                                                           hyperparameter                 0.002      0.003
+                                                           random:ID_spat                 0.000      0.000
+                                                           random:ID_time_cyclic          0.000      0.000
+                                 python_vs_r      clean    fixed                          0.001      0.009
+                                                           hyperparameter                 0.025      0.084
+                                                           random:ID_spat                 0.001      0.006
+                                                           random:ID_time_cyclic          0.001      0.002
+                                                  flagged  fixed                          2.332     58.737
+                                                           hyperparameter                20.028   1060.451
+                                                           random:ID_spat                 4.291     25.324
+                                                           random:ID_time_cyclic         22.180     38.938
+                 nlags_3_6       python_vs_python -        fixed                          0.000      0.000
+                                                           hyperparameter                 0.003      0.004
+                                                           random:ID_spat                 0.000      0.000
+                                                           random:ID_time_cyclic          0.000      0.000
+                                 python_vs_r      clean    fixed                          0.001      0.006
+                                                           hyperparameter                 0.013      0.117
+                                                           random:ID_spat                 0.001      0.003
+                                                           random:ID_time_cyclic          0.008      0.012
+                 no_covariates   python_vs_python -        fixed                          0.000      0.000
+                                                           hyperparameter                 0.002      0.006
+                                                           random:ID_spat                 0.000      0.000
+                                                           random:ID_time_cyclic          0.000      0.000
+                                 python_vs_r      clean    fixed                          0.000      0.000
+                                                           hyperparameter                 0.010      0.087
+                                                           random:ID_spat                 0.000      0.001
+                                                           random:ID_time_cyclic          0.002      0.003
+                 region_seasonal python_vs_python -        fixed                          0.000      0.000
+                                                           hyperparameter                 0.002      0.006
+                                                           random:ID_spat                 0.000      0.000
+                                                           random:ID_time_cyclic          0.000      0.000
+                                                           random:ID_time_cyclic2         0.000      0.000
+                                 python_vs_r      clean    fixed                          0.002      0.014
+                                                           hyperparameter                 0.014      0.110
+                                                           random:ID_spat                 0.004      0.008
+                                                           random:ID_time_cyclic          0.024      0.038
+                                                           random:ID_time_cyclic2         0.009      0.022
+weekly_nicaragua default         python_vs_python -        fixed                          0.000      0.000
+                                                           hyperparameter                 0.003      0.004
+                                                           random:ID_spat                 0.000      0.000
+                                                           random:ID_time_cyclic          0.000      0.000
+                                 python_vs_r      clean    fixed                          0.000      0.000
+                                                           hyperparameter                 0.020      0.025
+                                                           random:ID_spat                 0.000      0.000
+                                                           random:ID_time_cyclic          0.000      0.002
+                 nlags_3_6       python_vs_python -        fixed                          0.000      0.000
+                                                           hyperparameter                 0.003      0.004
+                                                           random:ID_spat                 0.000      0.000
+                                                           random:ID_time_cyclic          0.000      0.000
+                                 python_vs_r      clean    fixed                          0.001      0.005
+                                                           hyperparameter                 0.018      0.060
+                                                           random:ID_spat                 0.001      0.003
+                                                           random:ID_time_cyclic          0.005      0.017
+                 no_covariates   python_vs_python -        fixed                          0.000      0.000
+                                                           hyperparameter                 0.003      0.005
+                                                           random:ID_spat                 0.000      0.000
+                                                           random:ID_time_cyclic          0.000      0.000
+                                 python_vs_r      clean    fixed                          0.000      0.000
+                                                           hyperparameter                 0.021      0.026
+                                                           random:ID_spat                 0.000      0.000
+                                                           random:ID_time_cyclic          0.000      0.002
+                 region_seasonal python_vs_python -        fixed                          0.000      0.000
+                                                           hyperparameter                 0.005      0.007
+                                                           random:ID_spat                 0.000      0.000
+                                                           random:ID_time_cyclic          0.000      0.000
+                                                           random:ID_time_cyclic2         0.000      0.000
+                                 python_vs_r      clean    fixed                          0.001      0.005
+                                                           hyperparameter                 0.012      0.027
+                                                           random:ID_spat                 0.001      0.003
+                                                           random:ID_time_cyclic          0.002      0.007
+                                                           random:ID_time_cyclic2         0.003      0.009

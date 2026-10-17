@@ -1,0 +1,72 @@
+Config: n_lags=3 precision=0.01 region_seasonal=False
+Covariates: rainfall, mean_temperature
+{'dataset': 'monthly_ewars', 'variant': 'default', 'replicate': 'rep1', 'seed': 102921854, 'seconds': 4.76}
+Config: n_lags=3 precision=0.01 region_seasonal=False
+Covariates: rainfall, mean_temperature
+{'dataset': 'monthly_ewars', 'variant': 'default', 'replicate': 'rep2', 'seed': 431580441, 'seconds': 5.01}
+Config: n_lags=3 precision=0.01 region_seasonal=False
+Covariates: rainfall, mean_temperature
+{'dataset': 'monthly_ewars', 'variant': 'default', 'replicate': 'rep3', 'seed': 1263747830, 'seconds': 5.0}
+Config: n_lags=3,6 precision=0.01 region_seasonal=False
+Covariates: rainfall, mean_temperature
+{'dataset': 'monthly_ewars', 'variant': 'nlags_3_6', 'replicate': 'rep1', 'seed': 1036350705, 'seconds': 7.55}
+Config: n_lags=3,6 precision=0.01 region_seasonal=False
+Covariates: rainfall, mean_temperature
+{'dataset': 'monthly_ewars', 'variant': 'nlags_3_6', 'replicate': 'rep2', 'seed': 1900809351, 'seconds': 8.35}
+Config: n_lags=3,6 precision=0.01 region_seasonal=False
+Covariates: rainfall, mean_temperature
+{'dataset': 'monthly_ewars', 'variant': 'nlags_3_6', 'replicate': 'rep3', 'seed': 885772734, 'seconds': 7.39}
+Config: n_lags=3 precision=0.01 region_seasonal=False
+Covariates: 
+{'dataset': 'monthly_ewars', 'variant': 'no_covariates', 'replicate': 'rep1', 'seed': 774932251, 'seconds': 2.2}
+Config: n_lags=3 precision=0.01 region_seasonal=False
+Covariates: 
+{'dataset': 'monthly_ewars', 'variant': 'no_covariates', 'replicate': 'rep2', 'seed': 1397470688, 'seconds': 2.06}
+Config: n_lags=3 precision=0.01 region_seasonal=False
+Covariates: 
+{'dataset': 'monthly_ewars', 'variant': 'no_covariates', 'replicate': 'rep3', 'seed': 28996629, 'seconds': 2.02}
+Config: n_lags=3 precision=0.01 region_seasonal=True
+Covariates: rainfall, mean_temperature
+{'dataset': 'monthly_ewars', 'variant': 'region_seasonal', 'replicate': 'rep1', 'seed': 1123351349, 'seconds': 10.51}
+Config: n_lags=3 precision=0.01 region_seasonal=True
+Covariates: rainfall, mean_temperature
+{'dataset': 'monthly_ewars', 'variant': 'region_seasonal', 'replicate': 'rep2', 'seed': 753271394, 'seconds': 10.02}
+Config: n_lags=3 precision=0.01 region_seasonal=True
+Covariates: rainfall, mean_temperature
+{'dataset': 'monthly_ewars', 'variant': 'region_seasonal', 'replicate': 'rep3', 'seed': 55829016, 'seconds': 9.9}
+Config: n_lags=3 precision=0.01 region_seasonal=False
+Covariates: rainfall, mean_temperature
+{'dataset': 'weekly_nicaragua', 'variant': 'default', 'replicate': 'rep1', 'seed': 47739219, 'seconds': 3.53}
+Config: n_lags=3 precision=0.01 region_seasonal=False
+Covariates: rainfall, mean_temperature
+{'dataset': 'weekly_nicaragua', 'variant': 'default', 'replicate': 'rep2', 'seed': 2118986053, 'seconds': 3.64}
+Config: n_lags=3 precision=0.01 region_seasonal=False
+Covariates: rainfall, mean_temperature
+{'dataset': 'weekly_nicaragua', 'variant': 'default', 'replicate': 'rep3', 'seed': 1568953315, 'seconds': 3.54}
+Config: n_lags=3,6 precision=0.01 region_seasonal=False
+Covariates: rainfall, mean_temperature
+{'dataset': 'weekly_nicaragua', 'variant': 'nlags_3_6', 'replicate': 'rep1', 'seed': 1734713194, 'seconds': 5.65}
+Config: n_lags=3,6 precision=0.01 region_seasonal=False
+Covariates: rainfall, mean_temperature
+{'dataset': 'weekly_nicaragua', 'variant': 'nlags_3_6', 'replicate': 'rep2', 'seed': 385413233, 'seconds': 5.4}
+Config: n_lags=3,6 precision=0.01 region_seasonal=False
+Covariates: rainfall, mean_temperature
+{'dataset': 'weekly_nicaragua', 'variant': 'nlags_3_6', 'replicate': 'rep3', 'seed': 1485528464, 'seconds': 5.3}
+Config: n_lags=3 precision=0.01 region_seasonal=False
+Covariates: 
+{'dataset': 'weekly_nicaragua', 'variant': 'no_covariates', 'replicate': 'rep1', 'seed': 1190061818, 'seconds': 1.07}
+Config: n_lags=3 precision=0.01 region_seasonal=False
+Covariates: 
+{'dataset': 'weekly_nicaragua', 'variant': 'no_covariates', 'replicate': 'rep2', 'seed': 1819698423, 'seconds': 1.0}
+Config: n_lags=3 precision=0.01 region_seasonal=False
+Covariates: 
+{'dataset': 'weekly_nicaragua', 'variant': 'no_covariates', 'replicate': 'rep3', 'seed': 837115576, 'seconds': 0.98}
+Config: n_lags=3 precision=0.01 region_seasonal=True
+Covariates: rainfall, mean_temperature
+{'dataset': 'weekly_nicaragua', 'variant': 'region_seasonal', 'replicate': 'rep1', 'seed': 315881166, 'seconds': 10.59}
+Config: n_lags=3 precision=0.01 region_seasonal=True
+Covariates: rainfall, mean_temperature
+{'dataset': 'weekly_nicaragua', 'variant': 'region_seasonal', 'replicate': 'rep2', 'seed': 934331749, 'seconds': 10.67}
+Config: n_lags=3 precision=0.01 region_seasonal=True
+Covariates: rainfall, mean_temperature
+{'dataset': 'weekly_nicaragua', 'variant': 'region_seasonal', 'replicate': 'rep3', 'seed': 782270020, 'seconds': 11.24}

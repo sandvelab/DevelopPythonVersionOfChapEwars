@@ -1,0 +1,9 @@
+dataset	variant	n_rows_r	n_rows_py	same_columns_in_order	frame_max_abs_diff	basis_max_abs_diff	basis_attr_max_abs_diff	string_mismatches	na_pattern_mismatches	n_predicted_rows_py
+monthly_ewars	default	4416	4416	True	0.0	4.440892098500626e-16	3.552713678800501e-14	0	0	113
+monthly_ewars	nlags_3_6	4416	4416	True	0.0	4.440892098500626e-16	3.552713678800501e-14	0	0	113
+monthly_ewars	no_covariates	4416	4416	True	0.0	0.0	0.0	0	0	113
+monthly_ewars	region_seasonal	4416	4416	True	0.0	4.440892098500626e-16	3.552713678800501e-14	0	0	113
+weekly_nicaragua	default	7310	7310	True	6.776263578034403e-21	3.3306690738754696e-16	4.547473508864641e-13	0	0	60
+weekly_nicaragua	nlags_3_6	7310	7310	True	6.776263578034403e-21	4.440892098500626e-16	4.547473508864641e-13	0	0	60
+weekly_nicaragua	no_covariates	7310	7310	True	6.776263578034403e-21	0.0	0.0	0	0	60
+weekly_nicaragua	region_seasonal	7310	7310	True	6.776263578034403e-21	3.3306690738754696e-16	4.547473508864641e-13	0	0	60
