@@ -42,3 +42,4 @@ replaced by an updated import.
 - `plan-as-delivered/` — the plan before batch 1.
 - `r-sources/` — R-INLA 25.10.19 and dlnm 2.4.10 sources, and what the reference image runs (batch 3).
 - `python-inla-candidates/` — evidence on existing Python INLA implementations (batch 3).
+- `r-inla-gmrflib/` — GMRFLib at the same r-inla commit: INLA's integration and sampling code, the specification for inference candidate (a) (batch 8).
