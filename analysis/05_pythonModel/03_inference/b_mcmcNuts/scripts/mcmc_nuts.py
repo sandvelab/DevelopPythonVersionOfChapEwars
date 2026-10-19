@@ -8,8 +8,17 @@ diagonal and the prior normalising constant counted as INLA counts it
 (Latent.prior_logdet_z). Where this posterior differs from candidate (a)'s or from INLA's,
 the difference is the approximation, not the model. check_target.py verifies the identity.
 
-Parametrisation (the same distribution; chosen for NUTS's geometry, JC-33):
-    u      sampled directly, N(0, 1/tau_u) (centred: each value has ~12-52 observations)
+Parametrisation (the same distribution; chosen for NUTS's geometry, JC-33). Two are
+available, as Target(parametrisation=...):
+  "split" (used): the intercept and the iid effect u share one direction the likelihood
+    cannot see (b0 + c, u - c), so they are sampled as
+      ubar = r_bar / sqrt(n_u tau_u)          (the mean of u; prior only)
+      w    ~ N(0, 1/tau_u), n_u - 1 values    (u's deviations: u = ubar + T_u w)
+      a    ~ N(ubar, 1/1e-4)                  (the level b0 + ubar the data see; b0 = a - ubar)
+    with T_u the orthonormal sum-to-zero basis of primitives.sum_to_zero_basis. The map to
+    (b0, u) is linear, so the joint density is the same up to the Jacobian tau_u^(-1/2).
+  "centred": u sampled directly, N(0, 1/tau_u), and b0 with the other fixed effects.
+The other terms are the same in both:
     s_z    = V diag(tau_s lam + 1e-4)^(-1/2) r_s,   T_n' R_scaled T_n = V diag(lam) V'
     s2_z   likewise per location block, with tau_s2
     b0     = r_0 / sqrt(1e-4),  beta = r_b / sqrt(precision)
@@ -71,8 +80,11 @@ class Target:
     """One fit's data and fixed matrices as JAX arrays, the NumPyro model, and the map from
     the sampled coordinates back to the latent field x in INLA's full coordinates."""
 
-    def __init__(self, lat: Latent):
+    def __init__(self, lat: Latent, parametrisation: str = "split"):
+        if parametrisation not in ("split", "centred"):
+            raise ValueError(parametrisation)
         self.lat = lat
+        self.parametrisation = parametrisation
         A = lat.A.tocsr()
         b = lat.blocks
 
@@ -99,15 +111,27 @@ class Target:
                       y=J(lat.y[o]), TnV=J(self.TnV), lam=J(self.lam), fixed_sd=J(self.fixed_sd))
         if lat.region_seasonal:
             self.j["idx_s2"] = J(self.idx_s2[o])
+        if parametrisation == "split":
+            self.Tu = sum_to_zero_basis(self.n_u)
+            self.j["Tu"] = J(self.Tu)
 
     def model(self):
         j, m, lat = self.j, self.m, self.lat
         theta = numpyro.sample("theta", dist.ImproperUniform(dist.constraints.real_vector, (), (self.n_theta,)))
         numpyro.factor("log_prior_theta", log_prior_theta(theta))
         size, tau_u, tau_s = jnp.exp(theta[0]), jnp.exp(theta[1]), jnp.exp(theta[2])
-        u = numpyro.sample("u", dist.Normal(0, 1 / jnp.sqrt(tau_u)).expand([self.n_u]).to_event(1))
+        if self.parametrisation == "split":
+            ubar = numpyro.sample("r_bar", dist.Normal(0, 1)) / jnp.sqrt(self.n_u * tau_u)
+            w = numpyro.sample("w", dist.Normal(0, 1 / jnp.sqrt(tau_u)).expand([self.n_u - 1]).to_event(1))
+            a = numpyro.sample("a", dist.Normal(ubar, j["fixed_sd"][0]))
+            u = ubar + j["Tu"] @ w
+            r_f = (numpyro.sample("r_f", dist.Normal(0, 1).expand([lat.p_fixed - 1]).to_event(1))
+                   if lat.p_fixed > 1 else jnp.zeros(0))
+            r_f = jnp.concatenate([((a - ubar) / j["fixed_sd"][0])[None], r_f])
+        else:
+            u = numpyro.sample("u", dist.Normal(0, 1 / jnp.sqrt(tau_u)).expand([self.n_u]).to_event(1))
+            r_f = numpyro.sample("r_f", dist.Normal(0, 1).expand([lat.p_fixed]).to_event(1))
         r_s = numpyro.sample("r_s", dist.Normal(0, 1).expand([m]).to_event(1))
-        r_f = numpyro.sample("r_f", dist.Normal(0, 1).expand([lat.p_fixed]).to_event(1))
         ev_s = tau_s * j["lam"] + RW1_DIAGONAL
         x_s = j["TnV"] @ (r_s / jnp.sqrt(ev_s))
         # INLA's normalising constant (m theta_s / 2) in place of the exact one
@@ -126,14 +150,23 @@ class Target:
     def latent_draws(self, samples: dict) -> np.ndarray:
         """x in INLA's full coordinates and block order (u, s[, s2], fixed), one row per draw."""
         th = np.asarray(samples["theta"])
-        parts = [np.asarray(samples["u"])]
+        if self.parametrisation == "split":
+            ubar = np.asarray(samples["r_bar"]) / np.sqrt(self.n_u * np.exp(th[:, 1]))
+            u = ubar[:, None] + np.asarray(samples["w"]) @ self.Tu.T
+            b0 = np.asarray(samples["a"]) - ubar
+            rest = np.asarray(samples["r_f"]) if "r_f" in samples else np.zeros((len(th), 0))
+            r_f = np.concatenate([(b0 / self.fixed_sd[0])[:, None], rest], axis=1)
+        else:
+            u = np.asarray(samples["u"])
+            r_f = np.asarray(samples["r_f"])
+        parts = [u]
         ev = np.exp(th[:, [2]]) * self.lam[None, :] + RW1_DIAGONAL
         parts.append((np.asarray(samples["r_s"]) / np.sqrt(ev)) @ self.TnV.T)
         if self.lat.region_seasonal:
             ev2 = np.exp(th[:, [3]]) * self.lam[None, :] + RW1_DIAGONAL
             r2 = np.asarray(samples["r_s2"]) / np.sqrt(ev2[:, None, :])
             parts.append((r2 @ self.TnV.T).reshape(len(th), -1))
-        parts.append(np.asarray(samples["r_f"]) * self.fixed_sd[None, :])
+        parts.append(r_f * self.fixed_sd[None, :])
         return np.concatenate(parts, axis=1)
 
     def eta_rows(self, x: np.ndarray, rows: np.ndarray) -> np.ndarray:

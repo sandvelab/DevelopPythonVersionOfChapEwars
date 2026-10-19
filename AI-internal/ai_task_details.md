@@ -150,3 +150,27 @@ See `AI-generated/batch-reports/26-10-15_b04_referenceHarness.md` and
 - **Follow-ups.** Candidate (b) (MCMC); phase D, whose budget can now use the measured costs;
   the holdout. On monthly data EWARS (R and Python alike) scores worse than seasonal_median
   and persistence, which is a finding about the model rather than the translation.
+
+## T8 (2026-10-19) — batch 9, candidate (b): in progress
+
+- **What exists.** Node `b_mcmcNuts` (an alternative; `a_laplaceCcd` stays the main path).
+  `scripts/mcmc_nuts.py` writes the model in NumPyro so that its joint density is exactly the
+  one `ewars_python.laplace` approximates, including INLA's normalising-constant convention;
+  `check_target.py` verifies this (spread of the difference across 20 random points ≤ 4.4e-9).
+  `run_mcmc_fits.py` writes the same files as the R harness and candidate (a), plus draws and
+  convergence diagnostics; `compare.py` gives L3–L4 against R, MCMC-vs-MCMC and MCMC-vs-(a).
+- **What did not work.** Non-centred iid effects mixed slowly (ESS 100 for τ_u); a dense mass
+  matrix failed to adapt in 500 warm-up iterations (R-hat 2.2); 50 warm-up iterations left
+  chains unconverged and overflowed the NB sampler. Centred iid effects with a diagonal mass
+  matrix mixed well on monthly data but not on weekly (short test runs, scratchpad only, not
+  results): min ESS 14–50, R-hat up to 1.21, up to 15 min for 450 iterations.
+- **Being tested.** On the agent's diagnosis (unverified) of a ridge between intercept and the
+  mean iid effect, a "split" parametrisation (level a = b0 + ū, deviations w, ū prior-only),
+  verified to give the same density. The earlier "centred" version stays selectable.
+- **The human's guidance** (2026-10-19, to go into plan §4b as human-set): try the
+  reparametrisation, then decide the run length; small MCMC-vs-INLA differences are fine, only
+  differences large enough to give very different results matter. So the full run needs to
+  resolve substantial differences, not 0.01-sd ones.
+- **Follow-ups.** Decide run length from the timing test; full run; commit after run; JC-32–34
+  (engine/library, parametrisation and settings, main-path decision) and any CH entries for
+  the mixing; claim.md answers; plan §4b and §6; batch report; re-render the translation record.
