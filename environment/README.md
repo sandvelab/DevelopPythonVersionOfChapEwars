@@ -26,6 +26,12 @@ rebuild from it reported "Built environment matches environment/lock.txt exactly
 inference libraries are added, and the lock re-resolved, when batches 8–10 build the
 inference candidates. No `Dockerfile` yet: the Python service gets its own image in batch 11.
 
+Re-pinned 2026-10-18 in batch 9: numpyro added for inference candidate (b), bringing jax
+and jaxlib 0.11.2. `RESOLVE=1` left every earlier pin unchanged (only additions in the
+lockfile diff), and a clean rebuild reported "Built environment matches
+environment/lock.txt exactly". Candidate (a) uses none of the added packages. The service
+image of batch 11 does not include them (its own `uv.lock`).
+
 ## Say what cannot be pinned
 
 A vanished data source, a licence server, a specific GPU, an evaluation platform run as a

@@ -4,6 +4,8 @@
 # `RESOLVE=1 bash environment/install-env.sh` (which is what /pin-environment runs).
 # Pinned in batch 3 from the translation inventory (JC-12); the inference libraries are
 # added, and the lock re-resolved, when batches 8-10 build the inference candidates.
+# Batch 9 added numpyro (and jax through it) for candidate (b); candidate (a) needs
+# nothing beyond scipy.
 name: analysis
 python: "3.13"
 dependencies:
@@ -12,3 +14,4 @@ dependencies:
   - pandas         # the data adapters (the R dplyr/base data-frame code)
   - pyyaml         # the chapkit config file (R yaml::yaml.load_file)
   - dlnmpy @ git+https://github.com/Logic06183/dlnmpy@8c5edd79ea989d22b457bfb93e03b0c5e125792c  # the cross-basis (R dlnm), pinned commit
+  - numpyro        # candidate (b): NUTS on the model's joint posterior (pulls in jax, jaxlib)

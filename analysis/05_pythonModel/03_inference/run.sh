@@ -11,5 +11,5 @@ REPO_ROOT="$(cd "../../.." && pwd)"
 PYTHON="$REPO_ROOT/environment/env/bin/python"
 
 # Alternatives: only the main path is run here.
-# (only one alternative so far)
+# Not taken: b_mcmcNuts
 bash "a_laplaceCcd/run.sh"
