@@ -24,3 +24,5 @@ rm -rf results/mcmc_fits && mkdir -p results/mcmc_fits
 "$PYTHON" scripts/compare.py results/mcmc_fits/fits ../a_laplaceCcd/results/python_fits/fits \
   ../../../03_referenceHarness/results ../../../04_fidelityMetrics/scripts \
   ../../../04_fidelityMetrics/results/r_fit_health.tsv results > results/compare.log
+# 4. The summary tables the answers are read from.
+"$PYTHON" scripts/summarise.py results ../a_laplaceCcd/results/python_fits/python_fits_timings.tsv > results/summarise.log

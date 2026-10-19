@@ -1,0 +1,108 @@
+                                                                                  median_abs_z  max_abs_z
+dataset          variant         comparison      r_health group                                          
+monthly_ewars    default         mcmc_vs_laplace -        fixed                          0.014      0.057
+                                                          hyperparameter                 0.058      0.163
+                                                          random:ID_spat                 0.009      0.046
+                                                          random:ID_time_cyclic          0.015      0.031
+                                 mcmc_vs_mcmc    -        fixed                          0.024      0.069
+                                                          hyperparameter                 0.015      0.073
+                                                          random:ID_spat                 0.012      0.059
+                                                          random:ID_time_cyclic          0.019      0.038
+                                 mcmc_vs_r       clean    fixed                          0.014      0.058
+                                                          hyperparameter                 0.048      0.104
+                                                          random:ID_spat                 0.009      0.046
+                                                          random:ID_time_cyclic          0.018      0.034
+                                                 flagged  fixed                          2.337     58.072
+                                                          hyperparameter                20.059   1060.672
+                                                          random:ID_spat                 4.224     25.104
+                                                          random:ID_time_cyclic         22.508     39.139
+                 nlags_3_6       mcmc_vs_laplace -        fixed                          0.012      0.038
+                                                          hyperparameter                 0.057      0.124
+                                                          random:ID_spat                 0.008      0.039
+                                                          random:ID_time_cyclic          0.010      0.022
+                                 mcmc_vs_mcmc    -        fixed                          0.019      0.046
+                                                          hyperparameter                 0.017      0.031
+                                                          random:ID_spat                 0.012      0.052
+                                                          random:ID_time_cyclic          0.019      0.034
+                                 mcmc_vs_r       clean    fixed                          0.012      0.037
+                                                          hyperparameter                 0.047      0.111
+                                                          random:ID_spat                 0.008      0.039
+                                                          random:ID_time_cyclic          0.011      0.029
+                 no_covariates   mcmc_vs_laplace -        fixed                          0.002      0.002
+                                                          hyperparameter                 0.066      0.105
+                                                          random:ID_spat                 0.009      0.048
+                                                          random:ID_time_cyclic          0.010      0.035
+                                 mcmc_vs_mcmc    -        fixed                          0.003      0.003
+                                                          hyperparameter                 0.013      0.040
+                                                          random:ID_spat                 0.013      0.063
+                                                          random:ID_time_cyclic          0.016      0.052
+                                 mcmc_vs_r       clean    fixed                          0.002      0.002
+                                                          hyperparameter                 0.047      0.067
+                                                          random:ID_spat                 0.009      0.048
+                                                          random:ID_time_cyclic          0.010      0.033
+                 region_seasonal mcmc_vs_laplace -        fixed                          0.014      0.069
+                                                          hyperparameter                 0.051      0.068
+                                                          random:ID_spat                 0.013      0.181
+                                                          random:ID_time_cyclic          0.026      0.057
+                                                          random:ID_time_cyclic2         0.012      0.068
+                                 mcmc_vs_mcmc    -        fixed                          0.019      0.095
+                                                          hyperparameter                 0.027      0.049
+                                                          random:ID_spat                 0.017      0.073
+                                                          random:ID_time_cyclic          0.039      0.069
+                                                          random:ID_time_cyclic2         0.024      0.101
+                                 mcmc_vs_r       clean    fixed                          0.015      0.069
+                                                          hyperparameter                 0.040      0.150
+                                                          random:ID_spat                 0.013      0.180
+                                                          random:ID_time_cyclic          0.031      0.072
+                                                          random:ID_time_cyclic2         0.018      0.076
+weekly_nicaragua default         mcmc_vs_laplace -        fixed                          0.010      0.027
+                                                          hyperparameter                 0.051      0.057
+                                                          random:ID_spat                 0.007      0.032
+                                                          random:ID_time_cyclic          0.012      0.080
+                                 mcmc_vs_mcmc    -        fixed                          0.012      0.037
+                                                          hyperparameter                 0.014      0.051
+                                                          random:ID_spat                 0.008      0.036
+                                                          random:ID_time_cyclic          0.011      0.046
+                                 mcmc_vs_r       clean    fixed                          0.010      0.026
+                                                          hyperparameter                 0.028      0.033
+                                                          random:ID_spat                 0.007      0.032
+                                                          random:ID_time_cyclic          0.012      0.080
+                 nlags_3_6       mcmc_vs_laplace -        fixed                          0.021      0.048
+                                                          hyperparameter                 0.039      0.050
+                                                          random:ID_spat                 0.011      0.040
+                                                          random:ID_time_cyclic          0.015      0.074
+                                 mcmc_vs_mcmc    -        fixed                          0.017      0.077
+                                                          hyperparameter                 0.006      0.031
+                                                          random:ID_spat                 0.019      0.053
+                                                          random:ID_time_cyclic          0.015      0.051
+                                 mcmc_vs_r       clean    fixed                          0.020      0.048
+                                                          hyperparameter                 0.023      0.037
+                                                          random:ID_spat                 0.011      0.040
+                                                          random:ID_time_cyclic          0.015      0.087
+                 no_covariates   mcmc_vs_laplace -        fixed                          0.002      0.002
+                                                          hyperparameter                 0.030      0.036
+                                                          random:ID_spat                 0.006      0.027
+                                                          random:ID_time_cyclic          0.012      0.096
+                                 mcmc_vs_mcmc    -        fixed                          0.005      0.005
+                                                          hyperparameter                 0.017      0.056
+                                                          random:ID_spat                 0.010      0.041
+                                                          random:ID_time_cyclic          0.012      0.042
+                                 mcmc_vs_r       clean    fixed                          0.002      0.002
+                                                          hyperparameter                 0.009      0.045
+                                                          random:ID_spat                 0.006      0.027
+                                                          random:ID_time_cyclic          0.011      0.097
+                 region_seasonal mcmc_vs_laplace -        fixed                          0.014      0.045
+                                                          hyperparameter                 0.027      0.043
+                                                          random:ID_spat                 0.009      0.031
+                                                          random:ID_time_cyclic          0.018      0.109
+                                                          random:ID_time_cyclic2         0.012      0.058
+                                 mcmc_vs_mcmc    -        fixed                          0.018      0.071
+                                                          hyperparameter                 0.013      0.039
+                                                          random:ID_spat                 0.012      0.049
+                                                          random:ID_time_cyclic          0.030      0.083
+                                                          random:ID_time_cyclic2         0.028      0.081
+                                 mcmc_vs_r       clean    fixed                          0.014      0.046
+                                                          hyperparameter                 0.027      0.038
+                                                          random:ID_spat                 0.009      0.032
+                                                          random:ID_time_cyclic          0.020      0.109
+                                                          random:ID_time_cyclic2         0.012      0.059

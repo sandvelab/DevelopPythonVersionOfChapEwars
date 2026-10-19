@@ -254,6 +254,17 @@ Append-only, oldest first.
 | Candidate (a) scored on the Python design matrix only (JC-29) | L1–L2 identical to 4.4e-16 | agent-autonomous |
 | Service: chapkit ShellModelRunner as the original, python 3.13 + uv image pinned by digest, no platform pin, id `chapkit-ewars-model-python`; the sampler seed derived from the inputs unless `EWARS_SEED` is set (JC-24, JC-30) | plan §6 batch 11 | agent-autonomous |
 
+### 2026-10-19/20 — batch 9: inference candidate (b)
+
+| Decision | Basis | Agency |
+|---|---|---|
+| **MCMC precision needed: enough to show substantial differences.** Small MCMC-vs-INLA differences are acceptable; only differences large enough to give very different results matter | the human: "If differences are small, it is all fine - it is only if differences are substantial so that they give very different results that this will matter" | human-set |
+| Before the full run, reparametrise intercept and iid effect and re-time, rather than run the first parametrisation for ~8 h (CH-28) | the human chose option A of the agent's four | human-set |
+| Candidate (b) is NumPyro NUTS on exactly candidate (a)'s density, its code in the node rather than the service package (JC-32) | plan §4 Inference | agent-autonomous |
+| "Split" parametrisation; 4 chains x (1000 + 1000), 3 runs per dataset x variant (JC-33) | the timing test; the human's guidance above | agent-autonomous; run length agent-on-human-assessment |
+| numpyro 0.22.0 (jax 0.11.2) added to the main environment, earlier pins unchanged | `environment/README.md` | agent-autonomous |
+| **Candidate (a) stays the main path** (JC-34): same forecasts as (b) and R; closer to INLA on hyperparameters; 10-100 times cheaper. L5 is not run for (b) | `analysis/05_pythonModel/03_inference/claim.md` | agent-on-human-assessment |
+
 ## 5. How this plan is used
 
 `/do` runs the next open batch of §6 and stops. Sketched phases become concrete batches as
@@ -273,7 +284,7 @@ it makes a call or meets an obstacle, and re-renders the two documents at its en
 | 5 | B — Fidelity metrics | Scripts computing L1–L5 comparisons from files, with no pass/fail (§4b, 2026-10-17). Run them R-vs-R to describe the reference's own behaviour as it runs, degenerate fits and crashes counted rather than excluded. | done |
 | 6 | C — Data layer + cross-basis | A Python port of the adapters and `lib.R` offsets (L1 exact), and the cross-basis via `dlnmpy` (L2 ≤1e-8) on every variant. Any `dlnmpy` gap is ported in parallel from the archived R `dlnm` source and tested against R, and logged as a CH entry. | done |
 | 7 | C — Model primitives | Python ports of the INLA pieces common to all candidates: the cyclic RW1 structure matrix and `inla.scale.model` scaling, the constraints, iid with replicate, the NB likelihood in INLA's parametrisation, and the default priors. Each is checked against the archived R/INLA values. | done |
-| 8–10 | C — Inference candidates | One candidate per batch (§4, *Inference*: a, b, c if it exists) as alternatives children, each scored at L3 and L4 against the R reference on the R design matrix and on the Python design matrix. Record cost and convergence. Then the **main-path decision** on development evidence, with the rejected candidates kept runnable. | (a) done, provisional main path; (b) open |
+| 8–10 | C — Inference candidates | One candidate per batch (§4, *Inference*: a, b, c if it exists) as alternatives children, each scored at L3 and L4 against the R reference on the R design matrix and on the Python design matrix. Record cost and convergence. Then the **main-path decision** on development evidence, with the rejected candidates kept runnable. | done: (a) main path, (b) kept runnable (JC-34) |
 | 11 | C — chapkit service | Package the main-path model as a chapkit service mirroring the original `main.py` (the same id scheme with a `-python` suffix, the same config schema and output) with its own Docker image. Run it through chap with the batch-2 backtest. L5 against R and the baselines. Add the Python section to the tutorial. | done |
 | | D — Stability | A perturbation manifest from the JC ledger (the inference candidates, prior interpretations, sample count, seeds, config variants, any approximation settings), costed. Set the budget, freeze, run, and report the distribution of the L5 Python–R gap, not the single number. Mark in the JC ledger which calls move the conclusion. Freeze the holdout manifest. | open |
 | | E — Final validation | Open the holdout once; run the frozen manifest for both R and Python through chap; report the held-out fidelity distribution beside the development one. | open |
@@ -290,3 +301,4 @@ it makes a call or meets an obstacle, and re-renders the two documents at its en
 - Batch 3 — [[26-10-14_b03_translationInventory]]
 - Batch 4 — [[26-10-15_b04_referenceHarness]]
 - Batches 5–8 (candidate a) and 11 — [[26-10-17_b05-11_pythonModelAndCloseness]]
+- Batch 9 (candidate b) — [[26-10-20_b09_mcmcCandidate]]

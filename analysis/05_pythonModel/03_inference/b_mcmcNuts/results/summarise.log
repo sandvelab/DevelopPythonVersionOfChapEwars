@@ -1,0 +1,88 @@
+comparison           dataset          variant                   group  mcmc_vs_r  mcmc_vs_laplace  mcmc_vs_mcmc
+0              monthly_ewars          default                   fixed      0.014            0.014         0.024
+1              monthly_ewars          default          hyperparameter      0.048            0.058         0.015
+2              monthly_ewars          default          random:ID_spat      0.009            0.009         0.012
+3              monthly_ewars          default   random:ID_time_cyclic      0.018            0.015         0.019
+4              monthly_ewars        nlags_3_6                   fixed      0.012            0.012         0.019
+5              monthly_ewars        nlags_3_6          hyperparameter      0.047            0.057         0.017
+6              monthly_ewars        nlags_3_6          random:ID_spat      0.008            0.008         0.012
+7              monthly_ewars        nlags_3_6   random:ID_time_cyclic      0.011            0.010         0.019
+8              monthly_ewars    no_covariates                   fixed      0.002            0.002         0.003
+9              monthly_ewars    no_covariates          hyperparameter      0.047            0.066         0.013
+10             monthly_ewars    no_covariates          random:ID_spat      0.009            0.009         0.013
+11             monthly_ewars    no_covariates   random:ID_time_cyclic      0.010            0.010         0.016
+12             monthly_ewars  region_seasonal                   fixed      0.015            0.014         0.019
+13             monthly_ewars  region_seasonal          hyperparameter      0.040            0.051         0.027
+14             monthly_ewars  region_seasonal          random:ID_spat      0.013            0.013         0.017
+15             monthly_ewars  region_seasonal   random:ID_time_cyclic      0.031            0.026         0.039
+16             monthly_ewars  region_seasonal  random:ID_time_cyclic2      0.018            0.012         0.024
+17          weekly_nicaragua          default                   fixed      0.010            0.010         0.012
+18          weekly_nicaragua          default          hyperparameter      0.028            0.051         0.014
+19          weekly_nicaragua          default          random:ID_spat      0.007            0.007         0.008
+20          weekly_nicaragua          default   random:ID_time_cyclic      0.012            0.012         0.011
+21          weekly_nicaragua        nlags_3_6                   fixed      0.020            0.021         0.017
+22          weekly_nicaragua        nlags_3_6          hyperparameter      0.023            0.039         0.006
+23          weekly_nicaragua        nlags_3_6          random:ID_spat      0.011            0.011         0.019
+24          weekly_nicaragua        nlags_3_6   random:ID_time_cyclic      0.015            0.015         0.015
+25          weekly_nicaragua    no_covariates                   fixed      0.002            0.002         0.005
+26          weekly_nicaragua    no_covariates          hyperparameter      0.009            0.030         0.017
+27          weekly_nicaragua    no_covariates          random:ID_spat      0.006            0.006         0.010
+28          weekly_nicaragua    no_covariates   random:ID_time_cyclic      0.011            0.012         0.012
+29          weekly_nicaragua  region_seasonal                   fixed      0.014            0.014         0.018
+30          weekly_nicaragua  region_seasonal          hyperparameter      0.027            0.027         0.013
+31          weekly_nicaragua  region_seasonal          random:ID_spat      0.009            0.009         0.012
+32          weekly_nicaragua  region_seasonal   random:ID_time_cyclic      0.020            0.018         0.030
+33          weekly_nicaragua  region_seasonal  random:ID_time_cyclic2      0.012            0.012         0.028
+
+             dataset          variant       comparison  median_abs_z_mean_shift  median_abs_w1_over_sd  width90_ratio_median
+0      monthly_ewars          default  mcmc_vs_laplace                    0.027                  0.052                 1.006
+1      monthly_ewars          default     mcmc_vs_mcmc                    0.031                  0.053                 1.001
+2      monthly_ewars          default        mcmc_vs_r                    0.030                  0.053                 1.007
+3      monthly_ewars        nlags_3_6  mcmc_vs_laplace                    0.029                  0.053                 1.007
+4      monthly_ewars        nlags_3_6     mcmc_vs_mcmc                    0.033                  0.055                 0.998
+5      monthly_ewars        nlags_3_6        mcmc_vs_r                    0.029                  0.053                 1.007
+6      monthly_ewars    no_covariates  mcmc_vs_laplace                    0.029                  0.053                 1.002
+7      monthly_ewars    no_covariates     mcmc_vs_mcmc                    0.034                  0.054                 0.979
+8      monthly_ewars    no_covariates        mcmc_vs_r                    0.031                  0.053                 1.002
+9      monthly_ewars  region_seasonal  mcmc_vs_laplace                    0.031                  0.052                 1.009
+10     monthly_ewars  region_seasonal     mcmc_vs_mcmc                    0.028                  0.050                 1.000
+11     monthly_ewars  region_seasonal        mcmc_vs_r                    0.031                  0.055                 1.009
+12  weekly_nicaragua          default  mcmc_vs_laplace                    0.028                  0.053                 0.986
+13  weekly_nicaragua          default     mcmc_vs_mcmc                    0.027                  0.051                 1.000
+14  weekly_nicaragua          default        mcmc_vs_r                    0.026                  0.053                 0.984
+15  weekly_nicaragua        nlags_3_6  mcmc_vs_laplace                    0.029                  0.052                 1.000
+16  weekly_nicaragua        nlags_3_6     mcmc_vs_mcmc                    0.030                  0.052                 1.000
+17  weekly_nicaragua        nlags_3_6        mcmc_vs_r                    0.030                  0.052                 0.995
+18  weekly_nicaragua    no_covariates  mcmc_vs_laplace                    0.026                  0.051                 1.000
+19  weekly_nicaragua    no_covariates     mcmc_vs_mcmc                    0.027                  0.050                 1.000
+20  weekly_nicaragua    no_covariates        mcmc_vs_r                    0.031                  0.054                 0.999
+21  weekly_nicaragua  region_seasonal  mcmc_vs_laplace                    0.032                  0.052                 0.992
+22  weekly_nicaragua  region_seasonal     mcmc_vs_mcmc                    0.034                  0.054                 1.000
+23  weekly_nicaragua  region_seasonal        mcmc_vs_r                    0.028                  0.051                 0.992
+
+            dataset          variant  runs  seconds_min  seconds_max  divergences  tree_depth_hits  min_ess  max_rhat
+0     monthly_ewars          default     3        111.7        130.4            0                0    303.6    1.0198
+1     monthly_ewars        nlags_3_6     3        299.7       1999.0            0               61    712.7    1.0063
+2     monthly_ewars    no_covariates     3         55.9         76.0            1                0    570.1    1.0084
+3     monthly_ewars  region_seasonal     3        184.9        211.2            0                1    178.9    1.0317
+4  weekly_nicaragua          default     3        210.2        220.5            0                0    494.0    1.0106
+5  weekly_nicaragua        nlags_3_6     3        445.0        494.0            0               25    471.9    1.0200
+6  weekly_nicaragua    no_covariates     3         55.5         58.2            0                0    736.4    1.0079
+7  weekly_nicaragua  region_seasonal     3        249.3        255.9            0                0    242.2    1.0248
+
+all: max |median shift| per comparison, by group kind
+comparison     mcmc_vs_r        mcmc_vs_laplace        mcmc_vs_mcmc       
+                     min    max             min    max          min    max
+kind                                                                      
+hyperparameter     0.009  0.048           0.027  0.066        0.006  0.027
+latent             0.002  0.031           0.002  0.026        0.003  0.039
+                median_abs_z_mean_shift        median_abs_w1_over_sd        width90_ratio_median       
+                                    min    max                   min    max                  min    max
+comparison                                                                                             
+mcmc_vs_laplace                   0.026  0.032                 0.051  0.053                0.986  1.009
+mcmc_vs_mcmc                      0.027  0.034                 0.050  0.055                0.979  1.001
+mcmc_vs_r                         0.026  0.031                 0.051  0.055                0.984  1.009
+     z_mean_shift:mcmc_vs_r  z_mean_shift:mcmc_vs_laplace  z_mean_shift:mcmc_vs_mcmc
+min                  -0.111                        -0.163                     -0.056
+max                   0.018                         0.003                      0.044
+hyperparameters with negative shift vs laplace: 24 of 26

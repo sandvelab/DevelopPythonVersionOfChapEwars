@@ -174,3 +174,17 @@ See `AI-generated/batch-reports/26-10-15_b04_referenceHarness.md` and
 - **Follow-ups.** Decide run length from the timing test; full run; commit after run; JC-32–34
   (engine/library, parametrisation and settings, main-path decision) and any CH entries for
   the mixing; claim.md answers; plan §4b and §6; batch report; re-render the translation record.
+
+### T8, continued (2026-10-20) — batch 9 completed
+
+- **The split parametrisation worked.** In the same short tests, weekly no_covariates went from
+  879 s / min ESS 17 to 21 s / 221, and no tree-depth limit was hit. The full run (3 runs x 8
+  variants, 4 x (1000 + 1000)) took 1.9 h: max R-hat 1.032, min ESS 179, 1 divergence.
+- **Findings** (`b_mcmcNuts/results/summary_*.tsv`): the latent field and the forecasts agree
+  with (a) and R within the MCMC's own run-to-run noise. Hyperparameter precisions are lower
+  under MCMC (24 of 26 against (a)), by 0.03-0.07 sd and at most 0.16 sd. By the human's
+  criterion this is small. (a) stays the main path (JC-34); (b) is kept runnable, not run through chap.
+- **Anomaly kept on record.** One fit took 1999 s against 300-380 s for its siblings, with no
+  sampler-side cause; most likely host sleep (cf. CH-21), noted in `provenance/mcmc_fits.md`.
+- **Follow-ups.** Phase D (stability manifest and budget, with the human); phase E (holdout).
+  JC-32 and JC-33 carry "matters: open", which JC-34 answers ("no"); the ledger is append-only.

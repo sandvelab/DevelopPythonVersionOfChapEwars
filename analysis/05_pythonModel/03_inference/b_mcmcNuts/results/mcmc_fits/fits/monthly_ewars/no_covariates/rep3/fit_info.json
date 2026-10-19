@@ -1,0 +1,19 @@
+{
+  "engine": "numpyro NUTS (candidate b)",
+  "seed": 1911650605,
+  "num_warmup": 1000,
+  "num_samples": 1000,
+  "num_chains": 4,
+  "n_theta": 3,
+  "divergences": 1,
+  "mean_num_steps": 62.99475,
+  "max_tree_depth_hits": 0,
+  "min_ess": 709.7835453904645,
+  "max_rhat": 1.0038940008688735,
+  "theta_mean": [
+    0.5947574094778124,
+    -0.5973052536963276,
+    1.5588522486484377
+  ],
+  "seconds": 55.9
+}

@@ -45,10 +45,13 @@ reader who was not present can follow, and keep them honest about what did not w
     following INLA's compact-mode engine from its archived C source (`Archive/r-inla-gmrflib/`).
   - Findings: L1 exact, L2 4.4e-16; L3–L4 inside the R refits' own spread; chap CRPS overlaps
     the R runs' range on both datasets. Report: `analysis/06_closenessReport/results/closeness_report.md`.
-- T8 (2026-10-19): Batch 9, inference candidate (b), NumPyro NUTS — **in progress, no
-  results yet**. New node `analysis/05_pythonModel/03_inference/b_mcmcNuts/` (sampler, target
+- T8 (2026-10-19, done 2026-10-20): Batch 9, inference candidate (b), NumPyro NUTS. New node `analysis/05_pythonModel/03_inference/b_mcmcNuts/` (sampler, target
   check, fit runner, comparison against R, itself and candidate a); numpyro 0.22.0 / jax 0.11.2
   pinned into `environment/` with earlier pins unchanged (commit `bb0d809`).
   - The sampled density equals candidate (a)'s to ≤ 4.4e-9 log units on every dataset × variant.
-  - Short test runs mixed poorly on the weekly data (min ESS 14–50, R-hat to 1.21); a
-    reparametrisation of intercept and iid effect is being timed before the full run.
+  - Short test runs mixed poorly on the weekly data (min ESS 14–50, R-hat to 1.21); the
+    human chose to reparametrise first. The "split" parametrisation fixed it (CH-28, JC-33);
+    24 runs converged (R-hat ≤ 1.032) in 1.9 h.
+  - Result: same forecasts as candidate (a) and R to the Monte Carlo floor; hyperparameters
+    a few hundredths of a sd lower than INLA's. Candidate (a) stays the main path (JC-34).
+    Report: `AI-generated/batch-reports/26-10-20_b09_mcmcCandidate.md`.

@@ -241,5 +241,14 @@
   "solution": "Started by the agent (open -a Docker); needed for the INLA checks in the reference image and the Python service image",
   "status": "solved",
   "details": "-"
+ },
+ {
+  "date": "2026-10-19",
+  "batch": 9,
+  "id": "CH-28",
+  "challenge": "NUTS mixed slowly on the weekly data: in short test runs, min ESS 14-50 and R-hat up to 1.21, and up to 15 minutes for 450 iterations, against an ~8 h estimate for the planned run",
+  "solution": "Reparametrised intercept and iid effect so the sampler moves along the direction the likelihood cannot see (JC-33); the same density, re-checked. The cross-basis coefficients remain the slowest-mixing quantities",
+  "status": "solved",
+  "details": "The diagnosis (a ridge between intercept and mean iid effect) was the agent's hypothesis, borne out by the timing test rather than shown directly; the centred version stays selectable in mcmc_nuts.Target"
  }
 ]

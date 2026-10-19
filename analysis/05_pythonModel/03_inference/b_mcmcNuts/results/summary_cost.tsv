@@ -1,0 +1,9 @@
+dataset	variant	runs	seconds_min	seconds_max	divergences	tree_depth_hits	min_ess	max_rhat	a_seconds_min	a_seconds_max
+monthly_ewars	default	3	111.7	130.4	0	0	303.6	1.0198	4.76	5.01
+monthly_ewars	nlags_3_6	3	299.7	1999.0	0	61	712.7	1.0063	7.39	8.35
+monthly_ewars	no_covariates	3	55.9	76.0	1	0	570.1	1.0084	2.02	2.2
+monthly_ewars	region_seasonal	3	184.9	211.2	0	1	178.9	1.0317	9.9	10.51
+weekly_nicaragua	default	3	210.2	220.5	0	0	494.0	1.0106	3.53	3.64
+weekly_nicaragua	nlags_3_6	3	445.0	494.0	0	25	471.9	1.02	5.3	5.65
+weekly_nicaragua	no_covariates	3	55.5	58.2	0	0	736.4	1.0079	0.98	1.07
+weekly_nicaragua	region_seasonal	3	249.3	255.9	0	0	242.2	1.0248	10.59	11.24

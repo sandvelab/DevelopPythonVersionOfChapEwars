@@ -34,12 +34,13 @@ non-negotiables: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForCha
 ## The article
 
 - **Target venue**: not yet decided.
-- **Status**: batches 1–8 (inference candidate a) and 11 done. The Python model is a
+- **Status**: batches 1–11 done; inference candidate (a) is the main path, and candidate (b),
+  NUTS on the same density, gives the same forecasts (`analysis/05_pythonModel/03_inference/`). The Python model is a
   chapkit service at `analysis/05_pythonModel/scripts/chapkit_ewars_python/` (run guide in its
   `README.md`), evaluated through chap like the R original. The closeness report is
   `analysis/06_closenessReport/results/closeness_report.md`. It applies no pass/fail: the human
   applies the yardstick, and the R reference counts as it runs (plan §4b, 2026-10-17). Open:
-  candidate (b), phase D (stability), phase E (holdout).
+  phase D (stability), phase E (holdout).
 - **Manuscript**: `Human-AI-collaboration/manuscript/` (empty).
 - **The plan being executed**: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForChap.md`.
   It carries the batch ledger (§6); `/do` runs the next open batch and stops.
@@ -49,7 +50,7 @@ non-negotiables: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForCha
 | Setting | Value |
 |---|---|
 | Project random seed | `20261014`. Component seed = 1 + (first 4 bytes of sha256(`"20261014/<component>"`), big-endian) mod (2³¹ − 2), so it is valid for R, INLA and numpy (JC-17; first used in `analysis/03_referenceHarness/scripts/derive_seeds.py`). |
-| Main environment | Python 3.13.0 with numpy, scipy, pandas, pyyaml and dlnmpy @ `8c5edd79`, pinned in batch 3; the inference libraries are added when batches 8–10 build the candidates. Installed from `environment/lock.txt` by `environment/install-env.sh`. Invoked as `environment/env/bin/python`. Docker image: yes — the R reference is one, and the Python model ships one so chap drives both identically. |
+| Main environment | Python 3.13.0 with numpy, scipy, pandas, pyyaml and dlnmpy @ `8c5edd79`, pinned in batch 3; numpyro 0.22.0 (jax 0.11.2) added in batch 9 for candidate (b). Installed from `environment/lock.txt` by `environment/install-env.sh`. Invoked as `environment/env/bin/python`. Docker image: yes — the R reference is one, and the Python model ships one so chap drives both identically. |
 | Repository machinery interpreter | `.venv`, per `setup-guide.md` §3. |
 | Tracking level | standard (`AGENTS.md` §6). |
 | Compute budget for stability work | not yet set — set in phase D; measured per-run costs: Python fit 1–11 s, Python chap evaluation 2–6 min, R chap evaluation 4–7 min |
