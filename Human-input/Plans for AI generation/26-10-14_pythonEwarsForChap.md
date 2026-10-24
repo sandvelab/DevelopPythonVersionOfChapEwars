@@ -265,6 +265,14 @@ Append-only, oldest first.
 | numpyro 0.22.0 (jax 0.11.2) added to the main environment, earlier pins unchanged | `environment/README.md` | agent-autonomous |
 | **Candidate (a) stays the main path** (JC-34): same forecasts as (b) and R; closer to INLA on hyperparameters; 10-100 times cheaper. L5 is not run for (b) | `analysis/05_pythonModel/03_inference/claim.md` | agent-on-human-assessment |
 
+### 2026-10-21 — closing the development phase (outside the plan)
+
+| Decision | Basis | Agency |
+|---|---|---|
+| **Phases D–F are optional future work.** The project's purpose was the code translation and showing that something similar can be made; stability (D), the holdout (E) and the claims, manuscript and release (F) are deferred, not dropped. The holdout stays sealed | the human, 2026-10-21 | human-set |
+| The repository is no longer a starting point but the record of the finished translation: the root `README.md` is rewritten to summarise the result, point to the closeness report, the translation record and the model, and give a person a step-by-step guide to running the Python model through chap by hand. The template's own guides are kept as method documents | the human asked for the README; its content from the node answers, the closeness report and the verified run guide | agent-on-human-assessment |
+| **A self-contained folder for running the model, `python-ewars-standalone/`**: copies of the model, the example data and the configuration, with a guide in relative paths that installs chap as a uv tool at its current release. Exact reproducibility is not that guide's purpose; the pinned path stays under `analysis/`. The copies are made by `refresh.sh` and listed in the folder's `provenance.md` | the human asked for it; the guide's commands checked by running them from a copy outside the repository (`check/`) | agent-on-human-assessment |
+
 ## 5. How this plan is used
 
 `/do` runs the next open batch of §6 and stops. Sketched phases become concrete batches as
@@ -286,11 +294,13 @@ it makes a call or meets an obstacle, and re-renders the two documents at its en
 | 7 | C — Model primitives | Python ports of the INLA pieces common to all candidates: the cyclic RW1 structure matrix and `inla.scale.model` scaling, the constraints, iid with replicate, the NB likelihood in INLA's parametrisation, and the default priors. Each is checked against the archived R/INLA values. | done |
 | 8–10 | C — Inference candidates | One candidate per batch (§4, *Inference*: a, b, c if it exists) as alternatives children, each scored at L3 and L4 against the R reference on the R design matrix and on the Python design matrix. Record cost and convergence. Then the **main-path decision** on development evidence, with the rejected candidates kept runnable. | done: (a) main path, (b) kept runnable (JC-34) |
 | 11 | C — chapkit service | Package the main-path model as a chapkit service mirroring the original `main.py` (the same id scheme with a `-python` suffix, the same config schema and output) with its own Docker image. Run it through chap with the batch-2 backtest. L5 against R and the baselines. Add the Python section to the tutorial. | done |
-| | D — Stability | A perturbation manifest from the JC ledger (the inference candidates, prior interpretations, sample count, seeds, config variants, any approximation settings), costed. Set the budget, freeze, run, and report the distribution of the L5 Python–R gap, not the single number. Mark in the JC ledger which calls move the conclusion. Freeze the holdout manifest. | open |
-| | E — Final validation | Open the holdout once; run the frozen manifest for both R and Python through chap; report the held-out fidelity distribution beside the development one. | open |
-| | F — Claims & report | The claim collection from the tree; the hierarchical report; the final render of the judgment-call list and the challenges overview (short main part, details in the appendix). | open |
-| | F (cont.) | `/validate cleanroom` and `/validate outsider`; fix what they find. | open |
-| | F — Release | The manuscript section(s) the results support; the release scan; push on the human's instruction. | open |
+| 12 | — (outside the plan) | Close the development phase: record the human's decision that phases D–F are optional future work; rewrite the root `README.md` as the record's map, with the result, pointers and a hand-run guide for the Python model through chap (§4b, 2026-10-21). No analysis is run. | done |
+| 13 | — (outside the plan) | `python-ewars-standalone/`: a folder a person can copy anywhere and run the Python model from, through chap installed as a uv tool, with relative paths; copies of model, data and config made by `refresh.sh`, provenance beside them, the guide checked by running it (§4b, 2026-10-21). No analysis is run. | done |
+| | D — Stability | A perturbation manifest from the JC ledger (the inference candidates, prior interpretations, sample count, seeds, config variants, any approximation settings), costed. Set the budget, freeze, run, and report the distribution of the L5 Python–R gap, not the single number. Mark in the JC ledger which calls move the conclusion. Freeze the holdout manifest. | deferred — optional future work (§4b, 2026-10-21) |
+| | E — Final validation | Open the holdout once; run the frozen manifest for both R and Python through chap; report the held-out fidelity distribution beside the development one. | deferred — optional future work (§4b, 2026-10-21); the holdout stays sealed |
+| | F — Claims & report | The claim collection from the tree; the hierarchical report; the final render of the judgment-call list and the challenges overview (short main part, details in the appendix). | deferred — optional future work (§4b, 2026-10-21) |
+| | F (cont.) | `/validate cleanroom` and `/validate outsider`; fix what they find. | deferred — optional future work (§4b, 2026-10-21) |
+| | F — Release | The manuscript section(s) the results support; the release scan; push on the human's instruction. | deferred — optional future work (§4b, 2026-10-21) |
 
 ## Batch ledger — reports
 

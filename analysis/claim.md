@@ -22,6 +22,9 @@ need more declare it in their own claim.md.
    (06_closenessReport answers 1-2): the frame and cross-basis to rounding, the posterior and
    predictive distributions within the spread of INLA's own refits, and chap's CRPS overlapping
    the R original's run-to-run range on both datasets, with a similar seed-to-seed spread.
-2. **Which translation choices drive the remaining difference** is not yet established: the
-   stability phase (D) and candidate (b) have not run. The Python engine's departures from
-   INLA's are logged in JC-28.
+2. **Which translation choices drive the remaining difference** is only partly established.
+   Candidate (b), exact sampling of the same posterior, shows that INLA's approximation is not
+   one of them: it changes the hyperparameters by a few hundredths of a sd and the forecasts
+   not at all (05_pythonModel/03_inference answer 2). The Python engine's departures from
+   INLA's are logged in JC-28. The stability phase (D), which would rank the remaining
+   choices, is deferred as optional future work (plan §4b, 2026-10-21).

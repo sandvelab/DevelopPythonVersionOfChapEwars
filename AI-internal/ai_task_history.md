@@ -55,3 +55,16 @@ reader who was not present can follow, and keep them honest about what did not w
   - Result: same forecasts as candidate (a) and R to the Monte Carlo floor; hyperparameters
     a few hundredths of a sd lower than INLA's. Candidate (a) stays the main path (JC-34).
     Report: `AI-generated/batch-reports/26-10-20_b09_mcmcCandidate.md`.
+- T9 (2026-10-21): Closed the development phase and made the repository the record of the
+  finished translation, on the human's decision that phases D–F (stability, holdout, claims
+  and manuscript, release) are optional future work. Rewrote the root `README.md`: the result,
+  a map of where the model, the closeness report, the translation record and the plan are,
+  the deferred phases stated plainly, and a hand-run guide for the Python model through chap
+  taken from the verified run guide. Plan §4b entry and ledger row 12; readme-at-start status.
+  No analysis run.
+- T10 (2026-10-21): `python-ewars-standalone/`, a folder a person can copy anywhere and run
+  the Python model from: copies of the model, the two example datasets and the configuration
+  (made by `refresh.sh`, listed in `provenance.md`), and a guide in relative paths that
+  installs chap as a uv tool at its current release. The guide was run end to end from a copy
+  outside the repository (`check/`, exit 0; weekly CRPS 21.98, monthly 1132.08). Plan §4b
+  entry and ledger row 13; root README points to it.

@@ -1,0 +1,12 @@
+# The EWARS configuration passed to chap with --model-configuration-yaml: the defaults of
+# EwarsConfig in the pinned main.py, written out. The covariates must be named here:
+# when a configuration file is given, chap-core always sends
+# `additional_continuous_covariates`, and a list omitted from the file is sent as [] —
+# "no covariates", not the service default (CH-08).
+user_option_values:
+  n_lags: [3]
+  precision: 0.01
+  region_seasonal: false
+additional_continuous_covariates:
+  - rainfall
+  - mean_temperature

@@ -39,8 +39,11 @@ non-negotiables: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForCha
   chapkit service at `analysis/05_pythonModel/scripts/chapkit_ewars_python/` (run guide in its
   `README.md`), evaluated through chap like the R original. The closeness report is
   `analysis/06_closenessReport/results/closeness_report.md`. It applies no pass/fail: the human
-  applies the yardstick, and the R reference counts as it runs (plan §4b, 2026-10-17). Open:
-  phase D (stability), phase E (holdout).
+  applies the yardstick, and the R reference counts as it runs (plan §4b, 2026-10-17).
+  **The development phase is closed** (plan §4b, 2026-10-21): phases D (stability), E
+  (holdout) and F (claims, manuscript, release) are optional future work, deferred by the
+  human; the holdout stays sealed. The repository is the record of the finished translation,
+  and the root `README.md` is its map.
 - **Manuscript**: `Human-AI-collaboration/manuscript/` (empty).
 - **The plan being executed**: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForChap.md`.
   It carries the batch ledger (§6); `/do` runs the next open batch and stops.
@@ -53,7 +56,7 @@ non-negotiables: `Human-input/Plans for AI generation/26-10-14_pythonEwarsForCha
 | Main environment | Python 3.13.0 with numpy, scipy, pandas, pyyaml and dlnmpy @ `8c5edd79`, pinned in batch 3; numpyro 0.22.0 (jax 0.11.2) added in batch 9 for candidate (b). Installed from `environment/lock.txt` by `environment/install-env.sh`. Invoked as `environment/env/bin/python`. Docker image: yes — the R reference is one, and the Python model ships one so chap drives both identically. |
 | Repository machinery interpreter | `.venv`, per `setup-guide.md` §3. |
 | Tracking level | standard (`AGENTS.md` §6). |
-| Compute budget for stability work | not yet set — set in phase D; measured per-run costs: Python fit 1–11 s, Python chap evaluation 2–6 min, R chap evaluation 4–7 min |
+| Compute budget for stability work | not set — phase D is deferred (plan §4b, 2026-10-21); measured per-run costs: Python fit 1–11 s, Python chap evaluation 2–6 min, R chap evaluation 4–7 min |
 | Storage budget | not a constraint; clones over ~50 MB gitignored and re-obtainable by commit |
 | Data governance | public example data, redistributable under the shipping repositories' licences (re-checked at release) |
 | Git remote | `sandvelab/DevelopPythonVersionOfChapEwars`, public. Nothing is pushed without the human's instruction; `/release` runs the secrets and data-permission scan before anything becomes public. |

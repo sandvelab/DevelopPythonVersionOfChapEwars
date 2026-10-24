@@ -1,0 +1,21 @@
+services:
+  ewars-python:
+    build: .
+    ports:
+      - "8000:8000"
+    init: true
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    user: chapkit:chapkit
+    volumes:
+      - ewars_python_data:/app/data
+      - type: tmpfs
+        target: /tmp
+        tmpfs:
+          size: 2000000000
+
+volumes:
+  ewars_python_data:

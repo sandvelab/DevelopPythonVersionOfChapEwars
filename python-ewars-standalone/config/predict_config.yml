@@ -1,0 +1,6 @@
+# The same settings as ewars_config.yaml, in the flat form scripts/predict.py reads when the
+# model is run on two CSV files without chap.
+n_lags: [3]
+precision: 0.01
+region_seasonal: false
+additional_continuous_covariates: [rainfall, mean_temperature]

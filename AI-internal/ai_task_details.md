@@ -188,3 +188,59 @@ See `AI-generated/batch-reports/26-10-15_b04_referenceHarness.md` and
   sampler-side cause; most likely host sleep (cf. CH-21), noted in `provenance/mcmc_fits.md`.
 - **Follow-ups.** Phase D (stability manifest and budget, with the human); phase E (holdout).
   JC-32 and JC-33 carry "matters: open", which JC-34 answers ("no"); the ledger is append-only.
+
+### T9 (2026-10-21) — closing the development phase; README as the record's map
+
+- **The human's decision** (plan §4b, human-set): the project's purpose was the code
+  translation and showing that something similar can be made; phases D–F are optional future
+  work, deferred, not dropped. The holdout stays sealed.
+- **README.** The template's introduction was replaced by the project's: the result in one
+  paragraph per layer (from `analysis/claim.md`, `05_pythonModel/claim.md`,
+  `03_inference/claim.md`, `06_closenessReport/claim.md` and the closeness report), a table
+  of where things are, the deferred phases, a step-by-step guide for a person to run the
+  Python model through chap (commands copied from the service `README.md`, which
+  `verify_guide.sh` runs verbatim; guide exit code 0), how to reproduce the analysis, and
+  the method documents kept as part of the record. Every path named was checked to exist.
+- **Bookkeeping.** Plan: §4b entry dated 2026-10-21, ledger row 12, rows D–F set to
+  "deferred — optional future work". `readme-at-start.md`: status and the compute-budget
+  row. `/validate invariants`: all pass except `git` (uncommitted changes, expected before
+  the commit).
+- **Left as found.** `analysis/claim.md` answer 2 still says candidate (b) has not run; it
+  has (batch 9). A stray blank line was added at the top of
+  `AI-generated/batch-reports/26-10-15_b04_referenceHarness.md` before this session; not
+  mine, and batch reports are not hand-edited.
+- **Second round** (same day). Fixed: `analysis/claim.md` answer 2 now records that candidate
+  (b) ran and what it showed, and that phase D is deferred; the stray blank line in the batch
+  4 report reverted from git. README re-read for a newcomer: CHAP, chapkit, INLA and dlnm are
+  explained before they are used; a "start here" list; the five layers as a table with the
+  finding beside each; the headline CRPS ranges copied from the closeness report's L5 table
+  with the source stated; rough times per step; a troubleshooting list; the reproduction
+  section corrected (the NUTS candidate is not on the main path, so `analysis/run.sh` does
+  not run it).
+- **Third round.** The guide now says how to use it: one terminal, each block pasted whole,
+  in order, waiting for each to finish. Step 2's block carries a comment per line, and the
+  text says what the user should see when it has worked.
+
+### T10 (2026-10-21) — the standalone folder
+
+- **Why.** The human asked for one folder holding everything a person needs to follow a
+  guide and run the model, copyable anywhere, relative paths only, chap installed as a uv
+  tool; exact reproducibility is not that guide's purpose.
+- **What.** `python-ewars-standalone/`: `model/` (the service package without its local-run
+  files), `data/` (the two chap CSVs and the historic/future pairs), `config/` (chap's YAML
+  and a flat `predict_config.yml` for `predict.py`), `README.md` (the guide: install chap,
+  build and start the image, evaluate weekly and monthly, stop; your own data; predict
+  without chap; service without Docker; troubleshooting), `provenance.md`, `refresh.sh`
+  (rebuilds the copies from the analysis tree), `check/`. `.gitignore` covers `output/` and
+  the model's local-run folders.
+- **chap at its current release.** PyPI has chap-core 2.3.1; the project pinned 2.5.0.dev0
+  at `b8c8f788`. The `chap eval` and `chap export-metrics` options the guide uses exist in
+  both, checked with `uvx --from chap-core chap ... --help`. The guide says what to do if a
+  later release changes them.
+- **Check.** The guide's blocks were run from a copy of the folder in the session scratchpad,
+  with `uvx --from chap-core chap` in place of the installed tool so nothing was installed on
+  the machine: image built, service healthy, weekly evaluation CRPS 21.979, monthly 1132.079
+  (equal to the project's run1, as the sampler seed derives from the inputs), service stopped,
+  `predict.py` wrote 1000 samples per row. Log and exit code in `check/`.
+- **Not done.** `uv tool install chap-core` itself was not run on this machine; `uvx` resolves
+  the same release. The "service without Docker" block was not run.
