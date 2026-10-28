@@ -8,6 +8,9 @@ The aim of this guide is to let you run the model and see it evaluated by chap. 
 the project's reproduction path: chap is installed at whatever version is current, not
 pinned. The pinned, verified commands are in the repository's `analysis/` tree.
 
+The model is licensed under the GPL-3.0-or-later (`LICENSE`). `NOTICE` says where it comes from and
+which material in this folder the licence does not cover.
+
 | What | Where |
 |---|---|
 | The model, as a chapkit service: code, Dockerfile, pinned dependencies | `model/` (its `README.md` describes the package) |

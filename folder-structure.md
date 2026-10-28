@@ -13,8 +13,8 @@ What each directory is for, and the one rule that governs it. Create every folde
 ├── setup-guide.md          how to start a project from this copy
 ├── How-to-use-vault.md     the walkthrough: what to ask the agent, in what order
 ├── folder-structure.md     this file
-├── LICENSE                 CC BY 4.0 — the documents, data and provenance records
-├── LICENSE-CODE            MIT — the scripts, every run.sh, .claude/ and environment/
+├── LICENSE                 GPL-3.0 — the whole repository except third-party material
+├── NOTICE                  copyright, the line of descent, what the licence does not cover
 ├── .claude/
 │   ├── settings.json
 │   └── commands/           the 17 skills

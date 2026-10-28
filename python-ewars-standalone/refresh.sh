@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Rebuilds the copies in this folder from their sources in the analysis tree. Run from the
 # repository root:  bash python-ewars-standalone/refresh.sh
-# It replaces model/, data/ and config/; it does not touch README.md, provenance.md, check/
-# or output/. After running it, append a section to provenance.md with the commit.
+# It replaces model/, data/, config/, LICENSE and NOTICE; it does not touch README.md,
+# provenance.md, check/ or output/. After running it, append a section to provenance.md with the commit.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 HERE=python-ewars-standalone
@@ -37,5 +37,8 @@ precision: 0.01
 region_seasonal: false
 additional_continuous_covariates: [rainfall, mean_temperature]
 EOF
+
+# The licence and the notice, so that a copy of this folder carries them.
+cp LICENSE NOTICE "$HERE/"
 
 echo "refreshed $HERE/model, data and config from $(git rev-parse --short HEAD)"

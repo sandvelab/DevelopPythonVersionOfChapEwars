@@ -42,3 +42,10 @@ installed as a uv tool at its current release instead of the pinned commit. The 
 The guide's blocks, run from a copy of this folder placed outside the repository, with
 `uvx --from chap-core chap` standing in for the installed tool so that nothing is installed
 on the machine. `guide_run.log` is the full output; `guide_exit_code.txt` the exit status.
+
+## LICENSE, NOTICE (2026-10-27)
+
+Copied from the repository root by the `cp LICENSE NOTICE` line added to `refresh.sh`, run
+on its own rather than through the whole script, so that model/, data/ and config/ are left
+as they were copied on 2026-10-21. The relicensing is in plan §4b, 2026-10-27 (ledger
+row 14).

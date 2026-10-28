@@ -1,0 +1,48 @@
+A Python version of the CHAP-EWARS model, run through chap
+Copyright (C) 2026 the contributors to this repository
+
+This program is free software: you can redistribute it and/or modify it under the terms of
+the GNU General Public License as published by the Free Software Foundation, either version
+3 of the License, or (at your option) any later version (GPL-3.0-or-later). It is
+distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License, in `LICENSE`, for more details.
+
+
+Origin
+------
+
+This repository is a modified version of earlier work. It contains a Python translation of
+the EWARS-csd disease-forecasting model, made by this repository's contributors in 2026.
+The line of descent is:
+
+1. **EWARS-csd**, the WHO early warning and response tool for climate-sensitive diseases,
+   in the R implementation distributed in an earlier version of
+   https://github.com/Laith-hk/AUTO-EWARS-csd, under the GNU General Public License
+   version 3.
+2. **chapkit_ewars_model**, https://github.com/chap-models/chapkit_ewars_model, a modified
+   version of the WHO EWARS model by the CHAP team, wrapped as a chapkit service for
+   chap-core, under the GNU General Public License version 3. This repository translates
+   it at commit 964eea8bfdb194ca8985723216e94f1ac63aa4f1.
+3. **This repository**: the R model translated to Python, with its distributed-lag
+   cross-basis computed by dlnmpy and its INLA fit re-implemented in Python; the analysis
+   comparing the translation with the R original; and the record of how it was made.
+
+As a work based on the GPL-3.0 sources above, this repository as a whole is licensed under
+the GNU General Public License, version 3 or any later version.
+
+
+Third-party material
+--------------------
+
+Material that came from outside this repository keeps its own terms, and this licence does
+not cover it:
+
+- Everything under `Archive/`: pinned copies of external sources, each with the terms it
+  came with, stated per directory in its `provenance.md`.
+- The example datasets, in `Archive/dev-data/`, `Archive/holdout/`, `python-ewars-standalone/data/`
+  and as the inputs of the analysis under `analysis/**/results/`: public data as shipped by
+  chap-core and chapkit_ewars_model. This repository grants no licence for them.
+- The libraries the code uses or follows, each under its own licence: chapkit and chap-core
+  (AGPL-3.0); dlnmpy (GPL-2.0-or-later), a port of the R package dlnm (GPL >= 2); and
+  R-INLA (MIT, Copyright 2025 Haavard Rue), whose source the Python Laplace fit follows.

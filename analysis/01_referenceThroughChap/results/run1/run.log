@@ -8,7 +8,7 @@ uv 0.5.26 (5ef3d5139 2025-01-30)
 27.4.0 27.4.0 arm64
 + git --version
 git version 2.54.0 (Apple Git-157)
-+ cd '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1'
++ cd '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1'
 + git clone --quiet https://github.com/dhis2-chap/chap-core.git chap-core
 + git -C chap-core checkout --quiet b8c8f788fbc011f3d9d8a18ba9e993725023a6e4
 + git -C chap-core rev-parse HEAD
@@ -34,7 +34,7 @@ Installed 176 packages in 381ms
  + certifi==2026.5.20
  + cffi==2.0.0
  + cftime==1.6.5
- + chap-core==2.5.0.dev0 (from file:///Users/geirksa_1_2_3/ai/special-purpose%20vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core)
+ + chap-core==2.5.0.dev0 (from file://~/ai/special-purpose%20vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core)
  + chapkit==2.3.1
  + charset-normalizer==3.4.7
  + click==8.4.1
@@ -194,30 +194,30 @@ Installed 176 packages in 381ms
  + wrapt==2.2.1
  + xarray==2026.7.0
  + zipp==4.1.0
-+ CHAP='/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap'
-+ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' --help
-/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/bionumpy/io/vcf_header.py:38: SyntaxWarning: invalid escape sequence '\d'
++ CHAP='~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap'
++ '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' --help
+~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/bionumpy/io/vcf_header.py:38: SyntaxWarning: invalid escape sequence '\d'
   regex = re.match('(\d)', x)
-/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/bionumpy/io/vcf_header.py:80: SyntaxWarning: invalid escape sequence '\S'
+~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/bionumpy/io/vcf_header.py:80: SyntaxWarning: invalid escape sequence '\S'
   regex = re.search('^##(\S+?)=(.*)$', line)
-/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/bionumpy/io/vcf_header.py:86: SyntaxWarning: invalid escape sequence '\S'
+~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/bionumpy/io/vcf_header.py:86: SyntaxWarning: invalid escape sequence '\S'
   f'^##(\S+?)=(.*)$, get {line}. Ignore this line.'))
-/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/bionumpy/sequence/string_matcher.py:136: SyntaxWarning: invalid escape sequence '\['
+~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/bionumpy/sequence/string_matcher.py:136: SyntaxWarning: invalid escape sequence '\['
   r = re.compile('\[[^\]]+\]')
-/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/bionumpy/sequence/string_matcher.py:149: SyntaxWarning: invalid escape sequence '\['
+~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/lib/python3.13/site-packages/bionumpy/sequence/string_matcher.py:149: SyntaxWarning: invalid escape sequence '\['
   r = re.compile('(([A-Z]|\[[A-Z]+\])+)\.\{(\d*)\,(\d+)\}(.+)')
 + DATASET_CSVS=()
 + for k in '"${!DATASET_NAMES[@]}"'
-+ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/python' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/prepare_inputs.py' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/dev-data/monthly_ewars/historic_data.csv' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv'
-/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/dev-data/monthly_ewars/historic_data.csv -> /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv: 4416 rows; dropped columns: ['Unnamed: 0', 'Cases', 'E', 'month', 'ID_year', 'ID_spat', 'rainsum', 'meantemperature']
++ '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/python' '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/prepare_inputs.py' '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/dev-data/monthly_ewars/historic_data.csv' '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv'
+~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/dev-data/monthly_ewars/historic_data.csv -> ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv: 4416 rows; dropped columns: ['Unnamed: 0', 'Cases', 'E', 'month', 'ID_year', 'ID_spat', 'rainsum', 'meantemperature']
 + DATASET_CSVS+=("$OUT_DIR/inputs/${DATASET_NAMES[$k]}.csv")
 + for k in '"${!DATASET_NAMES[@]}"'
-+ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/python' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/prepare_inputs.py' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/dev-data/weekly_nicaragua/nicaragua_weekly_data_pre2018.csv' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv'
-/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/dev-data/weekly_nicaragua/nicaragua_weekly_data_pre2018.csv -> /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv: 7310 rows; dropped columns: ['Unnamed: 0']
++ '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/python' '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/prepare_inputs.py' '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/dev-data/weekly_nicaragua/nicaragua_weekly_data_pre2018.csv' '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv'
+~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/Archive/dev-data/weekly_nicaragua/nicaragua_weekly_data_pre2018.csv -> ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv: 7310 rows; dropped columns: ['Unnamed: 0']
 + DATASET_CSVS+=("$OUT_DIR/inputs/${DATASET_NAMES[$k]}.csv")
-+ shasum -a 256 '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv'
-da7deebee0779d15ed8240229578564d86151539b8758f58557201535d786e5c  /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv
-c72c40fe12d4436f162e186e4ada906b94d10e8eb712764efc2aea0c19c54513  /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv
++ shasum -a 256 '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv'
+da7deebee0779d15ed8240229578564d86151539b8758f58557201535d786e5c  ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv
+c72c40fe12d4436f162e186e4ada906b94d10e8eb712764efc2aea0c19c54513  ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv
 + docker pull --platform linux/amd64 ghcr.io/chap-models/chapkit_ewars_model@sha256:959fb4f0f1b9d257a9697925f4500fd8ec4ffa9e1bb3ed7fc36e4f5c57c6ff88
 ghcr.io/chap-models/chapkit_ewars_model@sha256:959fb4f0f1b9d257a9697925f4500fd8ec4ffa9e1bb3ed7fc36e4f5c57c6ff88: Pulling from chap-models/chapkit_ewars_model
 Digest: sha256:959fb4f0f1b9d257a9697925f4500fd8ec4ffa9e1bb3ed7fc36e4f5c57c6ff88
@@ -240,25 +240,25 @@ curl: (52) Empty reply from server
 + curl -fsS http://localhost:8000/health
 {"status":"healthy","checks":{"database":{"state":"healthy"},"registration":{"state":"healthy"}}}+ curl -fsS http://localhost:8000/api/v1/info
 + docker inspect --format '{{index .RepoDigests 0}} {{.Architecture}}' ghcr.io/chap-models/chapkit_ewars_model@sha256:959fb4f0f1b9d257a9697925f4500fd8ec4ffa9e1bb3ed7fc36e4f5c57c6ff88
-+ grep -q 964eea8bfdb194ca8985723216e94f1ac63aa4f1 '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/service_info.json'
-+ cd '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1'
++ grep -q 964eea8bfdb194ca8985723216e94f1ac63aa4f1 '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/service_info.json'
++ cd '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1'
 + for k in '"${!DATASET_NAMES[@]}"'
 + name=monthly_ewars
-+ csv='/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv'
-+ run_eval monthly_ewars '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' ewars_r --model-name http://localhost:8000 --run-config.is-chapkit-model --model-configuration-yaml '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml'
-+ local name=monthly_ewars 'csv=/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' label=ewars_r
++ csv='~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv'
++ run_eval monthly_ewars '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' ewars_r --model-name http://localhost:8000 --run-config.is-chapkit-model --model-configuration-yaml '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml'
++ local name=monthly_ewars 'csv=~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' label=ewars_r
 + shift 3
 + local start=24 rc=0
-+ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name http://localhost:8000 --run-config.is-chapkit-model --model-configuration-yaml '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml' --dataset-csv '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' --output-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__ewars_r.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology --run-config.log-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/monthly_ewars__ewars_r.log'
++ '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name http://localhost:8000 --run-config.is-chapkit-model --model-configuration-yaml '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml' --dataset-csv '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' --output-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__ewars_r.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology --run-config.log-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/monthly_ewars__ewars_r.log'
 2026-10-14T22:29:14 [INFO   ] Database URL not set [chap_core.database.database]
 2026-10-14T22:29:14 [INFO   ] Database url not set. Database operations will not work [chap_core.database.database]
 2026-10-14T22:29:14 [INFO   ] Evaluating model http://localhost:8000 with xarray/NetCDF output [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:29:14 [INFO   ] Level set to INFO [root]
-2026-10-14T22:29:14 [INFO   ] Loading dataset from /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv [root]
+2026-10-14T22:29:14 [INFO   ] Loading dataset from ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv [root]
 2026-10-14T22:29:14 [INFO   ] Remaining regions: ['Acre', 'Alagoas', 'Amapa', 'Amazonas', 'Bahia', 'Ceara', 'DistritoFederal', 'EspiritoSanto', 'Goias', 'Maranhao', 'MatoGrosso', 'MinasGerais', 'Para', 'Paraiba', 'Parana', 'Pernambuco', 'Piaui', 'Rondonia', 'Roraima', 'SantaCatarina', 'SaoPaulo', 'Sergipe', 'Tocantins'] with 23 entries [chap_core.rest_api.db_worker_functions]
 2026-10-14T22:29:14 [INFO   ] Loading model template from http://localhost:8000 [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:29:14 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
-2026-10-14T22:29:14 [INFO   ] Loading model configuration from /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml [chap_core.cli_endpoints._common]
+2026-10-14T22:29:14 [INFO   ] Loading model configuration from ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml [chap_core.cli_endpoints._common]
 2026-10-14T22:29:14 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
 2026-10-14T22:29:14 [INFO   ] Creating model configuration with name chapkit-ewars-model_config_1792009754308401 at http://localhost:8000. Data: {'name': 'chapkit-ewars-model_config_1792009754308401', 'data': {'n_lags': [3], 'precision': 0.01, 'region_seasonal': False, 'additional_continuous_covariates': ['rainfall', 'mean_temperature']}} [chap_core.models.external_chapkit_model]
 2026-10-14T22:29:14 [INFO   ] HTTP Request: POST http://localhost:8000/api/v1/configs "HTTP/1.1 201 Created" [httpx]
@@ -461,23 +461,23 @@ curl: (52) Empty reply from server
 2026-10-14T22:32:10 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M4Y1T7SFCS67FSXQF3RS98FC "HTTP/1.1 200 OK" [httpx]
 2026-10-14T22:32:10 [INFO   ] Job 01M4Y1T7SFCS67FSXQF3RS98FC status: completed [chap_core.models.chapkit_rest_api_wrapper]
 2026-10-14T22:32:10 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/artifacts/01M4Y1T7SFCS67FSXQF3RS98FB "HTTP/1.1 200 OK" [httpx]
-2026-10-14T22:32:10 [INFO   ] Exporting evaluation to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__ewars_r.nc [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:32:10 [INFO   ] Exporting evaluation to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__ewars_r.nc [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:32:10 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
 2026-10-14T22:32:10 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/configs/$schema "HTTP/1.1 200 OK" [httpx]
-2026-10-14T22:32:18 [INFO   ] Evaluation complete. Results saved to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__ewars_r.nc [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:32:18 [INFO   ] Evaluation complete. Results saved to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__ewars_r.nc [chap_core.cli_endpoints.evaluate]
 + printf '%s\t%s\t%s\t%s\n' monthly_ewars ewars_r 193 0
 + return 0
 + for b in '"${BASELINES[@]}"'
-+ run_eval monthly_ewars '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' global_median --model-name builtin:global_median
-+ local name=monthly_ewars 'csv=/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' label=global_median
++ run_eval monthly_ewars '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' global_median --model-name builtin:global_median
++ local name=monthly_ewars 'csv=~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' label=global_median
 + shift 3
 + local start=217 rc=0
-+ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name builtin:global_median --dataset-csv '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' --output-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__global_median.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology --run-config.log-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/monthly_ewars__global_median.log'
++ '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name builtin:global_median --dataset-csv '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' --output-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__global_median.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology --run-config.log-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/monthly_ewars__global_median.log'
 2026-10-14T22:32:21 [INFO   ] Database URL not set [chap_core.database.database]
 2026-10-14T22:32:21 [INFO   ] Database url not set. Database operations will not work [chap_core.database.database]
 2026-10-14T22:32:21 [INFO   ] Evaluating model builtin:global_median with xarray/NetCDF output [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:32:21 [INFO   ] Level set to INFO [root]
-2026-10-14T22:32:21 [INFO   ] Loading dataset from /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv [root]
+2026-10-14T22:32:21 [INFO   ] Loading dataset from ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv [root]
 2026-10-14T22:32:21 [INFO   ] Remaining regions: ['Acre', 'Alagoas', 'Amapa', 'Amazonas', 'Bahia', 'Ceara', 'DistritoFederal', 'EspiritoSanto', 'Goias', 'Maranhao', 'MatoGrosso', 'MinasGerais', 'Para', 'Paraiba', 'Parana', 'Pernambuco', 'Piaui', 'Rondonia', 'Roraima', 'SantaCatarina', 'SaoPaulo', 'Sergipe', 'Tocantins'] with 23 entries [chap_core.rest_api.db_worker_functions]
 2026-10-14T22:32:21 [INFO   ] Loading model template from builtin:global_median [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:32:21 [WARNING] Column 'mean_temperature' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
@@ -485,21 +485,21 @@ curl: (52) Empty reply from server
 2026-10-14T22:32:21 [WARNING] Column 'rainfall' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
 2026-10-14T22:32:21 [WARNING] Model has not specified minimum and maximum predicted length [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:32:21 [INFO   ] Running backtest with 7 splits, 3 periods, stride 1 [chap_core.cli_endpoints.evaluate]
-2026-10-14T22:32:22 [INFO   ] Exporting evaluation to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__global_median.nc [chap_core.cli_endpoints.evaluate]
-2026-10-14T22:32:23 [INFO   ] Evaluation complete. Results saved to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__global_median.nc [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:32:22 [INFO   ] Exporting evaluation to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__global_median.nc [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:32:23 [INFO   ] Evaluation complete. Results saved to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__global_median.nc [chap_core.cli_endpoints.evaluate]
 + printf '%s\t%s\t%s\t%s\n' monthly_ewars global_median 5 0
 + return 0
 + for b in '"${BASELINES[@]}"'
-+ run_eval monthly_ewars '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' seasonal_median --model-name builtin:seasonal_median
-+ local name=monthly_ewars 'csv=/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' label=seasonal_median
++ run_eval monthly_ewars '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' seasonal_median --model-name builtin:seasonal_median
++ local name=monthly_ewars 'csv=~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' label=seasonal_median
 + shift 3
 + local start=222 rc=0
-+ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name builtin:seasonal_median --dataset-csv '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' --output-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__seasonal_median.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology --run-config.log-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/monthly_ewars__seasonal_median.log'
++ '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name builtin:seasonal_median --dataset-csv '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' --output-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__seasonal_median.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology --run-config.log-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/monthly_ewars__seasonal_median.log'
 2026-10-14T22:32:25 [INFO   ] Database URL not set [chap_core.database.database]
 2026-10-14T22:32:25 [INFO   ] Database url not set. Database operations will not work [chap_core.database.database]
 2026-10-14T22:32:25 [INFO   ] Evaluating model builtin:seasonal_median with xarray/NetCDF output [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:32:25 [INFO   ] Level set to INFO [root]
-2026-10-14T22:32:25 [INFO   ] Loading dataset from /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv [root]
+2026-10-14T22:32:25 [INFO   ] Loading dataset from ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv [root]
 2026-10-14T22:32:25 [INFO   ] Remaining regions: ['Acre', 'Alagoas', 'Amapa', 'Amazonas', 'Bahia', 'Ceara', 'DistritoFederal', 'EspiritoSanto', 'Goias', 'Maranhao', 'MatoGrosso', 'MinasGerais', 'Para', 'Paraiba', 'Parana', 'Pernambuco', 'Piaui', 'Rondonia', 'Roraima', 'SantaCatarina', 'SaoPaulo', 'Sergipe', 'Tocantins'] with 23 entries [chap_core.rest_api.db_worker_functions]
 2026-10-14T22:32:25 [INFO   ] Loading model template from builtin:seasonal_median [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:32:26 [WARNING] Column 'mean_temperature' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
@@ -507,21 +507,21 @@ curl: (52) Empty reply from server
 2026-10-14T22:32:26 [WARNING] Column 'rainfall' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
 2026-10-14T22:32:26 [WARNING] Model has not specified minimum and maximum predicted length [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:32:26 [INFO   ] Running backtest with 7 splits, 3 periods, stride 1 [chap_core.cli_endpoints.evaluate]
-2026-10-14T22:32:26 [INFO   ] Exporting evaluation to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__seasonal_median.nc [chap_core.cli_endpoints.evaluate]
-2026-10-14T22:32:27 [INFO   ] Evaluation complete. Results saved to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__seasonal_median.nc [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:32:26 [INFO   ] Exporting evaluation to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__seasonal_median.nc [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:32:27 [INFO   ] Evaluation complete. Results saved to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__seasonal_median.nc [chap_core.cli_endpoints.evaluate]
 + printf '%s\t%s\t%s\t%s\n' monthly_ewars seasonal_median 4 0
 + return 0
 + for b in '"${BASELINES[@]}"'
-+ run_eval monthly_ewars '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' persistence --model-name builtin:persistence
-+ local name=monthly_ewars 'csv=/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' label=persistence
++ run_eval monthly_ewars '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' persistence --model-name builtin:persistence
++ local name=monthly_ewars 'csv=~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' label=persistence
 + shift 3
 + local start=226 rc=0
-+ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name builtin:persistence --dataset-csv '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' --output-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__persistence.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology --run-config.log-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/monthly_ewars__persistence.log'
++ '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name builtin:persistence --dataset-csv '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv' --output-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__persistence.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology --run-config.log-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/monthly_ewars__persistence.log'
 2026-10-14T22:32:28 [INFO   ] Database URL not set [chap_core.database.database]
 2026-10-14T22:32:28 [INFO   ] Database url not set. Database operations will not work [chap_core.database.database]
 2026-10-14T22:32:28 [INFO   ] Evaluating model builtin:persistence with xarray/NetCDF output [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:32:28 [INFO   ] Level set to INFO [root]
-2026-10-14T22:32:28 [INFO   ] Loading dataset from /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv [root]
+2026-10-14T22:32:28 [INFO   ] Loading dataset from ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/monthly_ewars.csv [root]
 2026-10-14T22:32:28 [INFO   ] Remaining regions: ['Acre', 'Alagoas', 'Amapa', 'Amazonas', 'Bahia', 'Ceara', 'DistritoFederal', 'EspiritoSanto', 'Goias', 'Maranhao', 'MatoGrosso', 'MinasGerais', 'Para', 'Paraiba', 'Parana', 'Pernambuco', 'Piaui', 'Rondonia', 'Roraima', 'SantaCatarina', 'SaoPaulo', 'Sergipe', 'Tocantins'] with 23 entries [chap_core.rest_api.db_worker_functions]
 2026-10-14T22:32:28 [INFO   ] Loading model template from builtin:persistence [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:32:29 [WARNING] Column 'mean_temperature' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
@@ -529,27 +529,27 @@ curl: (52) Empty reply from server
 2026-10-14T22:32:29 [WARNING] Column 'rainfall' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
 2026-10-14T22:32:29 [WARNING] Model has not specified minimum and maximum predicted length [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:32:29 [INFO   ] Running backtest with 7 splits, 3 periods, stride 1 [chap_core.cli_endpoints.evaluate]
-2026-10-14T22:32:30 [INFO   ] Exporting evaluation to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__persistence.nc [chap_core.cli_endpoints.evaluate]
-2026-10-14T22:32:30 [INFO   ] Evaluation complete. Results saved to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__persistence.nc [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:32:30 [INFO   ] Exporting evaluation to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__persistence.nc [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:32:30 [INFO   ] Evaluation complete. Results saved to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__persistence.nc [chap_core.cli_endpoints.evaluate]
 + printf '%s\t%s\t%s\t%s\n' monthly_ewars persistence 4 0
 + return 0
 + for k in '"${!DATASET_NAMES[@]}"'
 + name=weekly_nicaragua
-+ csv='/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv'
-+ run_eval weekly_nicaragua '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' ewars_r --model-name http://localhost:8000 --run-config.is-chapkit-model --model-configuration-yaml '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml'
-+ local name=weekly_nicaragua 'csv=/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' label=ewars_r
++ csv='~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv'
++ run_eval weekly_nicaragua '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' ewars_r --model-name http://localhost:8000 --run-config.is-chapkit-model --model-configuration-yaml '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml'
++ local name=weekly_nicaragua 'csv=~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' label=ewars_r
 + shift 3
 + local start=230 rc=0
-+ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name http://localhost:8000 --run-config.is-chapkit-model --model-configuration-yaml '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml' --dataset-csv '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' --output-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__ewars_r.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology --run-config.log-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/weekly_nicaragua__ewars_r.log'
++ '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name http://localhost:8000 --run-config.is-chapkit-model --model-configuration-yaml '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml' --dataset-csv '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' --output-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__ewars_r.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology --run-config.log-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/weekly_nicaragua__ewars_r.log'
 2026-10-14T22:32:32 [INFO   ] Database URL not set [chap_core.database.database]
 2026-10-14T22:32:32 [INFO   ] Database url not set. Database operations will not work [chap_core.database.database]
 2026-10-14T22:32:32 [INFO   ] Evaluating model http://localhost:8000 with xarray/NetCDF output [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:32:32 [INFO   ] Level set to INFO [root]
-2026-10-14T22:32:32 [INFO   ] Loading dataset from /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv [root]
+2026-10-14T22:32:32 [INFO   ] Loading dataset from ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv [root]
 2026-10-14T22:32:32 [INFO   ] Remaining regions: ['boaco', 'chinandega', 'esteli', 'granada', 'jinotega', 'leon', 'managua', 'masaya', 'matagalpa', 'rivas'] with 10 entries [chap_core.rest_api.db_worker_functions]
 2026-10-14T22:32:32 [INFO   ] Loading model template from http://localhost:8000 [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:32:32 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
-2026-10-14T22:32:32 [INFO   ] Loading model configuration from /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml [chap_core.cli_endpoints._common]
+2026-10-14T22:32:32 [INFO   ] Loading model configuration from ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/ewars_config.yaml [chap_core.cli_endpoints._common]
 2026-10-14T22:32:32 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
 2026-10-14T22:32:32 [INFO   ] Creating model configuration with name chapkit-ewars-model_config_1792009952612898 at http://localhost:8000. Data: {'name': 'chapkit-ewars-model_config_1792009952612898', 'data': {'n_lags': [3], 'precision': 0.01, 'region_seasonal': False, 'additional_continuous_covariates': ['rainfall', 'mean_temperature']}} [chap_core.models.external_chapkit_model]
 2026-10-14T22:32:32 [INFO   ] HTTP Request: POST http://localhost:8000/api/v1/configs "HTTP/1.1 201 Created" [httpx]
@@ -852,23 +852,23 @@ curl: (52) Empty reply from server
 2026-10-14T22:36:57 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/jobs/01M4Y22R15MJW01Z31T4ZNE8EP "HTTP/1.1 200 OK" [httpx]
 2026-10-14T22:36:57 [INFO   ] Job 01M4Y22R15MJW01Z31T4ZNE8EP status: completed [chap_core.models.chapkit_rest_api_wrapper]
 2026-10-14T22:36:57 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/artifacts/01M4Y22R15MJW01Z31T4ZNE8EN "HTTP/1.1 200 OK" [httpx]
-2026-10-14T22:36:57 [INFO   ] Exporting evaluation to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__ewars_r.nc [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:36:57 [INFO   ] Exporting evaluation to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__ewars_r.nc [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:36:57 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/info "HTTP/1.1 200 OK" [httpx]
 2026-10-14T22:36:57 [INFO   ] HTTP Request: GET http://localhost:8000/api/v1/configs/$schema "HTTP/1.1 200 OK" [httpx]
-2026-10-14T22:36:57 [INFO   ] Evaluation complete. Results saved to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__ewars_r.nc [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:36:57 [INFO   ] Evaluation complete. Results saved to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__ewars_r.nc [chap_core.cli_endpoints.evaluate]
 + printf '%s\t%s\t%s\t%s\n' weekly_nicaragua ewars_r 267 0
 + return 0
 + for b in '"${BASELINES[@]}"'
-+ run_eval weekly_nicaragua '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' global_median --model-name builtin:global_median
-+ local name=weekly_nicaragua 'csv=/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' label=global_median
++ run_eval weekly_nicaragua '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' global_median --model-name builtin:global_median
++ local name=weekly_nicaragua 'csv=~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' label=global_median
 + shift 3
 + local start=497 rc=0
-+ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name builtin:global_median --dataset-csv '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' --output-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__global_median.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology --run-config.log-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/weekly_nicaragua__global_median.log'
++ '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name builtin:global_median --dataset-csv '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' --output-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__global_median.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology --run-config.log-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/weekly_nicaragua__global_median.log'
 2026-10-14T22:37:00 [INFO   ] Database URL not set [chap_core.database.database]
 2026-10-14T22:37:00 [INFO   ] Database url not set. Database operations will not work [chap_core.database.database]
 2026-10-14T22:37:00 [INFO   ] Evaluating model builtin:global_median with xarray/NetCDF output [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:37:00 [INFO   ] Level set to INFO [root]
-2026-10-14T22:37:00 [INFO   ] Loading dataset from /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv [root]
+2026-10-14T22:37:00 [INFO   ] Loading dataset from ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv [root]
 2026-10-14T22:37:00 [INFO   ] Remaining regions: ['boaco', 'chinandega', 'esteli', 'granada', 'jinotega', 'leon', 'managua', 'masaya', 'matagalpa', 'rivas'] with 10 entries [chap_core.rest_api.db_worker_functions]
 2026-10-14T22:37:00 [INFO   ] Loading model template from builtin:global_median [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:37:01 [WARNING] Column 'mean_temperature' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
@@ -876,21 +876,21 @@ curl: (52) Empty reply from server
 2026-10-14T22:37:01 [WARNING] Column 'rainfall' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
 2026-10-14T22:37:01 [WARNING] Model has not specified minimum and maximum predicted length [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:37:01 [INFO   ] Running backtest with 7 splits, 3 periods, stride 1 [chap_core.cli_endpoints.evaluate]
-2026-10-14T22:37:02 [INFO   ] Exporting evaluation to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__global_median.nc [chap_core.cli_endpoints.evaluate]
-2026-10-14T22:37:02 [INFO   ] Evaluation complete. Results saved to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__global_median.nc [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:37:02 [INFO   ] Exporting evaluation to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__global_median.nc [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:37:02 [INFO   ] Evaluation complete. Results saved to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__global_median.nc [chap_core.cli_endpoints.evaluate]
 + printf '%s\t%s\t%s\t%s\n' weekly_nicaragua global_median 4 0
 + return 0
 + for b in '"${BASELINES[@]}"'
-+ run_eval weekly_nicaragua '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' seasonal_median --model-name builtin:seasonal_median
-+ local name=weekly_nicaragua 'csv=/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' label=seasonal_median
++ run_eval weekly_nicaragua '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' seasonal_median --model-name builtin:seasonal_median
++ local name=weekly_nicaragua 'csv=~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' label=seasonal_median
 + shift 3
 + local start=501 rc=0
-+ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name builtin:seasonal_median --dataset-csv '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' --output-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__seasonal_median.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology --run-config.log-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/weekly_nicaragua__seasonal_median.log'
++ '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name builtin:seasonal_median --dataset-csv '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' --output-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__seasonal_median.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology --run-config.log-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/weekly_nicaragua__seasonal_median.log'
 2026-10-14T22:37:04 [INFO   ] Database URL not set [chap_core.database.database]
 2026-10-14T22:37:04 [INFO   ] Database url not set. Database operations will not work [chap_core.database.database]
 2026-10-14T22:37:04 [INFO   ] Evaluating model builtin:seasonal_median with xarray/NetCDF output [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:37:04 [INFO   ] Level set to INFO [root]
-2026-10-14T22:37:04 [INFO   ] Loading dataset from /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv [root]
+2026-10-14T22:37:04 [INFO   ] Loading dataset from ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv [root]
 2026-10-14T22:37:04 [INFO   ] Remaining regions: ['boaco', 'chinandega', 'esteli', 'granada', 'jinotega', 'leon', 'managua', 'masaya', 'matagalpa', 'rivas'] with 10 entries [chap_core.rest_api.db_worker_functions]
 2026-10-14T22:37:04 [INFO   ] Loading model template from builtin:seasonal_median [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:37:05 [WARNING] Column 'mean_temperature' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
@@ -898,21 +898,21 @@ curl: (52) Empty reply from server
 2026-10-14T22:37:05 [WARNING] Column 'rainfall' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
 2026-10-14T22:37:05 [WARNING] Model has not specified minimum and maximum predicted length [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:37:05 [INFO   ] Running backtest with 7 splits, 3 periods, stride 1 [chap_core.cli_endpoints.evaluate]
-2026-10-14T22:37:06 [INFO   ] Exporting evaluation to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__seasonal_median.nc [chap_core.cli_endpoints.evaluate]
-2026-10-14T22:37:06 [INFO   ] Evaluation complete. Results saved to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__seasonal_median.nc [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:37:06 [INFO   ] Exporting evaluation to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__seasonal_median.nc [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:37:06 [INFO   ] Evaluation complete. Results saved to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__seasonal_median.nc [chap_core.cli_endpoints.evaluate]
 + printf '%s\t%s\t%s\t%s\n' weekly_nicaragua seasonal_median 5 0
 + return 0
 + for b in '"${BASELINES[@]}"'
-+ run_eval weekly_nicaragua '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' persistence --model-name builtin:persistence
-+ local name=weekly_nicaragua 'csv=/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' label=persistence
++ run_eval weekly_nicaragua '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' persistence --model-name builtin:persistence
++ local name=weekly_nicaragua 'csv=~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' label=persistence
 + shift 3
 + local start=506 rc=0
-+ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name builtin:persistence --dataset-csv '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' --output-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__persistence.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology --run-config.log-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/weekly_nicaragua__persistence.log'
++ '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' eval --model-name builtin:persistence --dataset-csv '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv' --output-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__persistence.nc' --backtest-params.n-periods 3 --backtest-params.n-splits 7 --backtest-params.stride 1 --backtest-params.future-weather-provider climatology --run-config.log-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/chap_logs/weekly_nicaragua__persistence.log'
 2026-10-14T22:37:08 [INFO   ] Database URL not set [chap_core.database.database]
 2026-10-14T22:37:08 [INFO   ] Database url not set. Database operations will not work [chap_core.database.database]
 2026-10-14T22:37:08 [INFO   ] Evaluating model builtin:persistence with xarray/NetCDF output [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:37:08 [INFO   ] Level set to INFO [root]
-2026-10-14T22:37:08 [INFO   ] Loading dataset from /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv [root]
+2026-10-14T22:37:08 [INFO   ] Loading dataset from ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/inputs/weekly_nicaragua.csv [root]
 2026-10-14T22:37:08 [INFO   ] Remaining regions: ['boaco', 'chinandega', 'esteli', 'granada', 'jinotega', 'leon', 'managua', 'masaya', 'matagalpa', 'rivas'] with 10 entries [chap_core.rest_api.db_worker_functions]
 2026-10-14T22:37:08 [INFO   ] Loading model template from builtin:persistence [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:37:09 [WARNING] Column 'mean_temperature' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
@@ -920,14 +920,14 @@ curl: (52) Empty reply from server
 2026-10-14T22:37:09 [WARNING] Column 'rainfall' is present in the dataset but not used by the model [chap_core.cli_endpoints._common]
 2026-10-14T22:37:09 [WARNING] Model has not specified minimum and maximum predicted length [chap_core.cli_endpoints.evaluate]
 2026-10-14T22:37:09 [INFO   ] Running backtest with 7 splits, 3 periods, stride 1 [chap_core.cli_endpoints.evaluate]
-2026-10-14T22:37:10 [INFO   ] Exporting evaluation to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__persistence.nc [chap_core.cli_endpoints.evaluate]
-2026-10-14T22:37:10 [INFO   ] Evaluation complete. Results saved to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__persistence.nc [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:37:10 [INFO   ] Exporting evaluation to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__persistence.nc [chap_core.cli_endpoints.evaluate]
+2026-10-14T22:37:10 [INFO   ] Evaluation complete. Results saved to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__persistence.nc [chap_core.cli_endpoints.evaluate]
 + printf '%s\t%s\t%s\t%s\n' weekly_nicaragua persistence 3 0
 + return 0
-+ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/python' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/fetch_last_workspace.py' http://localhost:8000 '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/weekly_workspace'
++ '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/python' '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/fetch_last_workspace.py' http://localhost:8000 '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/weekly_workspace'
 artifact 01M4Y23S9ZC5TK9R8C855GXNP8: 12 files extracted
-+ '[' -d '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/weekly_workspace/workspace' ']'
-+ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/python' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/inspect_workspace.py' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/weekly_workspace/workspace'
++ '[' -d '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/weekly_workspace/workspace' ']'
++ '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/python' '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/inspect_workspace.py' '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/weekly_workspace/workspace'
 + for name in '"${DATASET_NAMES[@]}"'
 + args=()
 + for f in '"$OUT_DIR"/eval/"${name}"__*.nc'
@@ -938,12 +938,12 @@ artifact 01M4Y23S9ZC5TK9R8C855GXNP8: 12 files extracted
 + args+=(--input-files "$f")
 + for f in '"$OUT_DIR"/eval/"${name}"__*.nc'
 + args+=(--input-files "$f")
-+ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' export-metrics --input-files '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__ewars_r.nc' --input-files '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__global_median.nc' --input-files '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__persistence.nc' --input-files '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__seasonal_median.nc' --output-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/metrics/monthly_ewars_metrics.csv'
-2026-10-14T22:37:12 [INFO   ] Processing /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__ewars_r.nc [chap_core.cli_endpoints.utils]
-2026-10-14T22:37:20 [INFO   ] Processing /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__global_median.nc [chap_core.cli_endpoints.utils]
-2026-10-14T22:37:21 [INFO   ] Processing /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__persistence.nc [chap_core.cli_endpoints.utils]
-2026-10-14T22:37:21 [INFO   ] Processing /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__seasonal_median.nc [chap_core.cli_endpoints.utils]
-2026-10-14T22:37:22 [INFO   ] Metrics exported to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/metrics/monthly_ewars_metrics.csv [chap_core.cli_endpoints.utils]
++ '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' export-metrics --input-files '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__ewars_r.nc' --input-files '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__global_median.nc' --input-files '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__persistence.nc' --input-files '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__seasonal_median.nc' --output-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/metrics/monthly_ewars_metrics.csv'
+2026-10-14T22:37:12 [INFO   ] Processing ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__ewars_r.nc [chap_core.cli_endpoints.utils]
+2026-10-14T22:37:20 [INFO   ] Processing ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__global_median.nc [chap_core.cli_endpoints.utils]
+2026-10-14T22:37:21 [INFO   ] Processing ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__persistence.nc [chap_core.cli_endpoints.utils]
+2026-10-14T22:37:21 [INFO   ] Processing ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/monthly_ewars__seasonal_median.nc [chap_core.cli_endpoints.utils]
+2026-10-14T22:37:22 [INFO   ] Metrics exported to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/metrics/monthly_ewars_metrics.csv [chap_core.cli_endpoints.utils]
 + for name in '"${DATASET_NAMES[@]}"'
 + args=()
 + for f in '"$OUT_DIR"/eval/"${name}"__*.nc'
@@ -954,13 +954,13 @@ artifact 01M4Y23S9ZC5TK9R8C855GXNP8: 12 files extracted
 + args+=(--input-files "$f")
 + for f in '"$OUT_DIR"/eval/"${name}"__*.nc'
 + args+=(--input-files "$f")
-+ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' export-metrics --input-files '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__ewars_r.nc' --input-files '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__global_median.nc' --input-files '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__persistence.nc' --input-files '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__seasonal_median.nc' --output-file '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/metrics/weekly_nicaragua_metrics.csv'
-2026-10-14T22:37:23 [INFO   ] Processing /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__ewars_r.nc [chap_core.cli_endpoints.utils]
-2026-10-14T22:37:25 [INFO   ] Processing /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__global_median.nc [chap_core.cli_endpoints.utils]
-2026-10-14T22:37:25 [INFO   ] Processing /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__persistence.nc [chap_core.cli_endpoints.utils]
-2026-10-14T22:37:25 [INFO   ] Processing /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__seasonal_median.nc [chap_core.cli_endpoints.utils]
-2026-10-14T22:37:26 [INFO   ] Metrics exported to /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/metrics/weekly_nicaragua_metrics.csv [chap_core.cli_endpoints.utils]
-+ cat '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/timings.tsv'
++ '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/run1/chap-core/.venv/bin/chap' export-metrics --input-files '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__ewars_r.nc' --input-files '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__global_median.nc' --input-files '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__persistence.nc' --input-files '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__seasonal_median.nc' --output-file '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/metrics/weekly_nicaragua_metrics.csv'
+2026-10-14T22:37:23 [INFO   ] Processing ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__ewars_r.nc [chap_core.cli_endpoints.utils]
+2026-10-14T22:37:25 [INFO   ] Processing ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__global_median.nc [chap_core.cli_endpoints.utils]
+2026-10-14T22:37:25 [INFO   ] Processing ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__persistence.nc [chap_core.cli_endpoints.utils]
+2026-10-14T22:37:25 [INFO   ] Processing ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/eval/weekly_nicaragua__seasonal_median.nc [chap_core.cli_endpoints.utils]
+2026-10-14T22:37:26 [INFO   ] Metrics exported to ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/metrics/weekly_nicaragua_metrics.csv [chap_core.cli_endpoints.utils]
++ cat '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1/timings.tsv'
 dataset	model	seconds	exit_code
 monthly_ewars	ewars_r	193	0
 monthly_ewars	global_median	5	0

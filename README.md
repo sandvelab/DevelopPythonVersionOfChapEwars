@@ -1,11 +1,19 @@
-—# A Python version of the CHAP-EWARS model, run through chap
+# A Python version of the CHAP-EWARS model, run through chap
 
 This repository holds a **Python translation of the CHAP-EWARS disease-forecasting model**
 and the complete record of how it was made and how closely it matches the original.
 
-The original, [`chap-models/chapkit_ewars_model`](https://github.com/chap-models/chapkit_ewars_model),
-is written in R. It forecasts disease cases per location and period from past cases,
-population, rainfall and temperature, using distributed-lag curves (the R package `dlnm`)
+The model is EWARS-csd, the WHO early warning tool for climate-sensitive diseases. This
+repository is a modified version of it, translated to Python. It is based on an earlier
+version of [`Laith-hk/AUTO-EWARS-csd`](https://github.com/Laith-hk/AUTO-EWARS-csd), by way
+of the modification step
+[`chap-models/chapkit_ewars_model`](https://github.com/chap-models/chapkit_ewars_model),
+which is the code translated here; both are licensed under the GPL-3.0, and so is this
+repository (see [Licence](#licence)).
+
+The R code translated, `chapkit_ewars_model`, is called the R original below. It forecasts
+disease cases per location and period from past cases, population, rainfall and
+temperature, using distributed-lag curves (the R package `dlnm`)
 inside a Bayesian model fitted with R-INLA. It is served to the
 [CHAP platform](https://github.com/dhis2-chap/chap-core) (chap-core) through a small
 service wrapper, chapkit. The Python version keeps that contract exactly: the same inputs,
@@ -286,7 +294,12 @@ results above.
 
 ## Licence
 
-`LICENSE` (CC BY 4.0) covers the documents, data, records and prose. `LICENSE-CODE` (MIT)
-covers the scripts, the Python model, every `run.sh`, `.claude/`, `environment/` and
-`AI-internal/useful-scripts/`. Material under `Archive/` also carries the terms it came
-with, stated per directory in each `provenance.md`.
+This repository is licensed under the GNU General Public License, version 3 or (at your
+option) any later version (GPL-3.0-or-later; the text is in `LICENSE`), because it is a
+modified version of GPL-3.0 work: an earlier version of
+[`Laith-hk/AUTO-EWARS-csd`](https://github.com/Laith-hk/AUTO-EWARS-csd) (EWARS-csd), as
+modified in [`chap-models/chapkit_ewars_model`](https://github.com/chap-models/chapkit_ewars_model).
+`NOTICE` gives the line of descent and the copyright statement. Third-party material is not
+covered by this licence: everything under `Archive/` keeps the terms it came with, stated
+per directory in each `provenance.md`, and the example datasets are public data for which
+this repository grants no licence.

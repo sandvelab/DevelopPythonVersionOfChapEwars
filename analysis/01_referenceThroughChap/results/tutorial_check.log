@@ -1,16 +1,16 @@
-+ awk '/^```bash$/{inside=1; next} /^```$/{inside=0} inside' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/AI-generated/26-10-14_tutorialRunOriginalEwarsThroughChap.md'
-+ shasum -a 256 '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/AI-generated/26-10-14_tutorialRunOriginalEwarsThroughChap.md' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/tutorial_check/tutorial_commands.sh'
-ce8b75d47be56dc81d8c31971599b541fd34e1c91c6c6e541806f01a0317e2f7  /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/AI-generated/26-10-14_tutorialRunOriginalEwarsThroughChap.md
-d4c2c975bb6ac32519b14a5044d12a4d85c41b5c01ae9965e59d3331cbed317f  /Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/tutorial_check/tutorial_commands.sh
-+ cd '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/tutorial_check'
++ awk '/^```bash$/{inside=1; next} /^```$/{inside=0} inside' '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/AI-generated/26-10-14_tutorialRunOriginalEwarsThroughChap.md'
++ shasum -a 256 '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/AI-generated/26-10-14_tutorialRunOriginalEwarsThroughChap.md' '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/tutorial_check/tutorial_commands.sh'
+ce8b75d47be56dc81d8c31971599b541fd34e1c91c6c6e541806f01a0317e2f7  ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/AI-generated/26-10-14_tutorialRunOriginalEwarsThroughChap.md
+d4c2c975bb6ac32519b14a5044d12a4d85c41b5c01ae9965e59d3331cbed317f  ~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/tutorial_check/tutorial_commands.sh
++ cd '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/tutorial_check'
 + rc=0
-+ env -i HOME=/Users/geirksa_1_2_3 PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/geirksa_1_2_3/.local/bin bash --noprofile --norc -x '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/tutorial_check/tutorial_commands.sh'
++ env -i HOME=~ PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:~/.local/bin bash --noprofile --norc -x '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/tutorial_check/tutorial_commands.sh'
 + echo 'tutorial exit code: 0'
 + docker rm -f ewars
-+ T='/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/tutorial_check/ewars-through-chap'
-+ cp '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/tutorial_check/ewars-through-chap/metrics.csv' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/tutorial_check/tutorial_metrics.csv'
-+ '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/tutorial_check/ewars-through-chap/chap-core/.venv/bin/python' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/compare_tutorial_run.py' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/tutorial_check/ewars-through-chap' '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1' 0
-+ cat '/Users/geirksa_1_2_3/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/tutorial_check/verdict.txt'
++ T='~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/tutorial_check/ewars-through-chap'
++ cp '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/tutorial_check/ewars-through-chap/metrics.csv' '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/tutorial_check/tutorial_metrics.csv'
++ '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/tutorial_check/ewars-through-chap/chap-core/.venv/bin/python' '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/scripts/compare_tutorial_run.py' '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/work/tutorial_check/ewars-through-chap' '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/run1' 0
++ cat '~/ai/special-purpose vaults/DevelopPythonVersionOfChapEwars/analysis/01_referenceThroughChap/results/tutorial_check/verdict.txt'
 PASS  tutorial ran to the end  (exit code 0)
 PASS  monthly input identical to run1  (da7deebee077 vs da7deebee077)
 PASS  seasonal_median scores equal run1  (differing metrics: none)
