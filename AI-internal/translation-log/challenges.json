@@ -250,5 +250,14 @@
   "solution": "Reparametrised intercept and iid effect so the sampler moves along the direction the likelihood cannot see (JC-33); the same density, re-checked. The cross-basis coefficients remain the slowest-mixing quantities",
   "status": "solved",
   "details": "The diagnosis (a ridge between intercept and mean iid effect) was the agent's hypothesis, borne out by the timing test rather than shown directly; the centred version stays selectable in mcmc_nuts.Target"
+ },
+ {
+  "id": "CH-29",
+  "date": "2026-10-29",
+  "batch": "release",
+  "challenge": "The human's answer to CH-03 (no data-specific licence for the example datasets), re-checked by /release check before the v0.1.0 Zenodo release",
+  "solution": "Released as is, on the human's decision: the datasets are public example data shipped openly in the GPL-3.0/AGPL-3.0 repositories chapkit_ewars_model and chap-core, and NOTICE states that this repository grants no licence for them",
+  "status": "solved",
+  "details": "Options put to the human: (1) release as is; (2) ask the CHAP team for written confirmation first; (3) leave the data out and reference the upstream commits, which would also remove it from the analysis results. The human chose (1). The data are region-by-period aggregates (disease cases, rainfall, temperature, population), not personal data. The same check found no secrets in any of the 9,250 blobs in the history and no credential files; every source under Archive/ carries a redistributable licence (GPL, AGPL or MIT; pyinla is represented only by PyPI's public metadata)."
  }
 ]
