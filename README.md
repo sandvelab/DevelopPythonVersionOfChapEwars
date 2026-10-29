@@ -1,5 +1,7 @@
 # A Python version of the CHAP-EWARS model, run through chap
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23774991.svg)](https://doi.org/10.5281/zenodo.23774991)
+
 This repository holds a **Python translation of the CHAP-EWARS disease-forecasting model**
 and the complete record of how it was made and how closely it matches the original.
 
